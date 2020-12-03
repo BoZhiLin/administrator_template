@@ -22,4 +22,10 @@ class UserController extends Controller
         $users = $this->userService->getAllUsers();
         return $users;
     }
+
+    public function show($id)
+    {
+        $user = $this->userService->getUser($id);
+        return $user;
+    }
 }

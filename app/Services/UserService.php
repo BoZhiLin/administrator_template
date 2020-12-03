@@ -17,4 +17,9 @@ class UserService extends Service
     {
         return $this->userRepo->all();
     }
+
+    public function getUser(int $user_id)
+    {
+        return $this->userRepo->find($user_id);
+    }
 }

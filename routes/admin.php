@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['as' => 'api.'], function () {
+Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     /** 使用者列表 */
-    Route::get('/users', 'UserController@index')->name('users.index');
+    Route::get('/', 'UserController@index')->name('index');
+    /** 查看使用者 */
+    Route::get('/{id}', 'UserController@show')->name('show');
 });
