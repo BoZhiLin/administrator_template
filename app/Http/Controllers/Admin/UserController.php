@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\Controller;
-
 use App\Services\UserService;
 
-class UserController extends Controller
+class UserController extends AdminController
 {
     protected $userService;
 

@@ -37,19 +37,20 @@ return [
 
     'guards' => [
         'admin' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'admin',
+            'hash' => false,
+        ],
+
+        'api' => [
+            'driver' => 'jwt',
+            'provider' => 'users',
+            'hash' => false,
         ],
 
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
-        ],
-
-        'api' => [
-            'driver' => 'token',
-            'provider' => 'users',
-            'hash' => false,
         ],
     ],
 
@@ -73,7 +74,7 @@ return [
     'providers' => [
         'admin' => [
             'driver' => 'eloquent',
-            'model' => '',
+            'model' => App\Models\AdminUser::class,
         ],
 
         'users' => [
