@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('test', function () {
-    return 2;
+Route::group(['as' => 'api.'], function () {
+    /** 使用者列表 */
+    Route::get('/users', 'UserController@index')->name('users.index');
 });
