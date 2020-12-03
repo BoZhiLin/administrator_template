@@ -18,6 +18,10 @@ abstract class Repository implements Eloquent
         return $this->getModel()->get();
     }
 
+    /**
+     * @param int $id
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function find(int $id)
     {
         return $this->getModel()->find($id);
