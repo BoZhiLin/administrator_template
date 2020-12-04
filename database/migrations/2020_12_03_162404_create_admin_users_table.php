@@ -15,7 +15,13 @@ class CreateAdminUsersTable extends Migration
     {
         Schema::create('admin_users', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->comment('名稱');
+            $table->string('email')->nullable()->comment('Email');
+            $table->string('username')->unique()->comment('帳號');
+            $table->string('password')->comment('密碼');
+            $table->string('last_ip')->nullable()->comment('上次登入IP');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

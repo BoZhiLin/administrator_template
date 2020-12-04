@@ -11,6 +11,17 @@ class AdminUser extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'username',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
+    ];
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

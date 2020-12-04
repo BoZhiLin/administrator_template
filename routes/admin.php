@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** 認證 */
-Route::group(['prefix' => 'auth'], function () {
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     /** 取得資訊 */
-    Route::get('me', 'AuthController@me');
+    Route::get('me', 'AuthController@me')->name('me');
     /** 登入 */
-    Route::post('login', 'AuthController@login');
+    Route::post('login', 'AuthController@login')->name('login');
     /** 登出 */
-    Route::post('logout', 'AuthController@logout');
+    Route::post('logout', 'AuthController@logout')->name('logout');
     /** 更換Token */
-    Route::post('refresh', 'AuthController@refresh');
+    Route::post('refresh', 'AuthController@refresh')->name('refresh');
 });
 
 /** User */

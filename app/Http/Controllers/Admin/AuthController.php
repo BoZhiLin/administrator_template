@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+
+use App\Defined\ResponseDefined;
 
 class AuthController extends AdminController
 {
@@ -13,70 +15,60 @@ class AuthController extends AdminController
      */
     public function __construct()
     {
-        $this->middleware('auth:admin', ['except' => ['login']]);
+        // $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('admin.log', ['only' => ['login', 'logout', 'refresh']]);
+        $this->middleware('admin.auth', ['only' => ['me', 'logout', 'refresh']]);
     }
 
-    /**
-     * Get a JWT via given credentials.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function login()
     {
-        $credentials = request(['email', 'password']);
+        $credentials = request(['username', 'password']);
+        $response = ['status' => ResponseDefined::SUCCESS];
 
-        if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        if (! $token = auth('admin')->attempt($credentials)) {
+            $response['status'] = ResponseDefined::UNAUTHORIZED;
+        } else {
+            $token_info = $this->respondWithToken($token);
+            Session::put('auth_info', $token_info);
+            $response['data']['credential'] = $token_info;
         }
 
-        return $this->respondWithToken($token);
+        return $response;
     }
 
-    /**
-     * Get the authenticated User.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function me()
     {
-        return response()->json(Auth::user());
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $response['data']['user'] = auth('admin')->user();
+
+        return $response;
     }
 
-    /**
-     * Log the user out (Invalidate the token).
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function logout()
     {
-        Auth::logout();
+        $response = ['status' => ResponseDefined::SUCCESS];
+        auth('admin')->logout();
+        Session::forget('auth_info');
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return $response;
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function refresh()
     {
-        return $this->respondWithToken(Auth::refresh());
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $token_info = $this->respondWithToken(auth('admin')->refresh());
+        Session::forget('auth_info');
+        Session::put('auth_info', $token_info);
+
+        return $response;
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     protected function respondWithToken($token)
     {
-        return response()->json([
+        return [
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() * 60
-        ]);
+            'expired_at' => strtotime(now()->addMinutes(config('jwt.ttl')))
+        ];
     }
 }
