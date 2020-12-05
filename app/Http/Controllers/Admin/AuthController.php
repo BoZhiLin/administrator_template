@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Session;
-
 use App\Defined\ResponseDefined;
 
 class AuthController extends AdminController
@@ -15,7 +13,6 @@ class AuthController extends AdminController
      */
     public function __construct()
     {
-        // $this->middleware('auth:api', ['except' => ['login']]);
         $this->middleware('admin.log', ['only' => ['login', 'logout', 'refresh']]);
         $this->middleware('admin.auth', ['only' => ['me', 'logout', 'refresh']]);
     }
@@ -29,7 +26,6 @@ class AuthController extends AdminController
             $response['status'] = ResponseDefined::UNAUTHORIZED;
         } else {
             $token_info = $this->respondWithToken($token);
-            Session::put('auth_info', $token_info);
             $response['data']['credential'] = $token_info;
         }
 
@@ -48,7 +44,6 @@ class AuthController extends AdminController
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         auth('admin')->logout();
-        Session::forget('auth_info');
 
         return $response;
     }
@@ -57,8 +52,7 @@ class AuthController extends AdminController
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $token_info = $this->respondWithToken(auth('admin')->refresh());
-        Session::forget('auth_info');
-        Session::put('auth_info', $token_info);
+        $response['data']['credential'] = $token_info;
 
         return $response;
     }

@@ -4,7 +4,8 @@ namespace App\Http\Middleware\Admin;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use App\Defined\ResponseDefined;
 
 class Authenticate
@@ -18,19 +19,22 @@ class Authenticate
      */
     public function handle(Request $request, Closure $next)
     {
-        $bearer_token = explode(' ', $request->header('Authorization'))[1];
-        dd($bearer_token);
-        $auth_info = Session::get('auth_info');
-        $response = ['status' => ResponseDefined::SUCCESS];
-        $token = $auth_info['access_token'];
+        $token = preg_split('/ /', $request->header('Authorization'))[1] ?? null;
 
-        dd(auth('admin')->setToken($token)->user());
-        if (!$auth_info['access_token']) {
-
-        } elseif (!auth('admin')->setToken($token)->user()) {
-
+        try {
+            if (is_null($token)) {
+                $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
+            } elseif (!auth('admin')->payload()) {
+                $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
+            } else {
+                $response = $next($request);
+            }
+        } catch (TokenInvalidException $ex) {
+            $response = response(['status' => ResponseDefined::TOKEN_INVALID], 401);
+        } catch (TokenExpiredException $ex) {
+            $response = response(['status' => ResponseDefined::TOKEN_EXPIRED], 401);
         }
 
-        return $next($request);
+        return $response;
     }
 }
