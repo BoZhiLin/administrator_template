@@ -10,8 +10,8 @@ class AuthController extends ApiController
 {
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
         $response = ['status' => ResponseDefined::SUCCESS];
+        $credentials = $this->credentials($request->all());
 
         if (! $token = auth('api')->attempt($credentials)) {
             $response['status'] = ResponseDefined::UNAUTHORIZED;
@@ -38,6 +38,15 @@ class AuthController extends ApiController
         $response['data']['credential'] = $token_info;
 
         return $response;
+    }
+
+    protected function credentials(array $data)
+    {
+        return [
+            'email' => $data['email'],
+            'password' => $data['password'],
+            'is_verified' => true
+        ];
     }
 
     protected function respondWithToken($token)

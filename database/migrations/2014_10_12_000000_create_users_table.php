@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable()->comment('頭像');
             $table->string('phone')->comment('電話');
             $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('is_verified')->default(false)->comment('是否驗證');
             $table->timestamp('expired_at')->nullable()->comment('會員有效日');
             $table->rememberToken();
             $table->timestamps();
