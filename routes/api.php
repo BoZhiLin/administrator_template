@@ -14,32 +14,29 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** 登入認證 */
-Route::group([
-    'prefix' => 'auth',
-    'as' => 'auth.',
-    'middleware' => ['api.log']
-], function () {
+Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['api.log']], function () {
     /** 登入 */
     Route::post('login', 'AuthController@login')->name('login');
-
-    Route::group(['middleware' => ['api.auth']], function () {
-        /** 登出 */
-        Route::post('logout', 'AuthController@logout')->name('logout');
-        /** 更換Token */
-        Route::post('refresh', 'AuthController@refresh')->name('refresh');
-    });
+    /** 登出 */
+    Route::post('logout', 'AuthController@logout')->name('logout')->middleware('api.auth');
+    /** 更換Token */
+    Route::post('refresh', 'AuthController@refresh')->name('refresh')->middleware('api.auth');
 });
 
 /** 驗證 */
-Route::group([
-    'prefix' => 'verify',
-    'as' => 'verify.',
-    'middleware' => ['api.log', 'api.auth']
-], function () {
+Route::group(['prefix' => 'verify', 'as' => 'verify.', 'middleware' => ['api.log', 'api.auth']], function () {
     /** 註冊驗證 */
     Route::post('/registration', 'VerifyController@registration')->name('registration');
     /** 寄發驗證碼 */
     Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
+});
+
+/** 密碼 */
+Route::group(['prefix' => 'password', 'as' => 'password.', 'middleware' => ['api.log']], function () {
+    /** 忘記密碼 */
+    Route::post('/forgot', 'PasswordController@forgot')->name('forgot');
+    /** 重設密碼 */
+    Route::post('/reset', 'PasswordController@reset')->name('reset')->middleware('api.auth');
 });
 
 /** 使用者 */
@@ -48,16 +45,4 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::get('/info', 'UserController@getInfo')->name('info');
     /** 註冊 */
     Route::post('/register', 'RegisterController@register')->name('register');
-});
-
-/** 密碼 */
-Route::group([
-    'prefix' => 'password',
-    'as' => 'password.',
-    'middleware' => ['api.log']
-], function () {
-    /** 忘記密碼 */
-    Route::post('/forgot', 'PasswordController@forgot')->name('forgot');
-    /** 重設密碼 */
-    Route::post('/reset', 'PasswordController@reset')->name('reset')->middleware('api.auth');
 });
