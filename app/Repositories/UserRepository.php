@@ -44,6 +44,7 @@ class UserRepository extends Repository
         $user = $this->getModel()->find($id);
         $user->email_verified_at = $now;
         $user->expired_at = $now->addDays($expires);
+        $user->is_verified = true;
         $user->save();
     }
 

@@ -17,6 +17,7 @@ class AuthController extends ApiController
             $response['status'] = ResponseDefined::UNAUTHORIZED;
         } else {
             $token_info = $this->respondWithToken($token);
+            $response['data']['is_verified'] = auth('api')->user()->is_verified;
             $response['data']['credential'] = $token_info;
         }
 
@@ -44,8 +45,7 @@ class AuthController extends ApiController
     {
         return [
             'email' => $data['email'],
-            'password' => $data['password'],
-            'is_verified' => true
+            'password' => $data['password']
         ];
     }
 

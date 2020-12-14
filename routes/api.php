@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 /** 登入認證 */
 Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['api.log']], function () {
     /** 登入 */
-    Route::post('login', 'AuthController@login')->name('login');
+    Route::post('/login', 'AuthController@login')->name('login');
     /** 登出 */
-    Route::post('logout', 'AuthController@logout')->name('logout')->middleware('api.auth');
+    Route::post('/logout', 'AuthController@logout')->name('logout')->middleware('api.auth');
     /** 更換Token */
-    Route::post('refresh', 'AuthController@refresh')->name('refresh')->middleware('api.auth');
+    Route::post('/refresh', 'AuthController@refresh')->name('refresh')->middleware('api.auth');
 });
 
 /** 驗證 */
