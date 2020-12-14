@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+    /** 取得登入資訊 */
+    Route::get('/info', 'UserController@getInfo')->name('info');
+    /** 註冊 */
+    Route::post('/register', 'RegisterController@register')->name('register');
+});
+
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+    /** 登入 */
+    Route::post('login', 'AuthController@login')->name('login');
+    /** 登出 */
+    Route::post('logout', 'AuthController@logout')->name('logout');
+    /** 更換Token */
+    Route::post('refresh', 'AuthController@refresh')->name('refresh');
 });
