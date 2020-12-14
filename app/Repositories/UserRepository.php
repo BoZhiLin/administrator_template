@@ -34,6 +34,22 @@ class UserRepository extends Repository
         return $user;
     }
 
+    /**
+     * 認證註記
+     * 
+     * @param int $id (使用者ID)
+     * @param int $expires (試用會員有效天數)
+     * @return void
+     */
+    public function setVerified(int $id, int $expires)
+    {
+        $now = now();
+        $user = $this->getModel()->find($id);
+        $user->email_verified_at = $now;
+        $user->expired_at = $now->addDays($expires);
+        $user->save();
+    }
+
     public function getModel()
     {
         return (User::class)::on($this->connection);

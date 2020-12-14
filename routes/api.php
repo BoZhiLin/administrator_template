@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/** 使用者 */
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     /** 取得登入資訊 */
     Route::get('/info', 'UserController@getInfo')->name('info');
@@ -20,6 +21,15 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::post('/register', 'RegisterController@register')->name('register');
 });
 
+/** 驗證 */
+Route::group(['prefix' => 'verify', 'as' => 'verify.'], function () {
+    /** 註冊驗證 */
+    Route::post('/registration', 'VerifyController@registration')->name('registration');
+    /** 寄發驗證碼 */
+    Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
+});
+
+/** 登入認證 */
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     /** 登入 */
     Route::post('login', 'AuthController@login')->name('login');

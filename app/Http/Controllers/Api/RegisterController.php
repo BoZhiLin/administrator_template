@@ -19,7 +19,7 @@ class RegisterController extends ApiController
     
     public function register(Request $request)
     {
-        $result = $this->validateRequest($request->all(), [
+        $response = $this->validateRequest($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'nickname' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -29,10 +29,10 @@ class RegisterController extends ApiController
             'phone' => ['nullable', 'string']
         ]);
 
-        if ($result['status'] === ResponseDefined::SUCCESS) {
-            $result = $this->userService->register($result['request']);
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = $this->userService->register($request->all());
         }
 
-        return $result;
+        return $response;
     }
 }

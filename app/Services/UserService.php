@@ -2,21 +2,29 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 use App\Jobs\SendVerifyMail;
 
+use App\Models\User;
+
+use App\Defined\SystemDefined;
+use App\Defined\ConfigDefined;
 use App\Defined\ResponseDefined;
 
 use App\Repositories\UserRepository;
+use App\Repositories\ConfigRepository;
 
 class UserService extends Service
 {
     protected $userRepo;
+    protected $configRepo;
 
-    public function __construct(UserRepository $userRepo)
+    public function __construct(UserRepository $userRepo, ConfigRepository $configRepo)
     {
         $this->userRepo = $userRepo;
+        $this->configRepo = $configRepo;
     }
 
     public function getAllUsers()
@@ -33,13 +41,49 @@ class UserService extends Service
      * 前台註冊會員
      * 
      * @param array $data
+     * @return array
      */
     public function register(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $user = $this->userRepo->create($data);
-        
-        SendVerifyMail::dispatch($user->email);
+        $this->generateVerifyCode($user);
+
+        return $response;
+    }
+
+    /**
+     * 註記已認證的會員
+     */
+    public function verifyUser(int $user_id, $code = null)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $key = "verify@user:$user_id";
+        $verify_code = Cache::get($key);
+
+        if (!$code) {
+            $response['status'] = ResponseDefined::VERIFY_CODE_REQUIRED;
+        } elseif (!$verify_code) {
+            $response['status'] = ResponseDefined::VERIFY_CODE_EXPIRED;
+        } elseif ($code != $verify_code) {
+            $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
+        } else {
+            $expire_days = $this->configRepo->getByType(ConfigDefined::DEFAULT_EXPIRED_IN)->value;
+            $this->userRepo->setVerified($user_id, $expire_days);
+            Cache::forget($key);
+        }
+
+        return $response;
+    }
+
+    /**
+     * 寄驗證碼
+     */
+    public function sendVerifyCode(int $user_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $user = $this->userRepo->find($user_id);
+        $this->generateVerifyCode($user);
 
         return $response;
     }
@@ -69,5 +113,20 @@ class UserService extends Service
         }
 
         return $response;
+    }
+
+    /**
+     * 產生驗證碼與發送信件
+     * 
+     * @param User $user
+     * @return void
+     */
+    private function generateVerifyCode(User $user)
+    {
+        $verify_code = random_int(100000, 999999);
+        $key = 'verify@user:' . $user->id;
+        $expire_seconds = SystemDefined::VERIFY_CODE_EXPIRED * 60;
+        Cache::put($key, $verify_code, $expire_seconds);
+        SendVerifyMail::dispatch($user, $verify_code);
     }
 }

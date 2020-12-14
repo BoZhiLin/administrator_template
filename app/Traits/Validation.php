@@ -28,8 +28,6 @@ trait Validation
                     break;
                 }
             }
-        } else {
-            $response['request'] = $request;
         }
 
         return $response;
