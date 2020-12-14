@@ -25,4 +25,6 @@ abstract class ResponseDefined
 
     /** 查無此帳號 */
     const USER_NOT_FOUND = 201;
+    /** 信箱必填 */
+    const EMAIL_REQUIRED = 202;
 }

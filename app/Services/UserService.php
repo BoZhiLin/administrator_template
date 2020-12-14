@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 use App\Jobs\SendVerifyMail;
+use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
@@ -25,16 +27,6 @@ class UserService extends Service
     {
         $this->userRepo = $userRepo;
         $this->configRepo = $configRepo;
-    }
-
-    public function getAllUsers()
-    {
-        return $this->userRepo->all();
-    }
-
-    public function getUser(int $user_id)
-    {
-        return $this->userRepo->find($user_id);
     }
 
     /**
@@ -84,6 +76,22 @@ class UserService extends Service
         $response = ['status' => ResponseDefined::SUCCESS];
         $user = $this->userRepo->find($user_id);
         $this->generateVerifyCode($user);
+
+        return $response;
+    }
+
+    public function forgetPassword(string $email)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $user = $this->userRepo->getByEmail($email);
+
+        if (is_null($user)) {
+            $response['status'] = ResponseDefined::USER_NOT_FOUND;
+        } else {
+            $new_password = Str::random(10);
+            $this->userRepo->setPassword($user, $new_password);
+            SendForgotMail::dispatch($user, ['password' => $new_password]);
+        }
 
         return $response;
     }

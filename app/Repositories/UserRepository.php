@@ -50,6 +50,19 @@ class UserRepository extends Repository
         $user->save();
     }
 
+    public function setPassword(User $user, string $password)
+    {
+        $user->password = Hash::make($password);
+        $user->save();
+    }
+
+    public function getByEmail(string $email)
+    {
+        return $this->getModel()
+            ->where('email', $email)
+            ->first();
+    }
+
     public function getModel()
     {
         return (User::class)::on($this->connection);

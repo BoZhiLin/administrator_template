@@ -15,15 +15,15 @@ class UserController extends AdminController
         $this->userService = $userService;
     }
 
-    public function index()
-    {
-        $users = $this->userService->getAllUsers();
-        return $users;
-    }
+    // public function index()
+    // {
+    //     $users = $this->userService->getAllUsers();
+    //     return $users;
+    // }
 
-    public function show($id)
-    {
-        $user = $this->userService->getUser($id);
-        return $user;
-    }
+    // public function show($id)
+    // {
+    //     $user = $this->userService->getUser($id);
+    //     return $user;
+    // }
 }

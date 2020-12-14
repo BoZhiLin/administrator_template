@@ -13,6 +13,35 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/** 登入認證 */
+Route::group([
+    'prefix' => 'auth',
+    'as' => 'auth.',
+    'middleware' => ['api.log']
+], function () {
+    /** 登入 */
+    Route::post('login', 'AuthController@login')->name('login');
+
+    Route::group(['middleware' => ['api.auth']], function () {
+        /** 登出 */
+        Route::post('logout', 'AuthController@logout')->name('logout');
+        /** 更換Token */
+        Route::post('refresh', 'AuthController@refresh')->name('refresh');
+    });
+});
+
+/** 驗證 */
+Route::group([
+    'prefix' => 'verify',
+    'as' => 'verify.',
+    'middleware' => ['api.log', 'api.auth']
+], function () {
+    /** 註冊驗證 */
+    Route::post('/registration', 'VerifyController@registration')->name('registration');
+    /** 寄發驗證碼 */
+    Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
+});
+
 /** 使用者 */
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     /** 取得登入資訊 */
@@ -21,20 +50,12 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::post('/register', 'RegisterController@register')->name('register');
 });
 
-/** 驗證 */
-Route::group(['prefix' => 'verify', 'as' => 'verify.'], function () {
-    /** 註冊驗證 */
-    Route::post('/registration', 'VerifyController@registration')->name('registration');
-    /** 寄發驗證碼 */
-    Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
-});
-
-/** 登入認證 */
-Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    /** 登入 */
-    Route::post('login', 'AuthController@login')->name('login');
-    /** 登出 */
-    Route::post('logout', 'AuthController@logout')->name('logout');
-    /** 更換Token */
-    Route::post('refresh', 'AuthController@refresh')->name('refresh');
+/** 密碼 */
+Route::group([
+    'prefix' => 'password',
+    'as' => 'password.',
+    'middleware' => ['api.log']
+], function () {
+    /** 忘記密碼 */
+    Route::post('/forgot', 'PasswordController@forgot')->name('forgot');
 });
