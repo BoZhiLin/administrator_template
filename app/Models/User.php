@@ -12,11 +12,6 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'nickname',
@@ -26,25 +21,20 @@ class User extends Authenticatable implements JWTSubject
         'phone'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_verified' => 'boolean'
     ];
+
+    public function wallets()
+    {
+        return $this->hasMany(Wallet::class);
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
