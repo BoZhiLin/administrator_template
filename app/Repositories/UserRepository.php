@@ -21,13 +21,10 @@ class UserRepository extends Repository
         $user->nickname = $data['nickname'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-
+        $user->phone = $data['phone'];
+        
         if (isset($user->avatar)) {
             $user->avatar = $data['avatar'];
-        }
-        
-        if (isset($data['phone'])) {
-            $user->phone = $data['phone'];
         }
 
         $user->save();
@@ -47,12 +44,6 @@ class UserRepository extends Repository
         $user = $this->getModel()->find($id);
         $user->email_verified_at = $now;
         $user->expired_at = $now->addDays($expires);
-        $user->save();
-    }
-
-    public function setPassword(User $user, string $password)
-    {
-        $user->password = Hash::make($password);
         $user->save();
     }
 

@@ -26,7 +26,7 @@ class RegisterController extends ApiController
             // 'password' => ['required', 'string', 'min:8', 'confirmed'],
             'password' => ['required', 'string', 'min:8'],
             'avatar' => ['nullable', 'image'],
-            'phone' => ['nullable', 'string']
+            'phone' => ['required', 'string']
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {

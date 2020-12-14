@@ -29,4 +29,18 @@ class PasswordController extends ApiController
 
         return response($response);
     }
+
+    public function reset(Request $request)
+    {
+        $response = $this->validateRequest($request->all(), [
+            'password' => 'required|string|min:8'
+        ]);
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $user_id = auth('api')->id();
+            $response = $this->userService->resetPassword($user_id, $request->password);
+        }
+
+        return $response;
+    }
 }

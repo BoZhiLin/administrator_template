@@ -58,4 +58,6 @@ Route::group([
 ], function () {
     /** 忘記密碼 */
     Route::post('/forgot', 'PasswordController@forgot')->name('forgot');
+    /** 重設密碼 */
+    Route::post('/reset', 'PasswordController@reset')->name('reset')->middleware('api.auth');
 });

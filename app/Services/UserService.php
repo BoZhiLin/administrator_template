@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,9 +90,20 @@ class UserService extends Service
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
         } else {
             $new_password = Str::random(10);
-            $this->userRepo->setPassword($user, $new_password);
+            $user->password = Hash::make($new_password);
+            $user->save();
             SendForgotMail::dispatch($user, ['password' => $new_password]);
         }
+
+        return $response;
+    }
+
+    public function resetPassword(int $user_id, string $password)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $user = $this->userRepo->find($user_id);
+        $user->password = Hash::make($password);
+        $user->save();
 
         return $response;
     }
