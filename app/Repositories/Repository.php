@@ -27,6 +27,15 @@ abstract class Repository implements Eloquent
         return $this->getModel()->find($id);
     }
 
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id)
+    {
+        return $this->getModel()->destroy($id);
+    }
+
     public function setConnection($db_connection = 'mysql')
     {
         $connection_configs = array_keys(config('database.connections'));

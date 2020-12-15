@@ -42,7 +42,9 @@ Route::group(['prefix' => 'password', 'as' => 'password.', 'middleware' => ['api
 /** 使用者 */
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     /** 取得登入資訊 */
-    Route::get('/info', 'UserController@getInfo')->name('info');
+    Route::get('/info', 'UserController@getInfo')->name('info')->middleware('api.auth');
+    /** 更新個人資訊 */
+    Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware(['api.log', 'api.auth']);
     /** 註冊 */
-    Route::post('/register', 'RegisterController@register')->name('register');
+    Route::post('/register', 'RegisterController@register')->name('register')->middleware('api.log');
 });

@@ -8,7 +8,7 @@ use App\Defined\ResponseDefined;
 
 trait Validation
 {
-    public function validateRequest($request, $validate, $error = [])
+    public function validateRequest(array $request, array $validate, array $error = [])
     {
         $validator = Validator::make($request, $validate);
         $response = ['status' => ResponseDefined::SUCCESS];

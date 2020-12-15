@@ -30,12 +30,6 @@ class UserService extends Service
         $this->configRepo = $configRepo;
     }
 
-    /**
-     * 前台註冊會員
-     * 
-     * @param array $data
-     * @return array
-     */
     public function register(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -45,9 +39,6 @@ class UserService extends Service
         return $response;
     }
 
-    /**
-     * 註記已認證的會員
-     */
     public function verifyUser(int $user_id, $code = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -69,9 +60,6 @@ class UserService extends Service
         return $response;
     }
 
-    /**
-     * 寄驗證碼
-     */
     public function sendVerifyCode(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -108,39 +96,49 @@ class UserService extends Service
         return $response;
     }
 
-    /**
-     * 取得登入會員資訊
-     * 
-     * @return array
-     */
-    public function getInfo()
+    public function setInfo(User $user, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = auth('api')->user();
-
-        if (is_null($user)) {
-            $response['status'] = ResponseDefined::USER_NOT_FOUND;
-        } else {
-            $response['data']['user'] = [
-                'id' => $user->id,
-                'name' => $user->name,
-                'nickname' => $user->nickname,
-                'email' => $user->email,
-                'avatar' => $user->avatar,
-                'phone' => $user->phone,
-                'expired_at' => $user->expired_at
-            ];
+        
+        if (isset($data['avatar'])) {
+            $new_avatar_path = 'avatar/' . $user->id . '.' . $data['avatar']->guessClientExtension();
+            Storage::disk('public')->delete('avatar/' . $user->id);
+            Storage::disk('public')->put($new_avatar_path, file_get_contents($data['avatar']->getRealPath()));
+            $data['avatar'] = $new_avatar_path;
         }
+
+        $user = $this->userRepo->update($user->id, $data);
+        $response['data']['user'] = $this->getUserInfo($user);
 
         return $response;
     }
 
-    /**
-     * 產生驗證碼與發送信件
-     * 
-     * @param User $user
-     * @return void
-     */
+    public function getInfo(User $user)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $response['data']['user'] = $this->getUserInfo($user);
+
+        return $response;
+    }
+
+    private function getUserInfo(User $user)
+    {
+        return [
+            'id' => $user->id,
+            'gender' => $user->gender,
+            'name' => $user->name,
+            'nickname' => $user->nickname,
+            'email' => $user->email,
+            'avatar' => $user->avatar,
+            'phone' => $user->phone,
+            'introduction' => $user->introduction,
+            'blood' => $user->blood,
+            'constellation' => $user->constellation,
+            'is_verified' => $user->is_verified,
+            'expired_at' => $user->expired_at
+        ];
+    }
+
     private function generateVerifyCode(User $user)
     {
         $verify_code = random_int(100000, 999999);

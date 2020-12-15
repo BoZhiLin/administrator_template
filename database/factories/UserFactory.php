@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
+use App\Defined\GenderDefined;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -25,12 +26,11 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'nickname' => $this->faker->name,
+            'gender' => GenderDefined::MALE,
             'email' => $this->faker->unique()->safeEmail,
             'email_verified_at' => now(),
             'is_verified' => true,
-            'phone' => $this->faker->phoneNumber,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
             'expired_at' => now()->addDays(3)
         ];
     }

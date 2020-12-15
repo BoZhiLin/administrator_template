@@ -10,21 +10,29 @@ class UserRepository extends Repository
 {
     /**
      * 新增/註冊會員
-     * 
-     * @param array $data
-     * @return User
      */
     public function create(array $data)
     {
         $user = new User();
+        $user->gender = $data['gender'];
         $user->name = $data['name'];
         $user->nickname = $data['nickname'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
-        $user->phone = $data['phone'];
+        $user->save();
+
+        return $user;
+    }
+
+    /**
+     * 更新個人資料
+     */
+    public function update(int $id, array $data)
+    {
+        $user = $this->getModel()->find($id);
         
-        if (isset($user->avatar)) {
-            $user->avatar = $data['avatar'];
+        foreach ($data as $attribute => $value) {
+            $user->$attribute = $value;
         }
 
         $user->save();
@@ -33,10 +41,6 @@ class UserRepository extends Repository
 
     /**
      * 認證註記
-     * 
-     * @param int $id (使用者ID)
-     * @param int $expires (試用會員有效天數)
-     * @return void
      */
     public function setVerified(int $id, int $expires)
     {
