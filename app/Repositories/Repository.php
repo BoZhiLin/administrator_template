@@ -15,7 +15,7 @@ abstract class Repository implements Eloquent
      */
     public function all()
     {
-        return $this->getModel()->get();
+        return $this->getModel()::get();
     }
 
     /**
@@ -24,7 +24,7 @@ abstract class Repository implements Eloquent
      */
     public function find(int $id)
     {
-        return $this->getModel()->find($id);
+        return $this->getModel()::find($id);
     }
 
     /**
@@ -33,7 +33,7 @@ abstract class Repository implements Eloquent
      */
     public function delete(int $id)
     {
-        return $this->getModel()->destroy($id);
+        return $this->getModel()::destroy($id);
     }
 
     public function setConnection($db_connection = 'mysql')

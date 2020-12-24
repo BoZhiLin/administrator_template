@@ -4,8 +4,6 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Hash;
 
-use App\Models\User;
-
 class UserRepository extends Repository
 {
     /**
@@ -13,7 +11,8 @@ class UserRepository extends Repository
      */
     public function create(array $data)
     {
-        $user = new User();
+        $model = $this->getModel();
+        $user = new $model();
         $user->gender = $data['gender'];
         $user->name = $data['name'];
         $user->nickname = $data['nickname'];
@@ -29,7 +28,7 @@ class UserRepository extends Repository
      */
     public function update(int $id, array $data)
     {
-        $user = $this->getModel()->find($id);
+        $user = $this->getModel()::find($id);
         
         foreach ($data as $attribute => $value) {
             $user->$attribute = $value;
@@ -45,7 +44,7 @@ class UserRepository extends Repository
     public function setVerified(int $id, int $expires)
     {
         $now = now();
-        $user = $this->getModel()->find($id);
+        $user = $this->getModel()::find($id);
         $user->email_verified_at = $now;
         $user->expired_at = $now->addDays($expires);
         $user->is_verified = true;
@@ -54,13 +53,11 @@ class UserRepository extends Repository
 
     public function getByEmail(string $email)
     {
-        return $this->getModel()
-            ->where('email', $email)
-            ->first();
+        return $this->getModel()::where('email', $email)->first();
     }
 
     public function getModel()
     {
-        return (User::class)::on($this->connection);
+        return \App\Models\User::class;
     }
 }

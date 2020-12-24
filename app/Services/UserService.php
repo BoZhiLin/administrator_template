@@ -16,15 +16,15 @@ use App\Defined\SystemDefined;
 use App\Defined\ConfigDefined;
 use App\Defined\ResponseDefined;
 
-use App\Repositories\UserRepository;
-use App\Repositories\ConfigRepository;
+use App\Repositories\UserRepository as UserRepo;
+use App\Repositories\ConfigRepository as ConfigRepo;
 
 class UserService extends Service
 {
     protected $userRepo;
     protected $configRepo;
 
-    public function __construct(UserRepository $userRepo, ConfigRepository $configRepo)
+    public function __construct(UserRepo $userRepo, ConfigRepo $configRepo)
     {
         $this->userRepo = $userRepo;
         $this->configRepo = $configRepo;

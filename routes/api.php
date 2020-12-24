@@ -48,3 +48,9 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     /** 註冊 */
     Route::post('/register', 'RegisterController@register')->name('register')->middleware('api.log');
 });
+
+/** 文章 */
+Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
+    /** PO文 */
+    Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
+});
