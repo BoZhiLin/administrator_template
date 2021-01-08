@@ -50,7 +50,7 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 });
 
 /** 文章 */
-Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
+Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
     /** 搜尋使用者文章 */
     Route::get('/search', 'PostController@searchPosts')->name('search');
     /** 特定文章 */
