@@ -2,13 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Models\Wallet;
-
 class WalletRepository extends Repository
 {
-    public function getByUser(int $user_id, string $coin)
+    public static function getByUser(int $user_id, string $coin)
     {
-        return $this->getModel()->firstOrCreate(
+        return static::getModel()::firstOrCreate(
                 [
                     'user_id' => $user_id, 
                     'coin' => $coin
@@ -16,8 +14,8 @@ class WalletRepository extends Repository
             );
     }
 
-    public function getModel()
+    public static function getModel()
     {
-        return (Wallet::class)::on($this->connection);
+        return \App\Models\Wallet::class;
     }
 }

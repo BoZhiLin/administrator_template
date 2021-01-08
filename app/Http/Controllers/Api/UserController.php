@@ -11,16 +11,9 @@ use App\Services\UserService;
 
 class UserController extends ApiController
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
     public function getInfo()
     {
-        $user_info = $this->userService->getInfo(auth('api')->user());
+        $user_info = UserService::getInfo(auth('api')->user());
         return response($user_info);
     }
 
@@ -37,7 +30,7 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = $this->userService->setInfo(auth('api')->user(), $request->only([
+            $response = UserService::setInfo(auth('api')->user(), $request->only([
                 'nickname',
                 'avatar',
                 'phone',

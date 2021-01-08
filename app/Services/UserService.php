@@ -16,30 +16,21 @@ use App\Defined\SystemDefined;
 use App\Defined\ConfigDefined;
 use App\Defined\ResponseDefined;
 
-use App\Repositories\UserRepository as UserRepo;
-use App\Repositories\ConfigRepository as ConfigRepo;
+use App\Repositories\UserRepository;
+use App\Repositories\ConfigRepository;
 
 class UserService extends Service
 {
-    protected $userRepo;
-    protected $configRepo;
-
-    public function __construct(UserRepo $userRepo, ConfigRepo $configRepo)
-    {
-        $this->userRepo = $userRepo;
-        $this->configRepo = $configRepo;
-    }
-
-    public function register(array $data)
+    public static function register(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = $this->userRepo->create($data);
-        $this->generateVerifyCode($user);
+        $user = UserRepository::create($data);
+        static::generateVerifyCode($user);
 
         return $response;
     }
 
-    public function verifyUser(int $user_id, $code = null)
+    public static function verifyUser(int $user_id, $code = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $key = "verify@user:$user_id";
@@ -52,27 +43,27 @@ class UserService extends Service
         } elseif ($code != $verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
         } else {
-            $expire_days = $this->configRepo->getByType(ConfigDefined::DEFAULT_EXPIRED_IN)->value;
-            $this->userRepo->setVerified($user_id, $expire_days);
+            $expire_days = ConfigRepository::getByType(ConfigDefined::DEFAULT_EXPIRED_IN)->value;
+            UserRepository::setVerified($user_id, $expire_days);
             Cache::forget($key);
         }
 
         return $response;
     }
 
-    public function sendVerifyCode(int $user_id)
+    public static function sendVerifyCode(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = $this->userRepo->find($user_id);
-        $this->generateVerifyCode($user);
+        $user = UserRepository::find($user_id);
+        static::generateVerifyCode($user);
 
         return $response;
     }
 
-    public function forgetPassword(string $email)
+    public static function forgetPassword(string $email)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = $this->userRepo->getByEmail($email);
+        $user = UserRepository::getByEmail($email);
 
         if (is_null($user)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
@@ -86,17 +77,17 @@ class UserService extends Service
         return $response;
     }
 
-    public function resetPassword(int $user_id, string $password)
+    public static function resetPassword(int $user_id, string $password)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = $this->userRepo->find($user_id);
+        $user = UserRepository::find($user_id);
         $user->password = Hash::make($password);
         $user->save();
 
         return $response;
     }
 
-    public function setInfo(User $user, array $data)
+    public static function setInfo(User $user, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         
@@ -107,21 +98,21 @@ class UserService extends Service
             $data['avatar'] = $new_avatar_path;
         }
 
-        $user = $this->userRepo->update($user->id, $data);
-        $response['data']['user'] = $this->getUserInfo($user);
+        $user = UserRepository::update($user->id, $data);
+        $response['data']['user'] = static::getUserInfo($user);
 
         return $response;
     }
 
-    public function getInfo(User $user)
+    public static function getInfo(User $user)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['user'] = $this->getUserInfo($user);
+        $response['data']['user'] = static::getUserInfo($user);
 
         return $response;
     }
 
-    private function getUserInfo(User $user)
+    private static function getUserInfo(User $user)
     {
         return [
             'id' => $user->id,
@@ -139,7 +130,7 @@ class UserService extends Service
         ];
     }
 
-    private function generateVerifyCode(User $user)
+    private static function generateVerifyCode(User $user)
     {
         $verify_code = random_int(100000, 999999);
         $key = 'verify@user:' . $user->id;

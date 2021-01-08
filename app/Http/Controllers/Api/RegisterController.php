@@ -11,13 +11,6 @@ use App\Services\UserService;
 
 class RegisterController extends ApiController
 {
-    protected $userService;
-
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-    
     public function register(Request $request)
     {
         $genders = implode(',', GenderDefined::all());
@@ -31,7 +24,7 @@ class RegisterController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = $this->userService->register($request->only([
+            $response = UserService::register($request->only([
                 'name',
                 'gender',
                 'nickname',

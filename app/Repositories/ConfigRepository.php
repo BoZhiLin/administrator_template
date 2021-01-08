@@ -2,19 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Models\Config;
-
 class ConfigRepository extends Repository
 {
-    public function getByType(string $type)
+    public static function getByType(string $type)
     {
-        return $this->getModel()
-            ->where('type', $type)
-            ->first();
+        return static::getModel()::where('type', $type)->first();
     }
 
-    public function getModel()
+    public static function getModel()
     {
-        return (Config::class)::on($this->connection);
+        return \App\Models\Config::class;
     }
 }

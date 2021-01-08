@@ -6,18 +6,11 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Defined\ResponseDefined;
 
-use App\Repositories\PostRepository as PostRepo;
+use App\Repositories\PostRepository;
 
 class PostService extends Service
 {
-    protected $postRepo;
-
-    public function __construct(PostRepo $postRepo)
-    {
-        $this->postRepo = $postRepo;
-    }
-
-    public function create(array $data)
+    public static function create(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
@@ -25,7 +18,7 @@ class PostService extends Service
             // TODO 上傳圖片待規劃
         }
 
-        $response['data']['post'] = $this->postRepo->create($data);
+        $response['data']['post'] = PostRepository::create($data);
         return $response;
     }
 }

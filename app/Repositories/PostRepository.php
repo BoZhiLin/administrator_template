@@ -4,9 +4,9 @@ namespace App\Repositories;
 
 class PostRepository extends Repository
 {
-    public function create(array $data)
+    public static function create(array $data)
     {
-        $model = $this->getModel();
+        $model = static::getModel();
         $post = new $model();
         $post->user_id = $data['user_id'];
         $post->content = $data['content'];
@@ -15,7 +15,7 @@ class PostRepository extends Repository
         return $post;
     }
 
-    public function getModel()
+    public static function getModel()
     {
         return \App\Models\Post::class;
     }

@@ -9,9 +9,9 @@ class UserRepository extends Repository
     /**
      * 新增/註冊會員
      */
-    public function create(array $data)
+    public static function create(array $data)
     {
-        $model = $this->getModel();
+        $model = static::getModel();
         $user = new $model();
         $user->gender = $data['gender'];
         $user->name = $data['name'];
@@ -26,9 +26,9 @@ class UserRepository extends Repository
     /**
      * 更新個人資料
      */
-    public function update(int $id, array $data)
+    public static function update(int $id, array $data)
     {
-        $user = $this->getModel()::find($id);
+        $user = static::getModel()::find($id);
         
         foreach ($data as $attribute => $value) {
             $user->$attribute = $value;
@@ -41,22 +41,22 @@ class UserRepository extends Repository
     /**
      * 認證註記
      */
-    public function setVerified(int $id, int $expires)
+    public static function setVerified(int $id, int $expires)
     {
         $now = now();
-        $user = $this->getModel()::find($id);
+        $user = static::getModel()::find($id);
         $user->email_verified_at = $now;
         $user->expired_at = $now->addDays($expires);
         $user->is_verified = true;
         $user->save();
     }
 
-    public function getByEmail(string $email)
+    public static function getByEmail(string $email)
     {
-        return $this->getModel()::where('email', $email)->first();
+        return static::getModel()::where('email', $email)->first();
     }
 
-    public function getModel()
+    public static function getModel()
     {
         return \App\Models\User::class;
     }

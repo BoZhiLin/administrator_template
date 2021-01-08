@@ -10,13 +10,6 @@ use App\Services\PostService;
 
 class PostController extends ApiController
 {
-    protected $postService;
-
-    public function __construct(PostService $postService)
-    {
-        $this->postService = $postService;
-    }
-
     public function store(Request $request)
     {
         $response = $this->validateRequest($request->all(), [
@@ -26,7 +19,7 @@ class PostController extends ApiController
         if ($response['status'] === ResponseDefined::SUCCESS) {
             $request_parameters = $request->only(['content']);
             $request_parameters['user_id'] = auth('api')->id();
-            $response = $this->postService->create($request_parameters);
+            $response = PostService::create($request_parameters);
         }
 
         return $response;
