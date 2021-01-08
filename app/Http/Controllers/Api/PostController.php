@@ -24,4 +24,18 @@ class PostController extends ApiController
 
         return $response;
     }
+
+    public function like(int $post_id)
+    {
+        $user = auth()->user();
+        $response = PostService::likeByUser($user, $post_id);
+        return $response;
+    }
+
+    public function dislike(int $post_id)
+    {
+        $user = auth()->user();
+        $response = PostService::cancelLikeByUser($user, $post_id);
+        return $response;
+    }
 }

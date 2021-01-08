@@ -27,4 +27,11 @@ abstract class ResponseDefined
     const USER_NOT_FOUND = 201;
     /** 信箱必填 */
     const EMAIL_REQUIRED = 202;
+
+    /** 查無文章 */
+    const POST_NOT_FOUND = 301;
+    /** 已按過讚 */
+    const POST_HAS_LIKE = 302;
+    /** 未按過讚 */
+    const POST_NOT_LIKE = 303;
 }

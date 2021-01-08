@@ -4,6 +4,11 @@ namespace App\Repositories;
 
 class PostRepository extends Repository
 {
+    public static function find(int $id)
+    {
+        return static::getModel()::find($id)->load('favoriteUsers');
+    }
+
     public static function create(array $data)
     {
         $model = static::getModel();

@@ -53,4 +53,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
     /** PO文 */
     Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
+    /** 按讚 */
+    Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
+    /** 取消讚 */
+    Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
 });

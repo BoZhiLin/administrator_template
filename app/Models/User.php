@@ -36,6 +36,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Wallet::class);
     }
 
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function favoritePosts()
+    {
+        return $this->belongsToMany(Post::class, 'user_favorite_posts')->withTimestamps();
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
