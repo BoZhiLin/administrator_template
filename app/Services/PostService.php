@@ -14,6 +14,35 @@ use App\Repositories\PostRepository;
 
 class PostService extends Service
 {
+    /**
+     * 取得特定文章
+     */
+    public static function getPostByID(int $post_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $post = PostRepository::find($post_id);
+
+        if (is_null($post)) {
+            $response['status'] = ResponseDefined::POST_NOT_FOUND;
+        } else {
+            $response['data']['post'] = $post;
+        }
+
+        return $response;
+    }
+
+    /**
+     * 條件搜尋
+     */
+    public static function searchPosts(array $params = [])
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $posts = PostRepository::search($params);
+        $response['data']['posts'] = $posts;
+
+        return $response;
+    }
+
     public static function create(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];

@@ -4,6 +4,16 @@ namespace App\Repositories;
 
 class PostRepository extends Repository
 {
+    public static function search(array $condition = [])
+    {
+        return 
+            static::getModel()::when($condition['user_id'], function ($query) use ($condition) {
+                $query->where('user_id', $condition['user_id']);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
+    }
+
     public static function find(int $id)
     {
         return static::getModel()::find($id)->load('favoriteUsers');

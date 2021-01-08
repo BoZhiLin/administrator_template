@@ -50,7 +50,11 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 });
 
 /** 文章 */
-Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
+Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
+    /** 搜尋使用者文章 */
+    Route::get('/search', 'PostController@searchPosts')->name('search');
+    /** 特定文章 */
+    Route::get('/{post_id}', 'PostController@show')->name('show');
     /** PO文 */
     Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
     /** 按讚 */

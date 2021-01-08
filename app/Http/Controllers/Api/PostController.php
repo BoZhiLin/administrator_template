@@ -10,6 +10,12 @@ use App\Services\PostService;
 
 class PostController extends ApiController
 {
+    public function show(int $post_id)
+    {
+        $response = PostService::getPostByID($post_id);
+        return $response;
+    }
+
     public function store(Request $request)
     {
         $response = $this->validateRequest($request->all(), [
@@ -22,6 +28,13 @@ class PostController extends ApiController
             $response = PostService::create($request_parameters);
         }
 
+        return $response;
+    }
+
+    public function searchPosts(Request $request)
+    {
+        // TODO:驗證參數 (QueryString)
+        $response = PostService::searchPosts($request->all());
         return $response;
     }
 
