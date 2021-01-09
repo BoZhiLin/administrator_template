@@ -35,6 +35,6 @@ class RegisterController extends ApiController
             ]));
         }
 
-        return $response;
+        return response($response);
     }
 }

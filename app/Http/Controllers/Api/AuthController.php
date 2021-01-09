@@ -13,32 +13,32 @@ class AuthController extends ApiController
         $response = ['status' => ResponseDefined::SUCCESS];
         $credentials = $this->credentials($request->all());
 
-        if (! $token = auth('api')->attempt($credentials)) {
+        if (! $token = auth()->attempt($credentials)) {
             $response['status'] = ResponseDefined::UNAUTHORIZED;
         } else {
             $token_info = $this->respondWithToken($token);
-            $response['data']['is_verified'] = auth('api')->user()->is_verified;
+            $response['data']['is_verified'] = auth()->user()->is_verified;
             $response['data']['credential'] = $token_info;
         }
 
-        return $response;
+        return response($response);
     }
 
     public function logout()
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        auth('api')->logout();
+        auth()->logout();
 
-        return $response;
+        return response($response);
     }
 
     public function refresh()
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $token_info = $this->respondWithToken(auth('api')->refresh());
+        $token_info = $this->respondWithToken(auth()->refresh());
         $response['data']['credential'] = $token_info;
 
-        return $response;
+        return response($response);
     }
 
     protected function credentials(array $data)

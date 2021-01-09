@@ -12,7 +12,7 @@ class UserController extends ApiController
 {
     public function getInfo()
     {
-        $user_info = UserService::getInfo(auth('api')->user());
+        $user_info = UserService::getInfo(auth()->user());
         return response($user_info);
     }
 
@@ -27,7 +27,7 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::setInfo(auth('api')->user(), $request->only([
+            $response = UserService::setInfo(auth()->user(), $request->only([
                 'nickname',
                 'avatar',
                 'phone',
@@ -37,6 +37,6 @@ class UserController extends ApiController
             ]));
         }
         
-        return $response;
+        return response($response);
     }
 }

@@ -30,10 +30,10 @@ class PasswordController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $user_id = auth('api')->id();
+            $user_id = auth()->id();
             $response = UserService::resetPassword($user_id, $request->password);
         }
 
-        return $response;
+        return response($response);
     }
 }
