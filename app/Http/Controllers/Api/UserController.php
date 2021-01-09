@@ -32,8 +32,7 @@ class UserController extends ApiController
                 'avatar',
                 'phone',
                 'introduction',
-                'blood',
-                'constellation'
+                'blood'
             ]));
         }
         
