@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 
 use App\Defined\ResponseDefined;
-use App\Defined\ConstellationDefined;
 
 use App\Services\UserService;
 
@@ -19,14 +18,12 @@ class UserController extends ApiController
 
     public function setInfo(Request $request)
     {
-        $constellations = implode(',', ConstellationDefined::all());
         $response = $this->validateRequest($request->all(), [
             'nickname' => 'required|string',
             'avatar' => 'nullable|image',
             'phone' => 'string',
             'introduction' => 'string|max:255',
-            'blood' => 'string',
-            'constellation' => "string|in:$constellations"
+            'blood' => 'string'
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
