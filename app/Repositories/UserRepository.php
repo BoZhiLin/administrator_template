@@ -44,14 +44,13 @@ class UserRepository extends Repository
     }
 
     /**
-     * 認證註記
+     * 通過認證
      */
-    public static function setVerified(int $id, int $expires)
+    public static function setVerified(int $id)
     {
         $now = now();
         $user = static::getModel()::find($id);
         $user->email_verified_at = $now;
-        $user->expired_at = $now->addDays($expires);
         $user->is_verified = true;
         $user->save();
     }

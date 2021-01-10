@@ -30,7 +30,6 @@ class CreateUsersTable extends Migration
             $table->string('constellation')->nullable()->comment('星座');
             $table->timestamp('email_verified_at')->nullable()->comment('信箱驗證日');
             $table->boolean('is_verified')->default(false)->comment('是否驗證');
-            $table->timestamp('expired_at')->nullable()->comment('會員有效日');
             $table->timestamps();
             $table->softDeletes();
         });
