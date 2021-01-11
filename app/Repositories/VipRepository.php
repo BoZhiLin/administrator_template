@@ -6,7 +6,7 @@ use App\Defined\VipTypeDefined;
 
 class VipRepository extends Repository
 {
-    public static function buyByUser(int $user_id, string $type, int $days)
+    public static function buyByUser(int $user_id, string $type, int $days = 30)
     {
         $now = now();
         $vip = static::getModel()::where('user_id', $user_id)

@@ -13,10 +13,11 @@ use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
+use App\Defined\TagDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
-use App\Defined\TagDefined;
+
 use App\Repositories\UserRepository;
 use App\Repositories\VipRepository;
 use App\Repositories\TagRepository;

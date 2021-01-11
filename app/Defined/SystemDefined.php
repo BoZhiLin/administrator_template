@@ -9,4 +9,13 @@ abstract class SystemDefined
 
     /** 會員預設期限 (天) */
     const USER_DEFAULT_DAYS = 3;
+
+    /** VIP有效天數 */
+    const VIP_EXPIRES_DAYS = 30;
+
+    /** 一般VIP單價 */
+    const GENERAL_VIP_PRICE = 499;
+
+    /** 黃金VIP 單價 */
+    const GOLD_VIP_PRICE = 799;
 }
