@@ -23,14 +23,6 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['api.log']],
     Route::post('/refresh', 'AuthController@refresh')->name('refresh')->middleware('api.auth');
 });
 
-/** 驗證 */
-Route::group(['prefix' => 'verify', 'as' => 'verify.', 'middleware' => ['api.log', 'api.auth']], function () {
-    /** 註冊驗證 */
-    Route::post('/registration', 'VerifyController@registration')->name('registration');
-    /** 寄發驗證碼 */
-    Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
-});
-
 /** 密碼 */
 Route::group(['prefix' => 'password', 'as' => 'password.', 'middleware' => ['api.log']], function () {
     /** 忘記密碼 */
@@ -49,22 +41,33 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::post('/register', 'RegisterController@register')->name('register')->middleware('api.log');
 });
 
-/** 文章 */
-Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
-    /** 搜尋使用者文章 */
-    Route::get('/search', 'PostController@searchPosts')->name('search');
-    /** 特定文章 */
-    Route::get('/{post_id}', 'PostController@show')->name('show');
-    /** PO文 */
-    Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
-    /** 按讚 */
-    Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
-    /** 取消讚 */
-    Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
-});
+/** Authenticated Allow */
+Route::group(['middleware' => ['api.auth']], function () {
+    /** 驗證 */
+    Route::group(['prefix' => 'verify', 'as' => 'verify.'], function () {
+        /** 註冊驗證 */
+        Route::post('/registration', 'VerifyController@registration')->name('registration')->middleware('api.log');
+        /** 寄發驗證碼 */
+        Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send')->middleware('api.log');
+    });
+    
+    /** 文章 */
+    Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
+        /** 搜尋使用者文章 */
+        Route::get('/search', 'PostController@searchPosts')->name('search');
+        /** 特定文章 */
+        Route::get('/{post_id}', 'PostController@show')->name('show');
+        /** PO文 */
+        Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
+        /** 按讚 */
+        Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
+        /** 取消讚 */
+        Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
+    });
 
-/** VIP */
-Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
-    /** 購買 */
-    Route::post('/buy', 'VipController@buy')->name('buy')->middleware('api.log');
+    /** VIP */
+    Route::group(['prefix' => 'vip', 'as' => 'vip.'], function () {
+        /** 購買 */
+        Route::post('/buy', 'VipController@buy')->name('buy')->middleware('api.log');
+    });
 });
