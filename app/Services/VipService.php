@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Defined\TagDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
@@ -10,7 +9,6 @@ use App\Defined\OrderTypeDefined;
 use App\Defined\OrderStatusDefined;
 
 use App\Repositories\VipRepository;
-use App\Repositories\TagRepository;
 use App\Repositories\OrderRepository;
 
 class VipService extends Service
@@ -37,22 +35,6 @@ class VipService extends Service
         $order = OrderRepository::create($order_info);
         VipRepository::buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
         /** 串金流 TODO */
-
-        return $response;
-    }
-
-    /**
-     * 設定自動續訂 ON/OFF
-     */
-    public static function autoRenewal(int $user_id, bool $status = true)
-    {
-        $response = ['status' => ResponseDefined::SUCCESS];
-
-        if ($status === true) {
-            TagRepository::setByUser($user_id, TagDefined::VIP_AUTO_RENEWAL);
-        } else {
-            TagRepository::removeByUser($user_id, TagDefined::VIP_AUTO_RENEWAL);
-        }
 
         return $response;
     }

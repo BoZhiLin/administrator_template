@@ -29,21 +29,4 @@ class VipController extends ApiController
         /** TODO 串金流時改為回傳支付form */
         return response($result);
     }
-
-    /**
-     * 設定自動續訂 ON/OFF
-     */
-    public function autoRenewal(Request $request)
-    {
-        $result = $this->validateRequest($request->all(), [
-            'status' => 'required|boolean'
-        ]);
-
-        if ($result['status'] === ResponseDefined::SUCCESS) {
-            $user_id = auth()->id();
-            VipService::autoRenewal($user_id, $request->status);
-        }
-
-        return response($result);
-    }
 }

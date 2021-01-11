@@ -67,6 +67,4 @@ Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']]
 Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
     /** 購買 */
     Route::post('/buy', 'VipController@buy')->name('buy')->middleware('api.log');
-    /** 自動續訂設定 */
-    Route::post('/auto/renewal', 'VipController@autoRenewal')->name('auto.renewal')->middleware('api.log');
 });

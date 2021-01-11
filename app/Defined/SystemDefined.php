@@ -18,4 +18,7 @@ abstract class SystemDefined
 
     /** 黃金VIP 單價 */
     const GOLD_VIP_PRICE = 799;
+
+    /** 會員到期通知天數 (N天前) */
+    const EXPIRATION_NOTIFY_DAYS = 3;
 }

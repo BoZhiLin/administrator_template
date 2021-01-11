@@ -4,24 +4,23 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-use App\Defined\TagDefined;
-use App\Models\User;
+use App\Defined\SystemDefined;
 
-class ScheduleAutoRenewal extends Command
+class ScheduleNotifyExpiration extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'user:auto-renewal';
+    protected $signature = 'expiration:notify';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '會員自動續訂';
+    protected $description = '會員即將到期通知';
 
     /**
      * Create a new command instance.
@@ -40,12 +39,8 @@ class ScheduleAutoRenewal extends Command
      */
     public function handle()
     {
-        $users = User::whereHas('tags', function ($query) {
-            $query->where('type', TagDefined::VIP_AUTO_RENEWAL);
-        })->get();
+        $days = SystemDefined::EXPIRATION_NOTIFY_DAYS;
 
-        // TODO
-
-        $this->info('Success');
+        // TODO: Email通知
     }
 }
