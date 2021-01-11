@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Hash;
 
+use App\Tools\Tool;
+
 class UserRepository extends Repository
 {
     /**
@@ -15,9 +17,12 @@ class UserRepository extends Repository
         $user = new $model();
         $user->gender = $data['gender'];
         $user->name = $data['name'];
+        $user->birthday = $data['birthday'];
         $user->nickname = $data['nickname'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
+        $user->constellation = Tool::getConstellation($data['birthday']);
+        $user->age = Tool::getAge($data['birthday']);
         $user->save();
 
         return $user;
@@ -39,14 +44,13 @@ class UserRepository extends Repository
     }
 
     /**
-     * 認證註記
+     * 通過認證
      */
-    public static function setVerified(int $id, int $expires)
+    public static function setVerified(int $id)
     {
         $now = now();
         $user = static::getModel()::find($id);
         $user->email_verified_at = $now;
-        $user->expired_at = $now->addDays($expires);
         $user->is_verified = true;
         $user->save();
     }

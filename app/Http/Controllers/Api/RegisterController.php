@@ -16,6 +16,7 @@ class RegisterController extends ApiController
         $genders = implode(',', GenderDefined::all());
         $response = $this->validateRequest($request->all(), [
             'name' => ['required', 'string', 'max:255'],
+            'birthday' => ['required', 'date_format:Y-m-d'],
             'gender' => ['required', "in:$genders"],
             'nickname' => ['required', 'string'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -26,6 +27,7 @@ class RegisterController extends ApiController
         if ($response['status'] === ResponseDefined::SUCCESS) {
             $response = UserService::register($request->only([
                 'name',
+                'birthday',
                 'gender',
                 'nickname',
                 'email',
@@ -33,6 +35,6 @@ class RegisterController extends ApiController
             ]));
         }
 
-        return $response;
+        return response($response);
     }
 }

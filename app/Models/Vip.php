@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Post extends Model
+class Vip extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -17,10 +17,5 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function favoriteUsers()
-    {
-        return $this->belongsToMany(User::class, 'user_favorite_posts')->withTimestamps();
     }
 }

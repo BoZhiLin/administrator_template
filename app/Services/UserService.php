@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -12,12 +13,14 @@ use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
+use App\Defined\TagDefined;
 use App\Defined\SystemDefined;
-use App\Defined\ConfigDefined;
+use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 
 use App\Repositories\UserRepository;
-use App\Repositories\ConfigRepository;
+use App\Repositories\VipRepository;
+use App\Repositories\TagRepository;
 
 class UserService extends Service
 {
@@ -43,8 +46,9 @@ class UserService extends Service
         } elseif ($code != $verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
         } else {
-            $expire_days = ConfigRepository::getByType(ConfigDefined::DEFAULT_EXPIRED_IN)->value;
-            UserRepository::setVerified($user_id, $expire_days);
+            /** 驗證成功，贈送3天一般會員身分 */
+            UserRepository::setVerified($user_id);
+            VipRepository::buyByUser($user_id, VipTypeDefined::GENERAL, SystemDefined::USER_DEFAULT_DAYS);
             Cache::forget($key);
         }
 
@@ -87,33 +91,41 @@ class UserService extends Service
         return $response;
     }
 
-    public static function setInfo(User $user, array $data)
+    public static function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
+        $full_fields = ['nickname', 'avatar', 'phone', 'introduction', 'blood'];
         
         if (isset($data['avatar'])) {
-            $new_avatar_path = 'avatar/' . $user->id . '.' . $data['avatar']->guessClientExtension();
-            Storage::disk('public')->delete('avatar/' . $user->id);
+            $new_avatar_path = 'avatar/' . $user_id . '.' . $data['avatar']->guessClientExtension();
+            Storage::disk('public')->delete('avatar/' . $user_id);
             Storage::disk('public')->put($new_avatar_path, file_get_contents($data['avatar']->getRealPath()));
             $data['avatar'] = $new_avatar_path;
         }
 
-        $user = UserRepository::update($user->id, $data);
-        $response['data']['user'] = static::getUserInfo($user);
+        $user = UserRepository::update($user_id, $data);
 
+        /** 完整填寫個資，給予註記，並贈送LIKE數 (TODO) */
+        if (Arr::has($data, $full_fields)) {
+            TagRepository::setByUser($user_id, TagDefined::PROFILE_COMPLETED);
+        }
+
+        $response['data']['user'] = static::getUserInfo($user->id);
         return $response;
     }
 
-    public static function getInfo(User $user)
+    public static function getInfo(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['user'] = static::getUserInfo($user);
-
+        $response['data']['user'] = static::getUserInfo($user_id);
         return $response;
     }
 
-    private static function getUserInfo(User $user)
+    private static function getUserInfo(int $user_id)
     {
+        $user = UserRepository::find($user_id);
+        $vip_levels = VipRepository::getLevelsByUser($user_id);
+        
         return [
             'id' => $user->id,
             'gender' => $user->gender,
@@ -126,7 +138,8 @@ class UserService extends Service
             'blood' => $user->blood,
             'constellation' => $user->constellation,
             'is_verified' => $user->is_verified,
-            'expired_at' => $user->expired_at
+            'gold_expired_at' => $vip_levels['gold_expired_at'],
+            'general_expired_at' => $vip_levels['general_expired_at']
         ];
     }
 

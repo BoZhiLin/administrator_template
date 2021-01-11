@@ -24,7 +24,7 @@ class Authenticate
         try {
             if (is_null($token)) {
                 $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
-            } elseif (!auth('api')->payload()) {
+            } elseif (!auth()->payload()) {
                 $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
             } else {
                 $response = $next($request);

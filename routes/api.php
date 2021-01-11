@@ -51,6 +51,22 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
 
 /** 文章 */
 Route::group(['prefix' => 'post', 'as' => 'post.', 'middleware' => ['api.auth']], function () {
+    /** 搜尋使用者文章 */
+    Route::get('/search', 'PostController@searchPosts')->name('search');
+    /** 特定文章 */
+    Route::get('/{post_id}', 'PostController@show')->name('show');
     /** PO文 */
     Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
+    /** 按讚 */
+    Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
+    /** 取消讚 */
+    Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
+});
+
+/** VIP */
+Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
+    /** 購買 */
+    Route::post('/buy', 'VipController@buy')->name('buy')->middleware('api.log');
+    /** 自動續訂設定 */
+    Route::post('/auto/renewal', 'VipController@autoRenewal')->name('auto.renewal')->middleware('api.log');
 });

@@ -14,11 +14,13 @@ class User extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'name',
+        'birthday',
         'nickname',
         'email',
         'password',
-        'avatar',
-        'phone'
+        'phone',
+        'constellation',
+        'age',
     ];
 
     protected $hidden = [
@@ -31,9 +33,29 @@ class User extends Authenticatable implements JWTSubject
         'is_verified' => 'boolean'
     ];
 
+    public function vips()
+    {
+        return $this->hasMany(Vip::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
     public function wallets()
     {
         return $this->hasMany(Wallet::class);
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function favoritePosts()
+    {
+        return $this->belongsToMany(Post::class, 'user_favorite_posts')->withTimestamps();
     }
 
     /**

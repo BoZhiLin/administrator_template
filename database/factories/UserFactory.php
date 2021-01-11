@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
-use App\Defined\GenderDefined;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+
+use App\Defined\GenderDefined;
+use App\Models\User;
+use App\Tools\Tool;
 
 class UserFactory extends Factory
 {
@@ -23,15 +24,20 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $gender = GenderDefined::all()[rand(0, 2)];
+        $birthday = $this->faker->date;
+
         return [
             'name' => $this->faker->name,
             'nickname' => $this->faker->name,
-            'gender' => GenderDefined::MALE,
+            'birthday' => $birthday,
+            'age' => Tool::getAge($birthday),
+            'constellation' => Tool::getConstellation($birthday),
+            'gender' => $gender,
             'email' => $this->faker->unique()->safeEmail,
-            'email_verified_at' => now(),
-            'is_verified' => true,
+            'email_verified_at' => null,
+            'is_verified' => false,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'expired_at' => now()->addDays(3)
         ];
     }
 }
