@@ -43,5 +43,7 @@ class VipController extends ApiController
             $user_id = auth()->id();
             VipService::autoRenewal($user_id, $request->status);
         }
+
+        return response($result);
     }
 }
