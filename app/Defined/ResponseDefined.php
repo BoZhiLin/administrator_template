@@ -34,4 +34,7 @@ abstract class ResponseDefined
     const POST_HAS_LIKE = 302;
     /** 未按過讚 */
     const POST_NOT_LIKE = 303;
+
+    /** 今日已簽到 */
+    const TODAY_HAS_SIGNED = 401;
 }

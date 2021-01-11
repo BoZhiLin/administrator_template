@@ -91,6 +91,13 @@ class UserService extends Service
         return $response;
     }
 
+    public static function getInfo(int $user_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $response['data']['user'] = static::getUserInfo($user_id);
+        return $response;
+    }
+
     public static function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -111,13 +118,6 @@ class UserService extends Service
         }
 
         $response['data']['user'] = static::getUserInfo($user->id);
-        return $response;
-    }
-
-    public static function getInfo(int $user_id)
-    {
-        $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['user'] = static::getUserInfo($user_id);
         return $response;
     }
 
