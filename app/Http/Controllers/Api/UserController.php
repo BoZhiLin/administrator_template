@@ -18,12 +18,13 @@ class UserController extends ApiController
 
     public function setInfo(Request $request)
     {
+        $bloods = implode(',', ['A', 'B', 'AB', 'O']);
         $response = $this->validateRequest($request->all(), [
             'nickname' => 'required|string',
             'avatar' => 'nullable|image',
             'phone' => 'string',
             'introduction' => 'string|max:255',
-            'blood' => 'string'
+            'blood' => "string|in:$bloods"
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {

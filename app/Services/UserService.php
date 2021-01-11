@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -15,9 +16,10 @@ use App\Models\User;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
-
+use App\Defined\TagDefined;
 use App\Repositories\UserRepository;
 use App\Repositories\VipRepository;
+use App\Repositories\TagRepository;
 
 class UserService extends Service
 {
@@ -91,6 +93,7 @@ class UserService extends Service
     public static function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
+        $full_fields = ['nickname', 'avatar', 'phone', 'introduction', 'blood'];
         
         if (isset($data['avatar'])) {
             $new_avatar_path = 'avatar/' . $user_id . '.' . $data['avatar']->guessClientExtension();
@@ -100,8 +103,13 @@ class UserService extends Service
         }
 
         $user = UserRepository::update($user_id, $data);
-        $response['data']['user'] = static::getUserInfo($user->id);
 
+        /** 完整填寫個資，給予註記，並贈送LIKE數 (TODO) */
+        if (Arr::has($data, $full_fields)) {
+            TagRepository::setByUser($user_id, TagDefined::PROFILE_COMPLETED);
+        }
+
+        $response['data']['user'] = static::getUserInfo($user->id);
         return $response;
     }
 
@@ -109,7 +117,6 @@ class UserService extends Service
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $response['data']['user'] = static::getUserInfo($user_id);
-
         return $response;
     }
 

@@ -18,7 +18,6 @@ class User extends Authenticatable implements JWTSubject
         'nickname',
         'email',
         'password',
-        'avatar',
         'phone',
         'constellation',
         'age',
@@ -37,6 +36,11 @@ class User extends Authenticatable implements JWTSubject
     public function vips()
     {
         return $this->hasMany(Vip::class);
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
     }
 
     public function wallets()
