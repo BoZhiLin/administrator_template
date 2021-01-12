@@ -11,14 +11,8 @@ class Banner extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = [
-        'deleted_at',
-    ];
-
-    protected $fillable = [
         'started_at',
         'ended_at',
-        'path',
-        'target_url',
-        'sort',
+        'deleted_at',
     ];
 }

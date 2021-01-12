@@ -11,13 +11,8 @@ class Announcement extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = [
-        'deleted_at',
-    ];
-
-    protected $fillable = [
-        'title',
-        'content',
         'started_at',
         'ended_at',
+        'deleted_at',
     ];
 }

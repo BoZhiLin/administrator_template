@@ -3,80 +3,70 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-use App\Services\AnnouncementService;
-use App\Http\Controllers\Api\ApiController;
+
 use App\Defined\ResponseDefined;
 
-class AnnouncementController extends ApiController
+use App\Services\AnnouncementService;
+
+class AnnouncementController extends AdminController
 {
-    
     public function index()
     {
-        return AnnouncementService::all();
+        $response = AnnouncementService::getAnnouncements(true);
+        return response($response);
+    }
+
+    public function show(int $id)
+    {
+        $response = AnnouncementService::getAnnouncement($id);
+        return response($response);
     }
 
     public function store(Request $request)
     {
-        $response = $this->validateRequest($request->all(), $this->rules(), $this->messages());
-        
-        if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = AnnouncementService::create($request->only([
-                'title',
-                'content',
-                'started_at',
-                'ended_at',
-            ]));
-        }
-        
-        return response($response);
-    }
-
-    public function destroy($id)
-    {
-        $response['data']['announcement'] = AnnouncementService::find($id)->delete();
-       
-        if ($response) {
-            $response['status'] = ResponseDefined::SUCCESS;
-            return response($response);
-        }
-    }
-
-    public function update($id, Request $request)
-    {
-        $response = $this->validateRequest($request->all(), $this->rules(), $this->messages());
-
-        if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response['data']['announcement'] = AnnouncementService::find($id)->update($request->only([
-                'title',
-                'content',
-                'started_at',
-                'ended_at',
-            ]));
-        }
-
-        return response($response);
-    }
-
-    public function rules()
-    {
-        return  [
+        $response = $this->validateRequest($request->all(), [
             'title' => 'required',
             'content' => 'required',
-            'started_at' => 'required|date_format:Y-m-d H:i:s',
-            'ended_at' => 'required|date_format:Y-m-d H:i:s',
-        ];
+            'started_at' => 'date_format:Y-m-d H:i:s',
+            'ended_at' => 'date_format:Y-m-d H:i:s'
+        ]);
+        
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = AnnouncementService::createAccouncement($request->only([
+                'title',
+                'content',
+                'started_at',
+                'ended_at'
+            ]));
+        }
+        
+        return response($response);
     }
 
-    public function messages()
+    public function update(int $id, Request $request)
     {
-        return  [
-            'title.required' => 'The :attribute field is required.',
-            'content.required' => 'The :attribute field is required.',
-            'started_at.required' => 'The :attribute field is required.',
-            'ended_at.required' => 'The :attribute field is required.',
-            'started_at.date_format'=> 'The :attribute is not a valid date_format.',
-            'ended_at.date_format'=> 'The :attribute is not a valid date_format.'
-        ];
+        $response = $this->validateRequest($request->all(), [
+            'title' => 'required',
+            'content' => 'required',
+            'started_at' => 'date_format:Y-m-d H:i:s',
+            'ended_at' => 'date_format:Y-m-d H:i:s'
+        ]);
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = AnnouncementService::updateAnnouncement($id, $request->only([
+                'title',
+                'content',
+                'started_at',
+                'ended_at'
+            ]));
+        }
+
+        return response($response);
     }
 
+    public function destroy(int $id)
+    {
+        $response = AnnouncementService::removeAnnouncement($id);
+        return response($response);
+    }
 }

@@ -25,42 +25,45 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('refresh', 'AuthController@refresh')->name('refresh');
 });
 
-/** User */
-Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
-    /** 使用者列表 */
-    Route::get('/', 'UserController@index')->name('index');
-    /** 查看使用者 */
-    Route::get('/{id}', 'UserController@show')->name('show');
-});
-
 /** 公告 */
 Route::group(['middleware' => ['admin.auth']], function (){
+    /** User */
+    Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+        /** 使用者列表 */
+        Route::get('/', 'UserController@index')->name('index');
+        /** 查看使用者 */
+        Route::get('/{id}', 'UserController@show')->name('show');
+    });
 
+    /** 公告管理 */
     Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
         /** 公告列表 */
         Route::get('/', 'AnnouncementController@index')->name('index');
-        /** 刪除公告 */
-        Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
+        /** 查找公告 */
+        Route::get('/{id}', 'AnnouncementController@show')->name('show');
         /** 紀錄公告 */
-        Route::group(['middleware' => ['admin.log']], function (){
+        Route::group(['middleware' => ['admin.log']], function () {
             /** 新增公告 */
-            Route::post('/store', 'AnnouncementController@store')->name('store');
+            Route::post('/', 'AnnouncementController@store')->name('store');
             /** 更新公告 */
             Route::put('/{id}', 'AnnouncementController@update')->name('update');
+            /** 刪除公告 */
+            Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
         });
     });
+
     /** Banner */
     Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
         /** Banner列表 */
         Route::get('/', 'BannerController@index')->name('index');
-        /** 刪除Banner */
-        Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
         /** 紀錄Banner */
-        Route::group(['middleware' => ['admin.log']], function (){
+        Route::group(['middleware' => ['admin.log']], function () {
             /** 新增公告 */
-            Route::post('/store', 'BannerController@store')->name('store');
+            Route::post('/', 'BannerController@store')->name('store');
             /** 更新公告 */
             Route::put('/{id}', 'BannerController@update')->name('update');
+            /** 刪除Banner */
+            Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
         });
     });
 });
