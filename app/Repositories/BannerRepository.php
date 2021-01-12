@@ -6,6 +6,6 @@ class BannerRepository extends Repository
 {
     public static function getModel()
     {
-        return \App\Models\Banners::class;
+        return \App\Models\Banner::class;
     }
 }

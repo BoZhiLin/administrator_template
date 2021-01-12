@@ -33,28 +33,35 @@ Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     Route::get('/{id}', 'UserController@show')->name('show');
 });
 
-Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
-    
-    Route::get('/', 'AnnouncementController@index')->name('index');
+/** 公告 */
+Route::group(['middleware' => ['admin.auth']], function (){
 
-    Route::get('/create', 'AnnouncementController@create')->name('create');
-
-    Route::post('/store', 'AnnouncementController@store')->name('store');
-    
-    Route::put('/{id}', 'AnnouncementController@update')->name('update');
-
-    Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
+    Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
+        /** 公告列表 */
+        Route::get('/', 'AnnouncementController@index')->name('index');
+        /** 刪除公告 */
+        Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
+        /** 紀錄公告 */
+        Route::group(['middleware' => ['admin.log']], function (){
+            /** 新增公告 */
+            Route::post('/store', 'AnnouncementController@store')->name('store');
+            /** 更新公告 */
+            Route::put('/{id}', 'AnnouncementController@update')->name('update');
+        });
+    });
+    /** Banner */
+    Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
+        /** Banner列表 */
+        Route::get('/', 'BannerController@index')->name('index');
+        /** 刪除Banner */
+        Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
+        /** 紀錄Banner */
+        Route::group(['middleware' => ['admin.log']], function (){
+            /** 新增公告 */
+            Route::post('/store', 'BannerController@store')->name('store');
+            /** 更新公告 */
+            Route::put('/{id}', 'BannerController@update')->name('update');
+        });
+    });
 });
 
-Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
-    
-    Route::get('/', 'BannerController@index')->name('index');
-
-    Route::get('/create', 'BannerController@create')->name('create');
-
-    Route::post('/store', 'BannerController@store')->name('store');
-    
-    Route::put('/{id}', 'BannerController@update')->name('update');
-
-    Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
-});

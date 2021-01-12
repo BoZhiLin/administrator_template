@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
-class Announcements extends Model
+class Banner extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -15,9 +15,10 @@ class Announcements extends Model
     ];
 
     protected $fillable = [
-        'title',
-        'content',
         'started_at',
         'ended_at',
+        'path',
+        'target_url',
+        'sort',
     ];
 }

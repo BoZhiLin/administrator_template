@@ -21,6 +21,6 @@ class AnnouncementRepository extends Repository
 
     public static function getModel()
     {
-        return \App\Models\Announcements::class;
+        return \App\Models\Announcement::class;
     }
 }

@@ -2,60 +2,59 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Repositories\AnnouncementRepository;
+use Illuminate\Http\Request;
+use App\Services\AnnouncementService;
+use App\Http\Controllers\Api\ApiController;
+use App\Defined\ResponseDefined;
 
-class AnnouncementController extends Controller
+class AnnouncementController extends ApiController
 {
     
     public function index()
     {
-        return AnnouncementRepository::all();
+        return AnnouncementService::all();
     }
 
-    public function create()
+    public function store(Request $request)
     {
-        return redirect()->route('announcement.store');
-    }
-
-    public function store()
-    {
-        $validation = request()->validate($this->rules(), $this->messages());
+        $response = $this->validateRequest($request->all(), $this->rules(), $this->messages());
         
-        $result = AnnouncementRepository::create($validation);
-
-        if ($result) {
-            return 'Database created successfully';
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = AnnouncementService::create($request->only([
+                'title',
+                'content',
+                'started_at',
+                'ended_at',
+            ]));
         }
+        
+        return response($response);
     }
 
     public function destroy($id)
     {
-        $result = AnnouncementRepository::find($id)->delete();
+        $response['data']['announcement'] = AnnouncementService::find($id)->delete();
        
-        if ($result) {
-            return 'Database deleted successfully';
+        if ($response) {
+            $response['status'] = ResponseDefined::SUCCESS;
+            return response($response);
+        }
+    }
+
+    public function update($id, Request $request)
+    {
+        $response = $this->validateRequest($request->all(), $this->rules(), $this->messages());
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response['data']['announcement'] = AnnouncementService::find($id)->update($request->only([
+                'title',
+                'content',
+                'started_at',
+                'ended_at',
+            ]));
         }
 
-        return back();
-    }
-
-    public function edit($id)
-    {
-        return redirect()->route('announcement.update', $id);
-    }
-
-    public function update($id)
-    {
-        $validation = request()->validate($this->rules(), $this->messages());
-
-        $update = AnnouncementRepository::find($id)->update($validation);
-
-        if ($update) {
-            return 'Database updated successfully';
-        } 
-
-        return back();
+        return response($response);
     }
 
     public function rules()
