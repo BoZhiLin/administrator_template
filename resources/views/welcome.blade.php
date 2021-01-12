@@ -17,7 +17,7 @@
         <div id="app">
             <navbar></navbar>
             <div class="container">
-            <router-link to="/Article">Article</router-link>
+            
             </div>
             <router-view></router-view>
         </div>
