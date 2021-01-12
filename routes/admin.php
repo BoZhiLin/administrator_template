@@ -32,3 +32,29 @@ Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     /** 查看使用者 */
     Route::get('/{id}', 'UserController@show')->name('show');
 });
+
+Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
+    
+    Route::get('/', 'AnnouncementController@index')->name('index');
+
+    Route::get('/create', 'AnnouncementController@create')->name('create');
+
+    Route::post('/store', 'AnnouncementController@store')->name('store');
+    
+    Route::put('/{id}', 'AnnouncementController@update')->name('update');
+
+    Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
+});
+
+Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
+    
+    Route::get('/', 'BannerController@index')->name('index');
+
+    Route::get('/create', 'BannerController@create')->name('create');
+
+    Route::post('/store', 'BannerController@store')->name('store');
+    
+    Route::put('/{id}', 'BannerController@update')->name('update');
+
+    Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
+});
