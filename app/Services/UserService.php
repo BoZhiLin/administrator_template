@@ -14,10 +14,12 @@ use App\Jobs\SendForgotMail;
 use App\Models\User;
 
 use App\Defined\TagDefined;
+use App\Defined\TaskDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 
+use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VipRepository;
 use App\Repositories\TagRepository;
@@ -101,7 +103,6 @@ class UserService extends Service
     public static function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $full_fields = ['nickname', 'avatar', 'phone', 'introduction', 'blood'];
         
         if (isset($data['avatar'])) {
             $new_avatar_path = 'avatar/' . $user_id . '.' . $data['avatar']->guessClientExtension();
@@ -111,12 +112,6 @@ class UserService extends Service
         }
 
         $user = UserRepository::update($user_id, $data);
-
-        /** 完整填寫個資，給予註記，並贈送LIKE數 (TODO) */
-        if (Arr::has($data, $full_fields)) {
-            TagRepository::setByUser($user_id, TagDefined::PROFILE_COMPLETED);
-        }
-
         $response['data']['user'] = static::getUserInfo($user->id);
         return $response;
     }

@@ -28,6 +28,10 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected $dates = [
+        'birthday',
+    ];
+
     protected $casts = [
         'email_verified_at' => 'datetime',
         'is_verified' => 'boolean'

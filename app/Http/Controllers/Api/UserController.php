@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
-use App\Defined\GenderDefined;
 use App\Defined\ResponseDefined;
 
 use App\Services\UserService;
+use App\Services\TaskService;
 
 class UserController extends ApiController
 {
     public function register(Request $request)
     {
-        $genders = implode(',', GenderDefined::all());
+        $genders = implode(',', ['MALE', 'FEMALE', 'OTHER']);
         $response = $this->validateRequest($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'birthday' => ['required', 'date_format:Y-m-d'],
@@ -56,13 +56,17 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::setInfo(auth()->id(), $request->only([
+            $user_id = auth()->id();
+            $data = $request->only([
                 'nickname',
                 'avatar',
                 'phone',
                 'introduction',
                 'blood'
-            ]));
+            ]);
+
+            $response = UserService::setInfo($user_id, $data);
+            $response = TaskService::completeProfile($user_id, $data);
         }
         
         return response($response);

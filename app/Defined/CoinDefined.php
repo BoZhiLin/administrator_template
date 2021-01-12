@@ -4,13 +4,16 @@ namespace App\Defined;
 
 abstract class CoinDefined
 {
-    /** 會員點數 */
-    const POINT = 'POINT';
+    /** SUPER LIKE */
+    const SUPER_LIKE = 'SUPER_LIKE';
+    /** 每日LIKE數 */
+    const DAY_LIKE = 'DAY_LIKE';
 
     public static function all()
     {
         return [
-            self::POINT
+            self::SUPER_LIKE,
+            self::DAY_LIKE,
         ];
     }
 }
