@@ -54,28 +54,35 @@ export default {
     return {
       email: "",
       password: "",
-    };
+    }
   },
   methods: {
     logined() {
-    //      axios.get('/api/users',{
+      axios({
+        method: "post",
+        url: "http://localhost:8000/api/auth/login",
+        params: {
+          email: this.email,
+          password: this.password,
+        },
+        headers: {
+          Accept: "application/json",
+        },
+      })
+        .then((response) => {
+          console.log(response.data.data);
+          localStorage.setItem("access_token", response.data.data.credential.access_token)
+          localStorage.setItem("expired_at", response.data.data.credential.expired_at)
+          console.log(localStorage.getItem("access_token"));
+        })
+        .catch((error) => {
+          console.log("false");
+        });
 
-      // }, {
-      //     headers: {
-      //         Accept: 'application/json',
-      //         Authorization:` Bearer ${localStorage.item}`
-      //     }
-      // })
-      //         .then(response => {
-
-      //         }).catch(error => {
-
-      //         });
-
-      this.$router.push("article");
+      this.$router.push({path:"/frontend/article"});
     },
   },
-};
+}
 </script>
 
 <style>
