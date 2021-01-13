@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-use App\Defined\GenderDefined;
 use App\Models\User;
 use App\Tools\Tool;
 
@@ -24,7 +23,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $gender = GenderDefined::all()[rand(0, 2)];
+        $gender = ['MALE', 'FEMALE', 'OTHER'][rand(0, 2)];
         $birthday = $this->faker->date;
 
         return [

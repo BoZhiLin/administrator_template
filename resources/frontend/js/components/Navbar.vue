@@ -22,7 +22,7 @@
             size="sm"
             class="my-2 my-sm-0"
             type="submit"
-            @click="$router.push({ path: 'login' })"
+            @click="$router.push({ path: '/frontend/login' })"
             >Login</b-button
           >
         </b-navbar-nav>
