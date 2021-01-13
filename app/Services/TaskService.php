@@ -6,13 +6,17 @@ use Illuminate\Support\Arr;
 
 use App\Defined\TagDefined;
 use App\Defined\TaskDefined;
+use App\Defined\CoinDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
+use App\Defined\TransactionDefined;
 
 use App\Repositories\TagRepository;
 use App\Repositories\VipRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\SignInRepository;
+use App\Repositories\WalletRepository;
+use App\Repositories\TransactionRepository;
 
 class TaskService extends Service
 {
@@ -62,7 +66,17 @@ class TaskService extends Service
                     'reward_type' => TaskDefined::REWARD_SEND_SUPER_LIKE,
                     'reward_value' => TaskDefined::GIFT_PROFILE_SUPER_LIKE
                 ]);
-                // TODO:Wallet & Transaction
+                
+                $super_like_wallet = WalletRepository::getByUser($user_id, CoinDefined::SUPER_LIKE);
+                TransactionRepository::createByWallet(
+                    $super_like_wallet,
+                    TransactionDefined::TASK,
+                    TaskDefined::GIFT_PROFILE_SUPER_LIKE,
+                    [
+                        'user_id' => $user_id,
+                        'by' => TaskDefined::TASK_COMPLETED_PROFILE
+                    ]
+                );
             }
         }
 
