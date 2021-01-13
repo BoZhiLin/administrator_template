@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Defined\VipTypeDefined;
-
 class VipRepository extends Repository
 {
     public static function buyByUser(int $user_id, string $type, int $days = 30)
@@ -28,34 +26,6 @@ class VipRepository extends Repository
         }
 
         $vip->save();
-    }
-
-    public static function getLevelsByUser(int $user_id)
-    {
-        $now = now();
-        $levels = [
-            'general_expired_at' => null,
-            'gold_expired_at' => null
-        ];
-        $vips = static::getModel()::where('user_id', $user_id)
-            ->whereIn('type', VipTypeDefined::all())
-            ->get();
-
-        if (
-            $vips->firstWhere('type', VipTypeDefined::GOLD) &&
-            $vips->firstWhere('type', VipTypeDefined::GOLD)->expired_at < $now
-        ) {
-            $levels['gold_expired_at'] = $vips->firstWhere('type', VipTypeDefined::GOLD)->expired_at;
-        }
-
-        if (
-            $vips->firstWhere('type', VipTypeDefined::GENERAL) &&
-            $vips->firstWhere('type', VipTypeDefined::GENERAL)->expired_at < $now
-        ) {
-            $levels['general_expired_at'] = $vips->firstWhere('type', VipTypeDefined::GENERAL)->expired_at;
-        }
-
-        return $levels;
     }
 
     public static function getModel()

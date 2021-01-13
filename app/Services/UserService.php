@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
@@ -13,16 +12,12 @@ use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
-use App\Defined\TagDefined;
-use App\Defined\TaskDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 
-use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\VipRepository;
-use App\Repositories\TagRepository;
 
 class UserService extends Service
 {
@@ -119,7 +114,7 @@ class UserService extends Service
     private static function getUserInfo(int $user_id)
     {
         $user = UserRepository::find($user_id);
-        $vip_levels = VipRepository::getLevelsByUser($user_id);
+        $vip_type = UserRepository::getVipLevel($user);
         
         return [
             'id' => $user->id,
@@ -132,9 +127,8 @@ class UserService extends Service
             'introduction' => $user->introduction,
             'blood' => $user->blood,
             'constellation' => $user->constellation,
-            'is_verified' => $user->is_verified,
-            'gold_expired_at' => $vip_levels['gold_expired_at'],
-            'general_expired_at' => $vip_levels['general_expired_at']
+            'vip_type' => $vip_type,
+            'is_verified' => $user->is_verified
         ];
     }
 

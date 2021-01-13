@@ -4,6 +4,10 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Hash;
 
+use App\Defined\VipTypeDefined;
+
+use App\Models\User;
+
 use App\Tools\Tool;
 
 class UserRepository extends Repository
@@ -60,8 +64,41 @@ class UserRepository extends Repository
         return static::getModel()::where('email', $email)->first();
     }
 
+    /**
+     * 獲取VIP階級
+     * 
+     * @param User $user
+     * @return string
+     */
+    public static function getVipLevel(User $user)
+    {
+        $now = now();
+        $user->load('vips');
+        $vips = $user->vips;
+        $types = VipTypeDefined::all();
+        $vip_type = VipTypeDefined::VISITOR;
+
+        if (!$vips->isEmpty()) {
+            foreach ($types as $type) {
+                $current_vip = $vips->where('type', $type)
+                    ->where('expired_at', '>', $now)
+                    ->first();
+
+                if (!is_null($current_vip)) {
+                    $vip_type = $type;
+                    
+                    if ($type === VipTypeDefined::GOLD) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $vip_type;
+    }
+
     public static function getModel()
     {
-        return \App\Models\User::class;
+        return User::class;
     }
 }

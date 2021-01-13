@@ -37,4 +37,7 @@ abstract class ResponseDefined
 
     /** 今日已簽到 */
     const TODAY_HAS_SIGNED = 401;
+
+    /** 查無公告 */
+    const ANNOUNCEMENT_NOT_FOUND = 501;
 }
