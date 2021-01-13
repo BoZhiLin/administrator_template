@@ -6,6 +6,12 @@ use Illuminate\Console\Command;
 
 use App\Defined\SystemDefined;
 
+use App\Models\User;
+
+use App\Repositories\UserRepository;
+
+use App\Jobs\SendExpirationMail;
+
 class ScheduleNotifyExpiration extends Command
 {
     /**
@@ -39,7 +45,20 @@ class ScheduleNotifyExpiration extends Command
      */
     public function handle()
     {
-        $days = SystemDefined::EXPIRATION_NOTIFY_DAYS;
+        User::has('vips')
+            ->with(['vips'])
+            ->get()
+            ->each(function ($user) {
+                $vip_type = UserRepository::getVipLevel($user);
+                $current_vip = $user->vips()
+                    ->where('type', $vip_type)
+                    ->whereDate('expired_at', today()->addDays(SystemDefined::EXPIRATION_NOTIFY_DAYS))
+                    ->first();
+
+                if (!is_null($current_vip)) {
+                    SendExpirationMail::dispatch();
+                }
+            });
 
         // TODO: Email通知
     }
