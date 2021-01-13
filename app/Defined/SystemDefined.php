@@ -21,4 +21,13 @@ abstract class SystemDefined
 
     /** 會員到期通知天數 (N天前) */
     const EXPIRATION_NOTIFY_DAYS = 3;
+
+    /** 非會員每日可配對數 */
+    const VISITOR_DAY_LIKES = 20;
+
+    /** 一般VIP每日可配對數 (LIKE) */
+    const GENERAL_DAY_LIKES = 70;
+
+    /** 黃金VIP每日可配對數 (LIKE) */
+    const GOLD_DAY_LIKES = 100;
 }

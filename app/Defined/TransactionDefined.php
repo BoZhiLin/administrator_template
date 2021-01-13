@@ -12,4 +12,7 @@ abstract class TransactionDefined
 
     /** 系統補償 */
     const SYSTEM_RECOUP = 'SYSTEM_RECOUP';
+
+    /** 系統每日發放 */
+    const SYSTEM_SEND_DAILY = 'SYSTEM_SEND_DAILY';
 }

@@ -22,7 +22,7 @@ class ScheduleUpdateUserAge extends Command
      *
      * @var string
      */
-    protected $description = '每日重算會員年齡';
+    protected $description = '每日重新計算會員年齡';
 
     /**
      * Create a new command instance.
@@ -41,10 +41,11 @@ class ScheduleUpdateUserAge extends Command
      */
     public function handle()
     {
-        User::each(function ($user) {
-            $age = Tool::getAge($user->birthday->toDateString());
-            $user->age = $age;
-            $user->save();
-        });
+        User::withTrashed()->get()
+            ->each(function ($user) {
+                $age = Tool::getAge($user->birthday->toDateString());
+                $user->age = $age;
+                $user->save();
+            });
     }
 }

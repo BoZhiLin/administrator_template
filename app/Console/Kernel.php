@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command(Commands\ScheduleSendDailyLike::class)->withoutOverlapping()->daily();
         $schedule->command(Commands\ScheduleUpdateUserAge::class)->withoutOverlapping()->daily();
         $schedule->command(Commands\ScheduleNotifyExpiration::class)->withoutOverlapping()->daily();
     }
