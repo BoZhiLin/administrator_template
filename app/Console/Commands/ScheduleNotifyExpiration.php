@@ -56,7 +56,9 @@ class ScheduleNotifyExpiration extends Command
                     ->first();
 
                 if (!is_null($current_vip)) {
-                    SendExpirationMail::dispatch();
+                    SendExpirationMail::dispatch($user, [
+                        'expired_at' => $current_vip->expired_at
+                    ]);
                 }
             });
 

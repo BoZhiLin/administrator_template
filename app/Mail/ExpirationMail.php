@@ -9,7 +9,7 @@ use Illuminate\Queue\SerializesModels;
 
 use App\Models\User;
 
-class ForgotMail extends Mailable
+class ExpirationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -34,8 +34,8 @@ class ForgotMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('【忘記密碼通知】')
-            ->view('email.forgot', [
+        return $this->subject('【會員VIP即將到期通知】')
+            ->view('email.expiration', [
                 'user' => $this->user,
                 'data' => $this->data
             ]);
