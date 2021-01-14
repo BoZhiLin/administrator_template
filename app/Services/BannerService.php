@@ -8,8 +8,6 @@ use App\Defined\ResponseDefined;
 
 use App\Repositories\BannerRepository;
 
-
-
 class BannerService extends Service
 {
     public static function getBanners(bool $with_all = false)
