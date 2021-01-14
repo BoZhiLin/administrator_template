@@ -34,6 +34,11 @@ class BannerService extends Service
     public static function createBanner(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
+
+        $new_banner_path = 'banner/'.$data['path']->getClientOriginalName();
+        Storage::disk('public')->put($new_banner_path, file_get_contents($data['path']->getRealPath()));
+        $data['path'] = $new_banner_path;
+
         $banner = BannerRepository::create($data);
 
         $response['data']['banner'] = $banner;
@@ -49,10 +54,12 @@ class BannerService extends Service
         if (is_null($banner)) {
             $response['status'] = ResponseDefined::Banner_NOT_FOUND;
         } else {
-            $new_banner_path = 'banner/'.$data['path']->getClientOriginalName();
-            Storage::disk('public')->delete(''. $banner->path);
-            Storage::disk('public')->put($new_banner_path, file_get_contents($data['path']->getRealPath()));
-            $banner->path = $new_banner_path;
+            if (isset($data['path'])){
+                $new_banner_path = 'banner/'.$data['path']->getClientOriginalName();
+                Storage::disk('public')->delete(''. $banner->path);
+                Storage::disk('public')->put($new_banner_path, file_get_contents($data['path']->getRealPath()));
+                $banner->path = $new_banner_path;
+            }  
               
             if (isset($data['target_url'])) {
                 $banner->target_url = $data['target_url'];
@@ -78,7 +85,7 @@ class BannerService extends Service
         if (is_null($banner)) {
             $response['status'] = ResponseDefined::Banner_NOT_FOUND;
         } else {
-            Storage::disk('public')->delete(''. $banner->path);
+            Storage::disk('public')->delete($banner->path);
             $banner->delete();
         }
 

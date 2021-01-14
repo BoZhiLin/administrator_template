@@ -27,11 +27,8 @@ class BannerRepository extends Repository
     public static function create(array $data)
     {
         $model = static::getModel();
-        $banner = new $model();
-        
-        $new_banner_path = 'banner/'.$data['path']->getClientOriginalName();
-        Storage::disk('public')->put($new_banner_path, file_get_contents($data['path']->getRealPath()));
-        $banner->path = $new_banner_path;
+        $banner = new $model();  
+        $banner->path = $data['path'];
               
         if (isset($data['target_url'])) {
             $banner->target_url = $data['target_url'];

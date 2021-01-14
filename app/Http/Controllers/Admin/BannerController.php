@@ -48,7 +48,7 @@ class BannerController extends AdminController
     public function update(int $id, Request $request)
     {
         $response = $this->validateRequest($request->all(), [
-            'path' => 'required|file|max:8192',
+            'path' => 'file|max:8192',
             'target_url' => 'required|url',
             'sort' => 'numeric',
             'started_at' => 'date_format:Y-m-d H:i:s',
