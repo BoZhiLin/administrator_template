@@ -56,11 +56,13 @@ Route::group(['middleware' => ['admin.auth']], function (){
     Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
         /** Banner列表 */
         Route::get('/', 'BannerController@index')->name('index');
+        /** 查找Banner */
+        Route::get('/{id}', 'BannerController@show')->name('show');
         /** 紀錄Banner */
         Route::group(['middleware' => ['admin.log']], function () {
-            /** 新增公告 */
+            /** 新增Banner */
             Route::post('/', 'BannerController@store')->name('store');
-            /** 更新公告 */
+            /** 更新Banner */
             Route::put('/{id}', 'BannerController@update')->name('update');
             /** 刪除Banner */
             Route::delete('/{id}', 'BannerController@destroy')->name('destroy');

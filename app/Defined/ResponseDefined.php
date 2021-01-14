@@ -40,4 +40,7 @@ abstract class ResponseDefined
 
     /** 查無公告 */
     const ANNOUNCEMENT_NOT_FOUND = 501;
+
+    /** 查無Banner */
+    const Banner_NOT_FOUND = 601;
 }

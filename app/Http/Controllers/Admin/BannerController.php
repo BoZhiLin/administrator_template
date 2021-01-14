@@ -2,50 +2,75 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Repositories\BannerRepository;
+use Illuminate\Http\Request;
 
-class BannerController extends Controller
+use App\Defined\ResponseDefined;
+
+use App\Services\BannerService;
+
+class BannerController extends AdminController
 {
-    
     public function index()
     {
-       
+        $response = BannerService::getBanners(true);
+        return response($response);
     }
 
-    public function create()
+    public function show(int $id)
     {
+        $response = BannerService::getBanner($id);
+        return response($response);
+    }
+
+    public function store(Request $request)
+    {
+        $response = $this->validateRequest($request->all(), [
+            'path' => 'required|file|max:8192',
+            'target_url' => 'required|url',
+            'sort' => 'numeric',
+            'started_at' => 'date_format:Y-m-d H:i:s',
+            'ended_at' => 'date_format:Y-m-d H:i:s'
+        ]);
         
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = BannerService::createBanner($request->only([
+                'path',
+                'target_url',
+                'sort',
+                'started_at',
+                'ended_at'
+            ]));
+        }
+        
+        return response($response);
     }
 
-    public function store()
+    public function update(int $id, Request $request)
     {
-       
+        $response = $this->validateRequest($request->all(), [
+            'path' => 'required|file|max:8192',
+            'target_url' => 'required|url',
+            'sort' => 'numeric',
+            'started_at' => 'date_format:Y-m-d H:i:s',
+            'ended_at' => 'date_format:Y-m-d H:i:s'
+        ]);
+        
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = BannerService::updateBanner($id, $request->only([
+                'path',
+                'target_url',
+                'sort',
+                'started_at',
+                'ended_at'
+            ]));
+        }
+
+        return response($response);
     }
 
     public function destroy($id)
     {
-       
+        $response = BannerService::removeBanner($id);
+        return response($response);
     }
-
-    public function edit($id)
-    {
-        
-    }
-
-    public function update($id)
-    {
-       
-    }
-
-    public function rules()
-    {
-       
-    }
-
-    public function messages()
-    {
-  
-    }
-
 }
