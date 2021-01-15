@@ -42,5 +42,5 @@ abstract class ResponseDefined
     const ANNOUNCEMENT_NOT_FOUND = 501;
 
     /** 查無Banner */
-    const Banner_NOT_FOUND = 601;
+    const BANNER_NOT_FOUND = 601;
 }

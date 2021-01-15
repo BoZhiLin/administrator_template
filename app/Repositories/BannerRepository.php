@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Facades\Storage;
-
 class BannerRepository extends Repository
 {
     public static function getAll(bool $with_all = false)
@@ -23,13 +21,13 @@ class BannerRepository extends Repository
 
         return $eloquent->get();
     }
-    
+
     public static function create(array $data)
     {
         $model = static::getModel();
-        $banner = new $model();  
+        $banner = new $model();
         $banner->path = $data['path'];
-              
+
         if (isset($data['target_url'])) {
             $banner->target_url = $data['target_url'];
         }
@@ -39,7 +37,7 @@ class BannerRepository extends Repository
         if (isset($data['ended_at'])) {
             $banner->ended_at = $data['ended_at'];
         }
-        
+
         $banner->save();
         return $banner;
     }

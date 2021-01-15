@@ -23,7 +23,7 @@ class BannerService extends Service
         $banner = BannerRepository::find($id);
 
         if (is_null($banner)) {
-            $response['status'] = ResponseDefined::Banner_NOT_FOUND;
+            $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
         } else {
             $response['data']['banner'] = $banner;
         }
@@ -35,32 +35,30 @@ class BannerService extends Service
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
-        $new_banner_path = 'banner/'.$data['file']->getClientOriginalName();
+        $new_banner_path = 'banner/' . $data['file']->getClientOriginalName();
         Storage::disk('public')->put($new_banner_path, file_get_contents($data['file']->getRealPath()));
         $data['path'] = $new_banner_path;
-
         $banner = BannerRepository::create($data);
 
         $response['data']['banner'] = $banner;
-
         return $response;
     }
-    
+
     public static function updateBanner(int $id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $banner = bannerRepository::find($id);
 
         if (is_null($banner)) {
-            $response['status'] = ResponseDefined::Banner_NOT_FOUND;
+            $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
         } else {
             if (isset($data['file'])) {
-                $new_banner_path = 'banner/'.$data['file']->getClientOriginalName();
-                Storage::disk('public')->delete(''. $banner->path);
+                $new_banner_path = 'banner/' . $data['file']->getClientOriginalName();
+                Storage::disk('public')->delete($banner->path);
                 Storage::disk('public')->put($new_banner_path, file_get_contents($data['file']->getRealPath()));
                 $banner->path = $new_banner_path;
-            }  
-              
+            }
+
             if (isset($data['target_url'])) {
                 $banner->target_url = $data['target_url'];
             }
@@ -83,7 +81,7 @@ class BannerService extends Service
         $banner = bannerRepository::find($id);
 
         if (is_null($banner)) {
-            $response['status'] = ResponseDefined::Banner_NOT_FOUND;
+            $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
         } else {
             Storage::disk('public')->delete($banner->path);
             $banner->delete();
