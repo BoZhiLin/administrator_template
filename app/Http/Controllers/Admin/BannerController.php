@@ -25,7 +25,7 @@ class BannerController extends AdminController
     public function store(Request $request)
     {
         $response = $this->validateRequest($request->all(), [
-            'path' => 'required|file|max:8192',
+            'file' => 'required|file|max:8192',
             'target_url' => 'required|url',
             'sort' => 'numeric',
             'started_at' => 'date_format:Y-m-d H:i:s',
@@ -34,7 +34,7 @@ class BannerController extends AdminController
         
         if ($response['status'] === ResponseDefined::SUCCESS) {
             $response = BannerService::createBanner($request->only([
-                'path',
+                'file',
                 'target_url',
                 'sort',
                 'started_at',
@@ -48,7 +48,7 @@ class BannerController extends AdminController
     public function update(int $id, Request $request)
     {
         $response = $this->validateRequest($request->all(), [
-            'path' => 'file|max:8192',
+            'file' => 'file|max:8192',
             'target_url' => 'required|url',
             'sort' => 'numeric',
             'started_at' => 'date_format:Y-m-d H:i:s',
@@ -57,7 +57,7 @@ class BannerController extends AdminController
         
         if ($response['status'] === ResponseDefined::SUCCESS) {
             $response = BannerService::updateBanner($id, $request->only([
-                'path',
+                'file',
                 'target_url',
                 'sort',
                 'started_at',
