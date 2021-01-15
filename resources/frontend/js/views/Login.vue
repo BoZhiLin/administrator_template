@@ -79,7 +79,7 @@ export default {
           console.log("false");
         });
 
-      this.$router.push({path:"/frontend/article"});
+      this.$router.push({path:"article"});
     },
   },
 }

@@ -10,12 +10,12 @@ const router = new VueRouter({
   mode: 'history',
   routes: [
     {
-      path: '/frontend/article',
+      path: '/article',
       name: 'article',
       component: Article
     },
     {
-      path: '/frontend/login',
+      path: '/login',
       name: 'login',
       component: Login
     },
