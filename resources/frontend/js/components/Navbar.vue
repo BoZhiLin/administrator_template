@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar type="dark" variant="dark">
+    <b-navbar type="dark" variant="dark" class="tet">
       <b-navbar-nav>
         <b-nav-item href="#">Home</b-nav-item>
 
@@ -41,5 +41,11 @@ export default {
 </script>
 
 <style>
-
+.tet{
+position: fixed;
+top: 0;
+right: 0;
+left: 0;
+z-index: 100;
+}
 </style>
