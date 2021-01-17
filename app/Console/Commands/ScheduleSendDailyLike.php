@@ -48,7 +48,6 @@ class ScheduleSendDailyLike extends Command
     {
         $day_likes = [
             VipTypeDefined::VISITOR => SystemDefined::VISITOR_DAY_LIKES,
-            VipTypeDefined::GENERAL => SystemDefined::GENERAL_DAY_LIKES,
             VipTypeDefined::GOLD => SystemDefined::GOLD_DAY_LIKES
         ];
 

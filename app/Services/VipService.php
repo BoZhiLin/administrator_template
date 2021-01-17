@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Defined\SystemDefined;
-use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 use App\Defined\OrderTypeDefined;
 use App\Defined\OrderStatusDefined;
@@ -13,22 +12,14 @@ use App\Repositories\OrderRepository;
 
 class VipService extends Service
 {
-    public static function buy(int $user_id, string $type)
+    public static function buy(int $user_id, string $type = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $order_types = [
-            VipTypeDefined::GENERAL => OrderTypeDefined::BUY_GENERAL_VIP,
-            VipTypeDefined::GOLD => OrderTypeDefined::BUY_GOLD_VIP
-        ];
-        $prices = [
-            VipTypeDefined::GENERAL => SystemDefined::GENERAL_VIP_PRICE,
-            VipTypeDefined::GOLD => SystemDefined::GENERAL_VIP_PRICE
-        ];
         $order_info = [
             'user_id' => $user_id,
-            'type' => $order_types[$type],
+            'type' => OrderTypeDefined::BUY_GOLD_VIP,
             'amount' => 1,
-            'value' => $prices[$type],
+            'value' => SystemDefined::GOLD_VIP_PRICE,
             'status' => OrderStatusDefined::PAYING
         ];
 
