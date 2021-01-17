@@ -39,16 +39,28 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware(['api.log', 'api.auth']);
     /** 註冊 */
     Route::post('/register', 'UserController@register')->name('register')->middleware('api.log');
+
+    /** VIP */
+    Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
+        /** 購買 */
+        Route::post('/buy', 'UserController@buyVIP')->name('buy')->middleware('api.log');
+    });
 });
 
 /** Authenticated Allow */
 Route::group(['middleware' => ['api.auth']], function () {
     /** 驗證 */
-    Route::group(['prefix' => 'verify', 'as' => 'verify.'], function () {
+    Route::group(['prefix' => 'verify', 'as' => 'verify.', 'middleware' => ['api.log']], function () {
         /** 註冊驗證 */
-        Route::post('/registration', 'VerifyController@registration')->name('registration')->middleware('api.log');
+        Route::post('/registration', 'VerifyController@registration')->name('registration');
         /** 寄發驗證碼 */
-        Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send')->middleware('api.log');
+        Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
+    });
+
+    /** Banner */
+    Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
+        /** 開放中Banner */
+        Route::get('/', 'BannerController@index')->name('index');
     });
     
     /** 文章 */
@@ -69,11 +81,5 @@ Route::group(['middleware' => ['api.auth']], function () {
     Route::group(['prefix' => 'task', 'as' => 'task.'], function () {
         /** 每日簽到 */
         Route::post('/sign', 'TaskController@signIn')->name('sign')->middleware('api.log');
-    });
-
-    /** VIP */
-    Route::group(['prefix' => 'vip', 'as' => 'vip.'], function () {
-        /** 購買 */
-        Route::post('/buy', 'VipController@buy')->name('buy')->middleware('api.log');
     });
 });

@@ -1,0 +1,114 @@
+{
+    "api.auth.login": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/auth\/login"
+    },
+    "api.auth.logout": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/auth\/logout"
+    },
+    "api.auth.refresh": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/auth\/refresh"
+    },
+    "api.password.forgot": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/password\/forgot"
+    },
+    "api.password.reset": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/password\/reset"
+    },
+    "api.user.info": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/user\/info"
+    },
+    "api.user.info.set": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/user\/info"
+    },
+    "api.user.register": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/user\/register"
+    },
+    "api.user.vip.buy": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/user\/vip\/buy"
+    },
+    "api.verify.registration": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/verify\/registration"
+    },
+    "api.verify.registration.send": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/verify\/registration\/send"
+    },
+    "api.banner.index": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/banner"
+    },
+    "api.post.search": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/post\/search"
+    },
+    "api.post.show": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/post\/{post_id}"
+    },
+    "api.post.store": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/post"
+    },
+    "api.post.like": {
+        "method": [
+            "PATCH"
+        ],
+        "uri": "api\/post\/{post_id}\/like"
+    },
+    "api.post.dislike": {
+        "method": [
+            "PATCH"
+        ],
+        "uri": "api\/post\/{post_id}\/dislike"
+    },
+    "api.task.sign": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/task\/sign"
+    }
+}
