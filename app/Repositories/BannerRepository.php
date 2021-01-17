@@ -7,7 +7,7 @@ class BannerRepository extends Repository
     public static function getAll(bool $with_all = false)
     {
         $now = now();
-        $eloquent = static::getModel()::orderBy('sort', 'desc');
+        $eloquent = static::getModel()::orderBy('sort', 'asc');
 
         if ($with_all === false) {
             $eloquent->where(function ($query) use ($now) {

@@ -14,27 +14,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** 認證 */
-Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
-    /** 取得資訊 */
-    Route::get('me', 'AuthController@me')->name('me');
+Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['admin.log']], function () {
     /** 登入 */
     Route::post('login', 'AuthController@login')->name('login');
-    /** 登出 */
-    Route::post('logout', 'AuthController@logout')->name('logout');
-    /** 更換Token */
-    Route::post('refresh', 'AuthController@refresh')->name('refresh');
+    /** 刷新與註銷 */
+    Route::group(['middleware' => ['admin.auth']], function () {
+       /** 登出 */
+        Route::post('logout', 'AuthController@logout')->name('logout');
+        /** 更換Token */
+        Route::post('refresh', 'AuthController@refresh')->name('refresh'); 
+    });
 });
 
 /** 公告 */
-Route::group(['middleware' => ['admin.auth']], function (){
-    /** User */
-    Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
-        /** 使用者列表 */
-        Route::get('/', 'UserController@index')->name('index');
-        /** 查看使用者 */
-        Route::get('/{id}', 'UserController@show')->name('show');
-    });
-
+Route::group(['middleware' => ['admin.auth']], function () {
     /** 公告管理 */
     Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
         /** 公告列表 */
@@ -69,4 +62,3 @@ Route::group(['middleware' => ['admin.auth']], function (){
         });
     });
 });
-
