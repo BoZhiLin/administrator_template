@@ -10,79 +10,110 @@
         style="max-width: 60%"
         class="mb-2"
       >
-        <b-card-text>
-          <b-row class="my-1">
-            <b-col sm="3">
-              <label for="input-none">email:</label>
-            </b-col>
-            <b-col sm="9">
-              <b-form-input
-                id="input-none"
-                size="sm"
-                v-model="email"
-                :state="null"
-                placeholder="Email"
-              ></b-form-input>
-            </b-col>
-          </b-row>
-          <b-row class="my-1">
-            <b-col sm="3">
-              <label for="input-none">Password:</label>
-            </b-col>
-            <b-col sm="9">
-              <b-form-input
-                id="input-none"
-                size="sm"
-                v-model="password"
-                :state="null"
-                placeholder="Password"
-              ></b-form-input>
-            </b-col>
-          </b-row>
-        </b-card-text>
+        <b-form @submit.stop.prevent>
+          <b-card-text>
+            <b-row class="my-1">
+              <b-col sm="3">
+                <label for="input-none">email:</label>
+              </b-col>
+              <b-col sm="9">
+                <b-form-input
+                  id="input-none"
+                  size="sm"
+                  v-model="email"
+                  :state="null"
+                  placeholder="Email"
+                ></b-form-input>
+              </b-col>
+            </b-row>
+            <b-row class="my-1">
+              <b-col sm="3">
+                <label for="input-none">Password:</label>
+              </b-col>
+              <b-col sm="9">
+                <b-form-input
+                  id="input-none"
+                  type="password"
+                  size="sm"
+                  v-model="password"
+                  :state="null"
+                  placeholder="Password"
+                ></b-form-input>
+              </b-col>
+            </b-row>
+          </b-card-text>
 
-        <b-button @click="logined" variant="primary">login</b-button>
+          <b-button type="submit" @click="login" variant="primary">login</b-button>
+        </b-form>
       </b-card>
     </div>
   </b-container>
 </template>
 
-
 <script>
+import defined from '../tools/defined.js';
+
 export default {
   data() {
     return {
       email: "",
       password: "",
-    }
+    };
   },
   methods: {
-    logined() {
-      axios({
-        method: "post",
-        url: "http://localhost:8000/api/auth/login",
-        params: {
+    login() {
+      // url不用打完整的，因為跟後端都在同一個網域底下
+      // 盡量不要用你原本的寫法，因為你送出的email跟password會暴露在網址上，有資安疑慮
+      // 下面註解掉的是你原本的寫法，可以跟新版的參照一下
+      axios
+        .post('/api/auth/login', {
           email: this.email,
-          password: this.password,
-        },
-        headers: {
-          Accept: "application/json",
-        },
-      })
-        .then((response) => {
-          console.log(response.data.data);
-          localStorage.setItem("access_token", response.data.data.credential.access_token)
-          localStorage.setItem("expired_at", response.data.data.credential.expired_at)
-          console.log(localStorage.getItem("access_token"));
+          password: this.password
+        }, {
+          headers: {
+            Accept: "application/json"
+          }
         })
-        .catch((error) => {
-          console.log("false");
-        });
+        .then(({ data }) => {
+          const response = data;
 
-      this.$router.push({path:"article"});
+          if (response.status === defined.response.SUCCESS) {
+            localStorage.setItem("access_token", response.data.access_token);
+            localStorage.setItem("expired_at", response.data.expired_at);
+
+            // 要登入成功才能到article
+            this.$router.push({ path: "article" });
+          }
+        })
+        .catch(({ response }) => {
+          // 
+        });
     },
+    // logined() {
+    //   axios({
+    //     method: "post",
+    //     url: "http://localhost:8000/api/auth/login",
+    //     params: {
+    //       email: this.email,
+    //       password: this.password,
+    //     },
+    //     headers: {
+    //       Accept: "application/json",
+    //     },
+    //   })
+    //     .then((response) => {
+    //       console.log(response.data.data);
+    //       localStorage.setItem("access_token", response.data.data.credential.access_token)
+    //       localStorage.setItem("expired_at", response.data.data.credential.expired_at)
+    //       console.log(localStorage.getItem("access_token"));
+    //     })
+    //     .catch((error) => {
+    //       console.log("false");
+    //     });
+    //   this.$router.push({path:"article"});
+    // },
   },
-}
+};
 </script>
 
 <style>
