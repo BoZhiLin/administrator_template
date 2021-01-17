@@ -1,62 +1,60 @@
 <template >
-  <b-container fluid style="padding: 0px" >
-    <section >
-      <div class="back-img" >
-        <div class="box1 ">
+  <b-container fluid style="padding: 0px">
+    <section>
+      <div class="back-img">
+        <div class="box1">
           <h1>交友首頁</h1>
         </div>
       </div>
     </section>
     <section>
-      <div  class="box2" @mousewheel="scrollEvent($event)" >
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
+      <div class="box2" @mousewheel="scrollEvent($event)">
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
 
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            > </b-card
-          ><b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
-          <b-card header="Default" class="text-center">
-            <b-card-text
-              >Lorem ipsum dolor sit amet, consectetur adipiscing
-              elit.</b-card-text
-            >
-          </b-card>
-        </div>
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          > </b-card
+        ><b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
+        <b-card header="Default" class="text-center">
+          <b-card-text
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</b-card-text
+          >
+        </b-card>
+      </div>
     </section>
     <footer>
-      <div class="footer">
-
-      </div>
+      <div class="footer"></div>
     </footer>
   </b-container>
 </template>
@@ -65,30 +63,24 @@
 export default {
   data() {
     return {
-        domObj: document.getElementById('box2'),
-        // deltaX:0
+      domObj: document.getElementById("box2"),
+      // deltaX:0
     };
   },
-  mounted() {
-   
-  },
+  mounted() {},
   methods: {
-    scrollEvent:function(event) {
-        event.preventDefault(); 
-        for (let i = 0; i < event.path.length; i++) {
-          if(event.path[i].className == "box2"){
-            if (event.deltaY > 0) {
-              console.log(event.path[i].scrollLeft +=50);
-            }
-            else{
-              console.log(event.path[i].scrollLeft -=50 );
-            }
+    scrollEvent(event) {
+      event.preventDefault();
+      for (let i = 0; i < event.path.length; i++) {
+        if (event.path[i].className == "box2") {
+          if (event.deltaY > 0) {
+            console.log((event.path[i].scrollLeft += 50));
+          } else {
+            console.log((event.path[i].scrollLeft -= 50));
           }
-          
         }
-    
+      }
     },
-    
   },
 };
 </script>
@@ -112,8 +104,7 @@ export default {
   overflow-x: scroll;
   overflow-y: scroll;
   margin: 40px 45px 5px 45px;
-  display: flex
-  
+  display: flex;
 }
 .text-center {
   min-width: 32% !important;
@@ -133,7 +124,7 @@ export default {
   /*隱藏滾輪*/
   display: none;
 }
-.footer{
+.footer {
   width: auto;
   height: 20vh;
   margin: 40px 45px 5px 45px;
