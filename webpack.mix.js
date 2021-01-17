@@ -15,7 +15,7 @@ mix.js('resources/frontend/js/app.js', 'public/frontend/js')
     .sass('resources/frontend/sass/app.scss', 'public/frontend/css')
     .copy('resources/frontend/images/', 'public/frontend/images')
 
-    // .js('resources/backend/js/app.js', 'public/backend/js')
-    // .sass('resources/backend/sass/app.scss', 'public/backend/css')
-    // .copy('resources/admin/images/', 'public/admin/images')
+    .js('resources/backend/js/app.js', 'public/backend/js')
+    .sass('resources/backend/sass/app.scss', 'public/backend/css')
+    .copy('resources/backend/images/', 'public/backend/images')
     .version();

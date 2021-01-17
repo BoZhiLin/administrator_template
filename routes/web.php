@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/** 後台 */
+Route::any('/admin/{all?}', function () {
+    return view('layouts.backend');
+})->where(['all' => '.*']);
+
+/** 前台 */
 Route::any('{all}', function () {
     return view('layouts.frontend');
 })->where(['all' => '.*']);
