@@ -81,4 +81,10 @@ class UserController extends ApiController
         /** TODO 串金流時改為回傳支付form */
         return response($result);
     }
+
+    public function signIn()
+    {
+        $response = TaskService::signIn(auth()->id());
+        return response($response);
+    }
 }

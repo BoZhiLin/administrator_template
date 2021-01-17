@@ -48,6 +48,12 @@
         ],
         "uri": "api\/user\/register"
     },
+    "api.user.sign": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/user\/sign"
+    },
     "api.user.vip.buy": {
         "method": [
             "POST"
@@ -104,11 +110,5 @@
             "PATCH"
         ],
         "uri": "api\/post\/{post_id}\/dislike"
-    },
-    "api.task.sign": {
-        "method": [
-            "POST"
-        ],
-        "uri": "api\/task\/sign"
     }
 }

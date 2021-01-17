@@ -11,7 +11,7 @@ php artisan route:clear
 php artisan config:clear
 php artisan view:clear
 
-# php artisan migrate
+php artisan migrate && php artisan db:seed
 
 php artisan config:cache
 php artisan route:cache

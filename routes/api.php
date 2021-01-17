@@ -39,6 +39,8 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware(['api.log', 'api.auth']);
     /** 註冊 */
     Route::post('/register', 'UserController@register')->name('register')->middleware('api.log');
+    /** 每日簽到 */
+    Route::post('/sign', 'UserController@signIn')->name('sign')->middleware('api.log');
 
     /** VIP */
     Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
@@ -75,11 +77,5 @@ Route::group(['middleware' => ['api.auth']], function () {
         Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
         /** 取消讚 */
         Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
-    });
-
-    /** 任務牆 */
-    Route::group(['prefix' => 'task', 'as' => 'task.'], function () {
-        /** 每日簽到 */
-        Route::post('/sign', 'TaskController@signIn')->name('sign')->middleware('api.log');
     });
 });
