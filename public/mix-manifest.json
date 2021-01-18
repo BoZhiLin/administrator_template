@@ -1,11 +1,6 @@
 {
-<<<<<<< HEAD
     "/backend/js/app.js": "/backend/js/app.js?id=c96d6b53c20b5f9dd98a",
-    "/frontend/js/app.js": "/frontend/js/app.js?id=f3f3e229cb9c50737d14",
-=======
-    "/backend/js/app.js": "/backend/js/app.js?id=ead0ad90d8c9fee31730",
-    "/frontend/js/app.js": "/frontend/js/app.js?id=20cb2424d248563a7010",
->>>>>>> origin/develop
+    "/frontend/js/app.js": "/frontend/js/app.js?id=09a7db65912f5ff10b1e",
     "/frontend/css/app.css": "/frontend/css/app.css?id=f4d8b4dcea3280933ba3",
     "/backend/css/app.css": "/backend/css/app.css?id=f4d8b4dcea3280933ba3"
 }

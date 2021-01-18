@@ -16,16 +16,15 @@
           <b-dropdown-item href="#">Account</b-dropdown-item>
           <b-dropdown-item href="#">Settings</b-dropdown-item>
         </b-nav-item-dropdown>
-
-        <b-navbar-nav class="ml-auto">
-          <b-button
-            size="sm"
-            class="my-2 my-sm-0"
-            type="submit"
-            @click="$router.push({ path: '/login' })"
-            >Login</b-button
-          >
-        </b-navbar-nav>
+      </b-navbar-nav>
+      <b-navbar-nav class="ml-auto">
+        <b-button
+          size="md"
+          class="my-2 my-sm-0 log-btn"
+          type="submit"
+          @click="$router.push({ path: '/login' })"
+          >Login</b-button
+        >
       </b-navbar-nav>
     </b-navbar>
   </div>
@@ -41,11 +40,21 @@ export default {
 </script>
 
 <style>
-.tet{
-position: fixed;
-top: 0;
-right: 0;
-left: 0;
-z-index: 100;
+.tet {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 100;
+  background: linear-gradient(#343a40, transparent) !important;
+}
+.log-btn {
+  color:#fd5068 !important ;
+  background-color: aliceblue!important;
+  transition: all 0.5s;
+}
+.log-btn:hover {
+  background: linear-gradient(45deg, Crimson, darksalmon) !important;
+  color:aliceblue !important
 }
 </style>

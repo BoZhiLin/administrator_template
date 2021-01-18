@@ -2,13 +2,8 @@
   <b-container fluid class="bg-img1 bg-img">
     <div class="box">
       <b-card
-        title="Login"
-        img-src="https://picsum.photos/600/300/?image=25"
-        img-alt="Image"
-        img-top
-        tag="article"
-        style="max-width: 60%"
-        class="mb-2"
+        header="Login"
+        class="header" 
       >
         <b-form @submit.stop.prevent>
           <b-card-text>
@@ -117,6 +112,11 @@ export default {
 </script>
 
 <style>
+.card-header{
+      font-size: x-large;
+      font-weight: 600;
+
+}
 .box {
   display: flex;
   align-content: center;
@@ -127,8 +127,9 @@ export default {
   background-blend-mode: multiply;
   background-position: center center;
   background-size: cover;
-  background-image: url("https://images.pexels.com/photos/587835/pexels-photo-587835.jpeg?auto=compress&cs=tinysrgb&dpr=1&w");
-  min-height: 50rem !important;
+  background-image: url("https://images.pexels.com/photos/3877815/pexels-photo-3877815.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+  min-height: 100vh !important;
   margin-bottom: 0px !important;
+  background-attachment: fixed;
 }
 </style>
