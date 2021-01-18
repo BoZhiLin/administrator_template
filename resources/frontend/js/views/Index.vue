@@ -103,7 +103,8 @@ export default {
       if (this.boxTatol == this.$refs.infoBox.scrollWidth) {
         this.$refs.infoBox.scrollLeft = 0;
       }
-      this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth;
+      var a = this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth;
+      console.log(a);
     },
   },
 };

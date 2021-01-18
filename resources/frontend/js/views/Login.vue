@@ -77,7 +77,7 @@ export default {
             localStorage.setItem("expired_at", response.data.expired_at);
 
             // 要登入成功才能到article
-            this.$router.push({ path: "article" });
+            this.$router.push({ path: "/article" });
           }
         })
         .catch(({ response }) => {
