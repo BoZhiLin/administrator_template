@@ -49,6 +49,20 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     });
 });
 
+/** Banner */
+Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
+    /** 開放中Banner */
+    Route::get('/', 'BannerController@index')->name('index');
+});
+
+/** 公告 */
+Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
+    /** 開放中公告 */
+    Route::get('/', 'AnnouncementController@index')->name('index');
+    /** 指定公告 */
+    Route::get('/{announcement_id}', 'AnnouncementController@show')->name('show');
+});
+
 /** Authenticated Allow */
 Route::group(['middleware' => ['api.auth']], function () {
     /** 驗證 */
@@ -57,12 +71,6 @@ Route::group(['middleware' => ['api.auth']], function () {
         Route::post('/registration', 'VerifyController@registration')->name('registration');
         /** 寄發驗證碼 */
         Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
-    });
-
-    /** Banner */
-    Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
-        /** 開放中Banner */
-        Route::get('/', 'BannerController@index')->name('index');
     });
     
     /** 文章 */

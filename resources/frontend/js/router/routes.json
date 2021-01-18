@@ -60,6 +60,27 @@
         ],
         "uri": "api\/user\/vip\/buy"
     },
+    "api.banner.index": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/banner"
+    },
+    "api.announcement.index": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/announcement"
+    },
+    "api.announcement.show": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/announcement\/{announcement_id}"
+    },
     "api.verify.registration": {
         "method": [
             "POST"
@@ -71,13 +92,6 @@
             "POST"
         ],
         "uri": "api\/verify\/registration\/send"
-    },
-    "api.banner.index": {
-        "method": [
-            "GET",
-            "HEAD"
-        ],
-        "uri": "api\/banner"
     },
     "api.post.search": {
         "method": [
