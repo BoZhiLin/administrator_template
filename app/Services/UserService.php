@@ -43,9 +43,9 @@ class UserService extends Service
         } elseif ($code != $verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
         } else {
-            /** 驗證成功，贈送3天一般會員身分 */
+            /** 驗證成功，贈送3天黃金會員 */
             UserRepository::setVerified($user_id);
-            VipRepository::buyByUser($user_id, VipTypeDefined::GENERAL, SystemDefined::USER_DEFAULT_DAYS);
+            VipRepository::buyByUser($user_id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
             Cache::forget($key);
         }
 

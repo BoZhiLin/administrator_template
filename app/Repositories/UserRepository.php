@@ -73,29 +73,45 @@ class UserRepository extends Repository
     public static function getVipLevel(User $user)
     {
         $now = now();
-        $user->load('vips');
-        $vips = $user->vips;
-        $types = VipTypeDefined::all();
+        $user->load('vip');
+        $vip = $user->vip;
         $vip_type = VipTypeDefined::VISITOR;
 
-        if (!$vips->isEmpty()) {
-            foreach ($types as $type) {
-                $current_vip = $vips->where('type', $type)
-                    ->where('expired_at', '>', $now)
-                    ->first();
-
-                if (!is_null($current_vip)) {
-                    $vip_type = $type;
-                    
-                    if ($type === VipTypeDefined::GOLD) {
-                        break;
-                    }
-                }
+        if (!is_null($vip)) {
+            if ($vip->expired_at > $now) {
+                $vip_type = VipTypeDefined::GOLD;
             }
         }
 
         return $vip_type;
     }
+
+    // public static function getVipLevel(User $user)
+    // {
+    //     $now = now();
+    //     $user->load('vips');
+    //     $vips = $user->vips;
+    //     $types = VipTypeDefined::all();
+    //     $vip_type = VipTypeDefined::VISITOR;
+
+    //     if (!$vips->isEmpty()) {
+    //         foreach ($types as $type) {
+    //             $current_vip = $vips->where('type', $type)
+    //                 ->where('expired_at', '>', $now)
+    //                 ->first();
+
+    //             if (!is_null($current_vip)) {
+    //                 $vip_type = $type;
+                    
+    //                 if ($type === VipTypeDefined::GOLD) {
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return $vip_type;
+    // }
 
     public static function getModel()
     {

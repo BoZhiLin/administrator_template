@@ -37,6 +37,11 @@ class User extends Authenticatable implements JWTSubject
         'is_verified' => 'boolean'
     ];
 
+    public function vip()
+    {
+        return $this->hasOne(Vip::class);
+    }
+
     public function vips()
     {
         return $this->hasMany(Vip::class);

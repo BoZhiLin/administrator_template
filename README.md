@@ -1,54 +1,7 @@
 # IFRIEND交友平台 (名稱暫定)
 
 ## Todo List
-
-1. 會員系統
-    - [x] 登入/註冊
-    - [x] 忘記密碼
-    - [x] 重設密碼
-    - [x] 獲取當前資訊
-    - [x] 發送Email驗證碼
-    - [x] 修改個人資料
-    - [x] 上傳大頭照
-    - [x] 即將到期通知
-
-2. 任務牆 (暫時先這樣)
-    - [x] 連續5天簽到 (贈送3天一般VIP)
-    - [x] 完成個人資料填寫 (送SUPER LIKE)
-
-3. 禮物盒(收獎勵)
-
-4. 私訊聊天功能
-    - [ ] 一對一聊天
-    
-5. 配對 & LIKE
-    - [ ] 配對功能
-
-6. 約會功能
-    - [ ] 建立約會
-
-7. 系統公告
-
-8. 橫幅設定
-
-9. 內建po文功能
-    - [x] 按讚、收回讚
-    - [x] 文章內頁
-    - [x] 搜尋文章
-    - [ ] 上傳圖片
-    - [ ] 文章添加個人有無點讚
-    - [ ] 顯示讚數
-    
-10. 錢包&交易
-
-11. 檢舉功能
-
-12. 帳戶凍結
-
-13. 購買VIP
-    - [ ] 續購
-
----
+https://docs.google.com/spreadsheets/d/1yEHd2eGisFBG2mIQt_zASOQARfC3a76LAYsiKT-APpY/edit?usp=sharing
     
 ## GIT LOG
 * 開發[dev]
@@ -57,8 +10,6 @@
 * 改進[refine]
 * 合併[merge]
 * 發行[release]
-
----
 
 ## GIT BRANCH
 * 主線[master]

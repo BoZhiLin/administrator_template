@@ -35,7 +35,7 @@ class TaskService extends Service
 
             /** 連續簽到5日，贈送3天VIP */
             if ($record->continuous === TaskDefined::TARGET_CONTINUOUS_DAYS) {
-                VipRepository::buyByUser($user_id, VipTypeDefined::GENERAL, TaskDefined::GIFT_CONTINUOUS_VIP_DAYS);
+                VipRepository::buyByUser($user_id, VipTypeDefined::GOLD, TaskDefined::GIFT_CONTINUOUS_VIP_DAYS);
                 TaskRepository::createRecordByUser($user_id, [
                     'code' => TaskDefined::TASK_SIGN_IN,
                     'reward_type' => TaskDefined::REWARD_SEND_VIP,

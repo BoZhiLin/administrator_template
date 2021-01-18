@@ -48,11 +48,38 @@
         ],
         "uri": "api\/user\/register"
     },
+    "api.user.sign": {
+        "method": [
+            "POST"
+        ],
+        "uri": "api\/user\/sign"
+    },
     "api.user.vip.buy": {
         "method": [
             "POST"
         ],
         "uri": "api\/user\/vip\/buy"
+    },
+    "api.banner.index": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/banner"
+    },
+    "api.announcement.index": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/announcement"
+    },
+    "api.announcement.show": {
+        "method": [
+            "GET",
+            "HEAD"
+        ],
+        "uri": "api\/announcement\/{announcement_id}"
     },
     "api.verify.registration": {
         "method": [
@@ -65,13 +92,6 @@
             "POST"
         ],
         "uri": "api\/verify\/registration\/send"
-    },
-    "api.banner.index": {
-        "method": [
-            "GET",
-            "HEAD"
-        ],
-        "uri": "api\/banner"
     },
     "api.post.search": {
         "method": [
@@ -104,11 +124,5 @@
             "PATCH"
         ],
         "uri": "api\/post\/{post_id}\/dislike"
-    },
-    "api.task.sign": {
-        "method": [
-            "POST"
-        ],
-        "uri": "api\/task\/sign"
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
-use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 
 use App\Services\VipService;
@@ -74,19 +73,18 @@ class UserController extends ApiController
         return response($response);
     }
 
-    public function buyVIP(Request $request)
+    public function buyVIP()
     {
-        $vips = implode(',', VipTypeDefined::all());
-        $result = $this->validateRequest($request->all(), [
-            'type' => "required|in:$vips"
-        ]);
-
-        if ($result['status'] === ResponseDefined::SUCCESS) {
-            $user_id = auth()->id();
-            $result = VipService::buy($user_id, $request->type);
-        }
+        $user_id = auth()->id();
+        $result = VipService::buy($user_id);
 
         /** TODO 串金流時改為回傳支付form */
         return response($result);
+    }
+
+    public function signIn()
+    {
+        $response = TaskService::signIn(auth()->id());
+        return response($response);
     }
 }

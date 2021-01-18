@@ -19,7 +19,7 @@ class GenerateRouteJson extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = '前後台API輸出為JSON檔';
 
     /**
      * Create a new command instance.
@@ -61,6 +61,7 @@ class GenerateRouteJson extends Command
         file_put_contents($backend_file, json_encode($backend_json));
         file_put_contents($frontend_file, json_encode($frontend_json));
 
-        $this->info('Completed!');
+        $this->info("後台API已輸出：$backend_file");
+        $this->info("前台API已輸出：$frontend_file");
     }
 }
