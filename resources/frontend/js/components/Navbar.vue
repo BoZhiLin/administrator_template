@@ -46,7 +46,6 @@ export default {
   right: 0;
   left: 0;
   z-index: 100;
-<<<<<<< HEAD
   background: linear-gradient(#343a40, transparent) !important;
 }
 .log-btn {
@@ -57,7 +56,5 @@ export default {
 .log-btn:hover {
   background: linear-gradient(45deg, Crimson, darksalmon) !important;
   color:aliceblue !important
-=======
->>>>>>> origin/develop
 }
 </style>
