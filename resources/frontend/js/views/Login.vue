@@ -1,10 +1,7 @@
 <template>
   <b-container fluid class="bg-img1 bg-img">
     <div class="box">
-      <b-card
-        header="Login"
-        class="header" 
-      >
+      <b-card header="Login" class="header">
         <b-form @submit.stop.prevent>
           <b-card-text>
             <b-row class="my-1">
@@ -38,7 +35,9 @@
             </b-row>
           </b-card-text>
 
-          <b-button type="submit" @click="login" variant="primary">login</b-button>
+          <b-button type="submit" @click="login" variant="primary"
+            >login</b-button
+          >
         </b-form>
       </b-card>
     </div>
@@ -46,7 +45,9 @@
 </template>
 
 <script>
-import defined from '../tools/defined.js';
+import defined from "../tools/defined.js";
+import { userLogin } from "../axios.js";
+// import axios from 'axios';
 
 export default {
   data() {
@@ -57,19 +58,13 @@ export default {
   },
   methods: {
     login() {
-      // url不用打完整的，因為跟後端都在同一個網域底下
-      // 盡量不要用你原本的寫法，因為你送出的email跟password會暴露在網址上，有資安疑慮
-      // 下面註解掉的是你原本的寫法，可以跟新版的參照一下
-      axios
-        .post('/api/auth/login', {
-          email: this.email,
-          password: this.password
-        }, {
-          headers: {
-            Accept: "application/json"
-          }
-        })
-        .then(({ data }) => {
+
+      userLogin({
+        email: this.email,
+        password: this.password
+      })
+       .then(({ data }) => {
+          // console.log(data);
           const response = data;
 
           if (response.status === defined.response.SUCCESS) {
@@ -81,10 +76,38 @@ export default {
           }
         })
         .catch(({ response }) => {
-          // 
+          //
         });
+
+      // url不用打完整的，因為跟後端都在同一個網域底下
+      // 盡量不要用你原本的寫法，因為你送出的email跟password會暴露在網址上，有資安疑慮
+      // 下面註解掉的是你原本的寫法，可以跟新版的參照一下
+      // axios
+      //   .post('/api/auth/login', {
+      //     email: this.email,
+      //     password: this.password
+      //   }, {
+      //     headers: {
+      //       Accept: "application/json"
+      //     }
+      //   })
+      //   .then(({ data }) => {
+      //     console.log(data);
+      //     const response = data;
+
+      //     if (response.status === defined.response.SUCCESS) {
+      //       localStorage.setItem("access_token", response.data.access_token);
+      //       localStorage.setItem("expired_at", response.data.expired_at);
+
+      //       // 要登入成功才能到article
+      //       // this.$router.push({ path: "/article" });
+      //     }
+      //   })
+      //   .catch(({ response }) => {
+      //     //
+      //   });
     },
-    // logined() {
+    // login() {
     //   axios({
     //     method: "post",
     //     url: "http://localhost:8000/api/auth/login",
@@ -112,10 +135,9 @@ export default {
 </script>
 
 <style>
-.card-header{
-      font-size: x-large;
-      font-weight: 600;
-
+.card-header {
+  font-size: x-large;
+  font-weight: 600;
 }
 .box {
   display: flex;

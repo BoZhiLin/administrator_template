@@ -129,10 +129,6 @@ export default {
   background: darksalmon linear-gradient(to right, rgba(0, 255, 0, 0), Crimson) !important;
   transition: background-color 0.5s;
 }
-.reg-btn:hover {
-  /* background-color: aliceblue !important;    */
-  /* color: Crimson !important; */
-}
 .reg-btn h3 {
   font-weight: 900;
 }
