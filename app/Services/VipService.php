@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Defined\SystemDefined;
+use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 use App\Defined\OrderTypeDefined;
 use App\Defined\OrderStatusDefined;
@@ -12,7 +13,7 @@ use App\Repositories\OrderRepository;
 
 class VipService extends Service
 {
-    public static function buy(int $user_id, string $type = null)
+    public static function buy(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $order_info = [
@@ -24,7 +25,7 @@ class VipService extends Service
         ];
 
         $order = OrderRepository::create($order_info);
-        VipRepository::buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
+        VipRepository::buyByUser($user_id, VipTypeDefined::GOLD, SystemDefined::VIP_EXPIRES_DAYS);
         /** 串金流 TODO */
 
         return $response;
