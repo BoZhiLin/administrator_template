@@ -10,28 +10,42 @@ export default {
     return {
       scr_img:
         "https://images.pexels.com/photos/994605/pexels-photo-994605.jpeg?cs=srgb&dl=pexels-fabian-wiktor-994605.jpg&fm=jpg",
-      new_date:"",
-    }
+      new_date: "",
+    };
   },
-  created:function(){
+  created() {
     console.log(123);
-        var a = new Date(localStorage.getItem("expired_at") * 1000);
-        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        var year = a.getFullYear();
-        var month = months[a.getMonth()];
-        var date = a.getDate();
-        var hour = a.getHours();
-        var min = a.getMinutes();
-        var sec = a.getSeconds();
-        this.new_date = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
-        console.log(this.new_date);
-      },
-      watch: {
-        app(app) {
-          console.log("testarticle", this.app);
-        },
-      },
-    }
+    var a = new Date(localStorage.getItem("expired_at") * 1000);
+    var months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    this.new_date =
+      date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
+    console.log(this.new_date);
+  },
+  watch: {
+    app(app) {
+      console.log("testarticle", this.app);
+    },
+  },
+};
 </script>
 
 <style>

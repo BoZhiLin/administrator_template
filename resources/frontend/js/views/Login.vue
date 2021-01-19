@@ -46,8 +46,7 @@
 
 <script>
 import defined from "../tools/defined.js";
-import { userLogin } from "../tools/api.js";
-// import axios from 'axios';
+import api from "../tools/api.js";
 
 export default {
   data() {
@@ -59,19 +58,16 @@ export default {
   methods: {
     login() {
 
-      userLogin({
+      api.userLogin({
         email: this.email,
         password: this.password
       })
        .then(({ data }) => {
-          // console.log(data);
           const response = data;
 
           if (response.status === defined.response.SUCCESS) {
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("expired_at", response.data.expired_at);
-
-            // 要登入成功才能到article
             this.$router.push({ path: "/article" });
           }
         })

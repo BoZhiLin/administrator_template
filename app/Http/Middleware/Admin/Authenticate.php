@@ -23,16 +23,16 @@ class Authenticate
 
         try {
             if (is_null($token)) {
-                $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
+                $response = response(['status' => ResponseDefined::UNAUTHORIZED]);
             } elseif (!auth('admin')->payload()) {
-                $response = response(['status' => ResponseDefined::UNAUTHORIZED], 401);
+                $response = response(['status' => ResponseDefined::UNAUTHORIZED]);
             } else {
                 $response = $next($request);
             }
         } catch (TokenInvalidException $ex) {
-            $response = response(['status' => ResponseDefined::TOKEN_INVALID], 401);
+            $response = response(['status' => ResponseDefined::TOKEN_INVALID]);
         } catch (TokenExpiredException $ex) {
-            $response = response(['status' => ResponseDefined::TOKEN_EXPIRED], 401);
+            $response = response(['status' => ResponseDefined::TOKEN_EXPIRED]);
         }
 
         return $response;
