@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="{{ asset('frontend/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/frontend/app.css') }}">
 
 </head>
 <body >
@@ -25,6 +25,6 @@
         <app />
     </div>
 
-    <script src="{{ asset('frontend/js/app.js') }}"></script>
+    <script src="{{ asset('js/frontend/app.js') }}"></script>
 </body>
 </html>

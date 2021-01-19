@@ -11,11 +11,11 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/frontend/js/app.js', 'public/frontend/js')
-    .sass('resources/frontend/sass/app.scss', 'public/frontend/css')
-    .copy('resources/frontend/images/', 'public/frontend/images/')
+mix.js('resources/frontend/js/app.js', 'public/js/frontend/')
+    .sass('resources/frontend/sass/app.scss', 'public/css/frontend/')
+    .copy('resources/frontend/images/', 'public/images/frontend/')
 
-    .js('resources/backend/js/app.js', 'public/backend/js')
-    .sass('resources/backend/sass/app.scss', 'public/backend/css')
-    .copy('resources/backend/images/', 'public/backend/images/')
+    .js('resources/backend/js/app.js', 'public/js/backend/')
+    .sass('resources/backend/sass/app.scss', 'public/css/backend/')
+    .copy('resources/backend/images/', 'public/images/backend/')
     .version();
