@@ -103,7 +103,8 @@ export default {
       if (this.boxTatol == this.$refs.infoBox.scrollWidth) {
         this.$refs.infoBox.scrollLeft = 0;
       }
-      this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth;
+      var a = this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth;
+      console.log(a);
     },
   },
 };
@@ -127,10 +128,6 @@ export default {
   border-radius: 25px !important;
   background: darksalmon linear-gradient(to right, rgba(0, 255, 0, 0), Crimson) !important;
   transition: background-color 0.5s;
-}
-.reg-btn:hover {
-  /* background-color: aliceblue !important;    */
-  /* color: Crimson !important; */
 }
 .reg-btn h3 {
   font-weight: 900;
