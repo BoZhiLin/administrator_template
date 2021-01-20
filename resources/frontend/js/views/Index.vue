@@ -1,5 +1,5 @@
 <template >
-  <b-container fluid style="padding: 0px">
+  <b-container fluid class="bv-example-row" style="padding: 0px">
     <section>
       <div class="back-img">
         <div class="box1">
@@ -58,8 +58,49 @@
         </b-card>
       </div>
     </section>
+    <section>
+      <div class="footer">
+        <b-row>
+          <b-col>
+            <h2><i>公司</i></h2>
+            <ul class="list-unstyled">
+              <li><a href="">聯絡</a></li>
+              <li><a href="">安全性</a></li>
+              <li><a href="">訂閱方案</a></li>
+            </ul>
+          </b-col>
+          <b-col>
+            <h2><i>社群</i></h2>
+            <ul class="list-unstyled">
+              <li><a href="">部落格</a></li>
+              <li><a href="">媒體報到</a></li>
+              <li><a href="">支援</a></li>
+              <li><a href="">促銷</a></li>
+            </ul>
+          </b-col>
+          <b-col>
+            <h2><i>合作夥伴</i></h2>
+            <ul class="list-unstyled">
+              <li><a href="">Spotify</a></li>
+              <li><a href="">Netflix</a></li>
+            </ul>
+          </b-col>
+          <b-col>
+            <h2><i>法務</i></h2>
+            <ul class="list-unstyled">
+              <li><a href="">隱私</a></li>
+              <li><a href="">條款</a></li>
+              <li><a href="">Cookie</a></li>
+              <li><a href="">社群規範</a></li>
+              <li><a href="">安全政策</a></li>
+              <li><a href="">智慧財產權</a></li>
+            </ul>
+          </b-col>
+        </b-row>
+      </div>
+    </section>
     <footer>
-      <div class="footer"></div>
+      <div class="footer" style="height: 20vh"></div>
     </footer>
   </b-container>
 </template>
@@ -72,10 +113,12 @@ export default {
       boxWidth: 0,
       boxScroll: 0,
       boxTatol: 0,
+      timeStatus: null,
     };
   },
   mounted() {
     this.timer();
+    console.log(this.$route.path);
   },
   methods: {
     scrollEvent: function (event) {
@@ -93,7 +136,7 @@ export default {
       }
     },
     timer: function () {
-      return setInterval(() => {
+      this.timeStatus = setInterval(() => {
         this.scroll();
       }, 5000);
     },
@@ -103,10 +146,16 @@ export default {
       if (this.boxTatol == this.$refs.infoBox.scrollWidth) {
         this.$refs.infoBox.scrollLeft = 0;
       }
-      var a = this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth;
+      var a = (this.$refs.infoBox.scrollLeft += this.$refs.infoBox.offsetWidth);
       console.log(a);
     },
   },
+    beforeDestroy() {
+      clearInterval(this.timeStatus);   
+    },
+    destroyed() {
+      clearInterval(this.timeStatus);
+    },
 };
 </script>
 
@@ -164,8 +213,13 @@ export default {
 }
 .footer {
   width: auto;
-  height: 20vh;
-  margin: 40px 45px 5px 45px;
+  /* height: 20vh; */
+  margin: 40px 65px 5px 65px;
   border-top: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 20px;
+}
+.list-unstyled li {
+  margin-top: 10px;
+  color: black !important;
 }
 </style>

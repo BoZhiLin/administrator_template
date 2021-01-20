@@ -57,12 +57,12 @@ export default {
   },
   methods: {
     login() {
-
-      api.userLogin({
-        email: this.email,
-        password: this.password
-      })
-       .then(({ data }) => {
+      api
+        .userLogin({
+          email: this.email,
+          password: this.password,
+        })
+        .then(({ data }) => {
           const response = data;
 
           if (response.status === defined.response.SUCCESS) {
@@ -139,9 +139,10 @@ export default {
   display: flex;
   align-content: center;
   justify-content: center;
+  box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.6);
 }
 .bg-img1 {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.6);
   background-blend-mode: multiply;
   background-position: center center;
   background-size: cover;
