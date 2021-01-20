@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../views/Login';
-import Dashboard from '../views/dashboard/index.vue'
 
 Vue.use(VueRouter);
 
@@ -11,12 +9,12 @@ const router = new VueRouter({
     {
       path: '/admin/login',
       name: 'admin.login',
-      component: Login
+      component: require('../views/Login.vue').default
     },
     {
       path: '/admin/dashboard',
       name: 'admin.dashboard',
-      component: Dashboard
+      component: require('../views/dashboard/Index.vue').default
     },
   ]
 });

@@ -29,6 +29,7 @@
         <b-form-input 
           id="password"
           name="password"
+          type="password"
           placeholder="Enter your password"
           v-model="password"
         ></b-form-input>
@@ -40,36 +41,34 @@
 
 <script>
 import axios from 'axios';
-import router from '../router/index'
+import defined from "../tools/defined.js";
 
 export default {
   name: "Login",
   data: function() {
     return {
-        username: "",
-        password: "",
+      username: "",
+      password: "",
     }
   },
   methods: {
-    adminLogin : function () {
-      axios.post('/admin/api/auth/login', {
-      username: this.username,
-      password: this.password
-      })
-      .then(function (response) {
-        const success = response.data;
-        const credential = success.data.credential;
-        
-        if (success.status === 0) {
-              localStorage.setItem("access_token", credential.access_token);
-              localStorage.setItem("expired_at", credential.expired_at);
-              router.push({ path: "/admin/dashboard" });
-            }
+    adminLogin() {
+      axios
+        .post('/admin/api/auth/login', {
+          username: this.username,
+          password: this.password,
         })
-      .catch(function (error) {
-        alert('Error');
-      });
-    }
+        .then(({ data }) => {
+          const response = data;
+          const credential = response.data;
+          
+          if (response.status === defined.response.SUCCESS) {
+            localStorage.setItem("access_token", credential.access_token);
+            localStorage.setItem("expired_at", credential.expired_at);
+            this.$router.push({ path: "/admin/dashboard" });
+          }
+        });
+    },
   },
 };
 </script>
