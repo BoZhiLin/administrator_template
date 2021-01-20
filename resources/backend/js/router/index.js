@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Login from '../views/Login';
 
 Vue.use(VueRouter);
 
@@ -10,8 +9,13 @@ const router = new VueRouter({
     {
       path: '/admin/login',
       name: 'admin.login',
-      component: Login
-    }
+      component: require('../views/Login.vue').default
+    },
+    {
+      path: '/admin/dashboard',
+      name: 'admin.dashboard',
+      component: require('../views/dashboard/Index.vue').default
+    },
   ]
 });
 
