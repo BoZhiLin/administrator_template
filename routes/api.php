@@ -76,7 +76,7 @@ Route::group(['middleware' => ['api.auth']], function () {
     /** 文章 */
     Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
         /** 搜尋使用者文章 */
-        Route::get('/search', 'PostController@searchPosts')->name('search');
+        Route::get('/', 'PostController@index')->name('index');
         /** 特定文章 */
         Route::get('/{post_id}', 'PostController@show')->name('show');
         /** PO文 */

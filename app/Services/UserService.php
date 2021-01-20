@@ -115,6 +115,7 @@ class UserService extends Service
     {
         $user = UserRepository::find($user_id);
         $vip_type = UserRepository::getVipLevel($user);
+        $like_posts = $user->favoritePosts->pluck('id');
         
         return [
             'id' => $user->id,
@@ -128,7 +129,8 @@ class UserService extends Service
             'blood' => $user->blood,
             'constellation' => $user->constellation,
             'vip_type' => $vip_type,
-            'is_verified' => $user->is_verified
+            'is_verified' => $user->is_verified,
+            'like_posts' => $like_posts
         ];
     }
 
