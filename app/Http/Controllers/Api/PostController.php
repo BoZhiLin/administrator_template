@@ -10,6 +10,12 @@ use App\Services\PostService;
 
 class PostController extends ApiController
 {
+    public function index()
+    {
+        $response = PostService::getPosts();
+        return response($response);
+    }
+
     public function show(int $post_id)
     {
         $response = PostService::getPostByID($post_id);
@@ -28,13 +34,6 @@ class PostController extends ApiController
             $response = PostService::create($request_parameters);
         }
 
-        return response($response);
-    }
-
-    public function searchPosts(Request $request)
-    {
-        // TODO:驗證參數 (QueryString)
-        $response = PostService::searchPosts($request->all());
         return response($response);
     }
 

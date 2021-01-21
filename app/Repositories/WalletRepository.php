@@ -8,7 +8,7 @@ class WalletRepository extends Repository
 {
     public static function getByUser(int $user_id, string $coin)
     {
-        $lock_key = 'wallet@user:' . $user_id;
+        $lock_key = "wallet@user:$user_id";
 
         try {
             Lock::acquire($lock_key);

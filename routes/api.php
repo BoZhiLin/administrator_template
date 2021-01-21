@@ -76,7 +76,7 @@ Route::group(['middleware' => ['api.auth']], function () {
     /** 文章 */
     Route::group(['prefix' => 'post', 'as' => 'post.'], function () {
         /** 搜尋使用者文章 */
-        Route::get('/search', 'PostController@searchPosts')->name('search');
+        Route::get('/', 'PostController@index')->name('index');
         /** 特定文章 */
         Route::get('/{post_id}', 'PostController@show')->name('show');
         /** PO文 */
@@ -85,5 +85,17 @@ Route::group(['middleware' => ['api.auth']], function () {
         Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
         /** 取消讚 */
         Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
+    });
+
+    /** 約會 */
+    Route::group(['prefix' => 'date', 'as' => 'date.'], function () {
+        /** 開放中的約會 */
+        Route::get('/list', 'DateController@getOpeningList')->name('opening');
+        /** 發佈 */
+        Route::post('/publish', 'DateController@publish')->name('publish')->middleware('api.log');
+        /** 報名 */
+        Route::post('/{date_id}/signup', 'DateController@signUp')->name('signup')->middleware('api.log');
+        /** 配對 */
+        Route::post('/{date_id}/match', 'DateController@match')->name('match')->middleware('api.log');
     });
 });
