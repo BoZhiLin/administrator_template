@@ -86,4 +86,16 @@ Route::group(['middleware' => ['api.auth']], function () {
         /** 取消讚 */
         Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
     });
+
+    /** 約會 */
+    Route::group(['prefix' => 'date', 'as' => 'date.'], function () {
+        /** 開放中的約會 */
+        Route::get('/list', 'DateController@getOpeningList')->name('opening');
+        /** 發佈 */
+        Route::post('/publish', 'DateController@publish')->name('publish')->middleware('api.log');
+        /** 報名 */
+        Route::post('/{date_id}/signup', 'DateController@signUp')->name('signup')->middleware('api.log');
+        /** 配對 */
+        Route::post('/{date_id}/match', 'DateController@match')->name('match')->middleware('api.log');
+    });
 });

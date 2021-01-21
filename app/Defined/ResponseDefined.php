@@ -43,4 +43,19 @@ abstract class ResponseDefined
 
     /** 查無Banner */
     const BANNER_NOT_FOUND = 601;
+
+    /** 暫時無法新增約會 */
+    const DATE_PUBLISH_NOT_ALLOW = 701;
+    /** 查無約會 */
+    const DATE_NOT_FOUND = 702;
+    /** 不允許報名自己的約會 */
+    const DATE_NOT_ALLOW_SELF = 703;
+    /** 該約會已配對完畢 */
+    const DATE_HAS_MATCHED = 704;
+    /** 約會已結束 */
+    const DATE_HAS_CLOSED = 705;
+    /** 不可重複報名 */
+    const DATE_HAS_SIGNUP = 706;
+    /** 此配對人無報名該約會 */
+    const DATE_MATCH_NOT_EXISTS = 707;
 }
