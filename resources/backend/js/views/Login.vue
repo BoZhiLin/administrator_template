@@ -68,8 +68,7 @@ export default {
             localStorage.setItem("access_token", credential.access_token);
             localStorage.setItem("expired_at", credential.expired_at);
             this.$router.push({ path: "/admin/dashboard" });
-          }
-          else if (response.status === defined.response.UNAUTHORIZED) {
+          } else if (response.status === defined.response.UNAUTHORIZED) {
             this.$swal("Error!", "Incorrect account password!", "error");
           }
         });
