@@ -40,15 +40,6 @@
         >
       </b-form>
     </b-card>
-
-    <div>
-      <b-modal ref="my-modal" hide-footer>
-        <div class="d-block text-center">
-          <h3>Incorrect account password</h3>
-        </div>
-        <b-button class="mt-3" variant="outline-danger" block @click="hideDialogModal">Close</b-button>
-      </b-modal>
-    </div>
   </div>
 </template>
 
@@ -64,12 +55,6 @@ export default {
     };
   },
   methods: {
-    showDialogModal() {
-      this.$refs['my-modal'].show()
-    },
-    hideDialogModal() {
-      this.$refs['my-modal'].hide()
-    },
     adminLogin() {
       axios
         .post("/admin/api/auth/login", {
@@ -84,8 +69,8 @@ export default {
             localStorage.setItem("expired_at", credential.expired_at);
             this.$router.push({ path: "/admin/dashboard" });
           }
-          if (response.status === defined.response.UNAUTHORIZED) {
-            this.showDialogModal();
+          else if (response.status === defined.response.UNAUTHORIZED) {
+            this.$swal("Error!", "Incorrect account password!", "error");
           }
         });
     },
