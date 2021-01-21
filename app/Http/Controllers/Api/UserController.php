@@ -16,13 +16,37 @@ class UserController extends ApiController
     {
         $genders = implode(',', ['MALE', 'FEMALE', 'OTHER']);
         $response = $this->validateRequest($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'max:100'],
             'birthday' => ['required', 'date_format:Y-m-d'],
             'gender' => ['required', "in:$genders"],
-            'nickname' => ['required', 'string'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'password' => ['required', 'string', 'min:8']
+            'nickname' => ['required'],
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => ['required', 'min:8']
+        ], [
+            'name' => [
+                'Required' => ResponseDefined::NAME_REQUIRED,
+                'Max' => ResponseDefined::NAME_MAX,
+            ],
+            'birthday' => [
+                'Required' => ResponseDefined::BIRTHDAY_REQUIRED,
+                'DateFormat' => ResponseDefined::BIRTHDAY_INVALID
+            ],
+            'gender' => [
+                'Required' => ResponseDefined::GENDER_REQUIRED,
+                'In' => ResponseDefined::GENDER_INVALID
+            ],
+            'nickname' => [
+                'Required' => ResponseDefined::NICKNAME_REQUIRED
+            ],
+            'email' => [
+                'Required' => ResponseDefined::EMAIL_REQUIRED,
+                'Email' => ResponseDefined::EMAIL_INVALID,
+                'Unique' => ResponseDefined::EMAIL_HAS_EXISTS
+            ],
+            'password' => [
+                'Required' => ResponseDefined::PASSWORD_REQUIRED,
+                'Min' => ResponseDefined::PASSWORD_MIN
+            ]
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
