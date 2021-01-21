@@ -21,6 +21,10 @@ class Api {
     return this.sendRequest("/api/auth/login", "POST", false, data);
   }
 
+  userRegister(data) {
+    return this.sendRequest("/api/user/register", "POST", false, data);
+  }
+
   userInfo() {
     return this.sendRequest("/api/user/info", "GET", true);
   }

@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="bg-img1 bg-img">
     <div class="box">
-      <b-card header="Login" class="header">
+      <b-card header="Login" class="header" >
         <b-form @submit.stop.prevent>
           <b-card-text>
             <b-row class="my-1">
@@ -36,7 +36,10 @@
           </b-card-text>
 
           <b-button type="submit" @click="login" variant="primary"
-            >login</b-button
+            >登入</b-button
+          >
+          <b-button type="submit" @click="$router.push({ path: '/Register' })" variant="primary"
+            >註冊</b-button
           >
         </b-form>
       </b-card>

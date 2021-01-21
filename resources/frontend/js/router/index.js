@@ -22,6 +22,11 @@ const router = new VueRouter({
       name: 'index',
       component: require('../views/Index.vue').default
     },
+    {
+      path: '/register',
+      name: 'register',
+      component: require('../views/Register.vue').default
+    },
     // {
     //     path: '*',
     //     name: '404',
