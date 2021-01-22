@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** 認證 */
-Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['admin.log']], function () {
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     /** 登入 */
     Route::post('login', 'AuthController@login')->name('login');
     /** 刷新與註銷 */
@@ -26,7 +26,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['admin.log']
     });
 });
 
-/** 公告 */
+/** Authenticated Allow */
 Route::group(['middleware' => ['admin.auth']], function () {
     /** 公告管理 */
     Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
@@ -34,15 +34,12 @@ Route::group(['middleware' => ['admin.auth']], function () {
         Route::get('/', 'AnnouncementController@index')->name('index');
         /** 查找公告 */
         Route::get('/{id}', 'AnnouncementController@show')->name('show');
-        /** 紀錄公告 */
-        Route::group(['middleware' => ['admin.log']], function () {
-            /** 新增公告 */
-            Route::post('/', 'AnnouncementController@store')->name('store');
-            /** 更新公告 */
-            Route::put('/{id}', 'AnnouncementController@update')->name('update');
-            /** 刪除公告 */
-            Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
-        });
+        /** 新增公告 */
+        Route::post('/', 'AnnouncementController@store')->name('store');
+        /** 更新公告 */
+        Route::put('/{id}', 'AnnouncementController@update')->name('update');
+        /** 刪除公告 */
+        Route::delete('/{id}', 'AnnouncementController@destroy')->name('destroy');
     });
 
     /** Banner */
@@ -51,14 +48,11 @@ Route::group(['middleware' => ['admin.auth']], function () {
         Route::get('/', 'BannerController@index')->name('index');
         /** 查找Banner */
         Route::get('/{id}', 'BannerController@show')->name('show');
-        /** 紀錄Banner */
-        Route::group(['middleware' => ['admin.log']], function () {
-            /** 新增Banner */
-            Route::post('/', 'BannerController@store')->name('store');
-            /** 更新Banner */
-            Route::put('/{id}', 'BannerController@update')->name('update');
-            /** 刪除Banner */
-            Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
-        });
+        /** 新增Banner */
+        Route::post('/', 'BannerController@store')->name('store');
+        /** 更新Banner */
+        Route::put('/{id}', 'BannerController@update')->name('update');
+        /** 刪除Banner */
+        Route::delete('/{id}', 'BannerController@destroy')->name('destroy');
     });
 });

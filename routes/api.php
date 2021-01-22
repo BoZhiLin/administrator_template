@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 /** 登入認證 */
-Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['api.log']], function () {
+Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     /** 登入 */
     Route::post('/login', 'AuthController@login')->name('login');
     /** 登出 */
@@ -24,7 +24,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.', 'middleware' => ['api.log']],
 });
 
 /** 密碼 */
-Route::group(['prefix' => 'password', 'as' => 'password.', 'middleware' => ['api.log']], function () {
+Route::group(['prefix' => 'password', 'as' => 'password.'], function () {
     /** 忘記密碼 */
     Route::post('/forgot', 'PasswordController@forgot')->name('forgot');
     /** 重設密碼 */
@@ -36,16 +36,16 @@ Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
     /** 取得登入資訊 */
     Route::get('/info', 'UserController@getInfo')->name('info')->middleware('api.auth');
     /** 更新個人資訊 */
-    Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware(['api.log', 'api.auth']);
+    Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware('api.auth');
     /** 註冊 */
-    Route::post('/register', 'UserController@register')->name('register')->middleware('api.log');
+    Route::post('/register', 'UserController@register')->name('register');
     /** 每日簽到 */
-    Route::post('/sign', 'UserController@signIn')->name('sign')->middleware('api.log');
+    Route::post('/sign', 'UserController@signIn')->name('sign');
 
     /** VIP */
     Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
         /** 購買 */
-        Route::post('/buy', 'UserController@buyVIP')->name('buy')->middleware('api.log');
+        Route::post('/buy', 'UserController@buyVIP')->name('buy');
     });
 });
 
@@ -66,7 +66,7 @@ Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () 
 /** Authenticated Allow */
 Route::group(['middleware' => ['api.auth']], function () {
     /** 驗證 */
-    Route::group(['prefix' => 'verify', 'as' => 'verify.', 'middleware' => ['api.log']], function () {
+    Route::group(['prefix' => 'verify', 'as' => 'verify.'], function () {
         /** 註冊驗證 */
         Route::post('/registration', 'VerifyController@registration')->name('registration');
         /** 寄發驗證碼 */
@@ -80,11 +80,11 @@ Route::group(['middleware' => ['api.auth']], function () {
         /** 特定文章 */
         Route::get('/{post_id}', 'PostController@show')->name('show');
         /** PO文 */
-        Route::post('/', 'PostController@store')->name('store')->middleware('api.log');
+        Route::post('/', 'PostController@store')->name('store');
         /** 按讚 */
-        Route::patch('/{post_id}/like', 'PostController@like')->name('like')->middleware('api.log');
+        Route::patch('/{post_id}/like', 'PostController@like')->name('like');
         /** 取消讚 */
-        Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike')->middleware('api.log');
+        Route::patch('/{post_id}/dislike', 'PostController@dislike')->name('dislike');
     });
 
     /** 約會 */
@@ -94,10 +94,10 @@ Route::group(['middleware' => ['api.auth']], function () {
         /** 約會明細 */
         Route::get('/{date_id}', 'DateController@getDetail')->name('detail');
         /** 發佈 */
-        Route::post('/publish', 'DateController@publish')->name('publish')->middleware('api.log');
+        Route::post('/publish', 'DateController@publish')->name('publish');
         /** 報名 */
-        Route::post('/{date_id}/signup', 'DateController@signUp')->name('signup')->middleware('api.log');
+        Route::post('/{date_id}/signup', 'DateController@signUp')->name('signup');
         /** 配對 */
-        Route::post('/{date_id}/match', 'DateController@match')->name('match')->middleware('api.log');
+        Route::post('/{date_id}/match', 'DateController@match')->name('match');
     });
 });

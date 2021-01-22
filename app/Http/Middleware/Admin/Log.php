@@ -19,22 +19,28 @@ class Log
      */
     public function handle(Request $request, Closure $next)
     {
-        $admin_log = new AdminLog();
-        $admin_log->ip = $request->ip();
-        $admin_log->action = $request->path();
-        $admin_log->device = $request->userAgent();
-        $admin_log->post = json_encode($request->post());
-        $admin_log->get = json_encode($request->query());
-        $admin_log->session = json_encode(['admin_id' => Session::get('admin_id')]);
-        $admin_log->save();
+        $allowed_methods = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
-        $result = $next($request);
-
-        if (gettype($result->original) === 'array') {
-            $admin_log->response = json_encode($result->original);
+        if (in_array($request->method(), $allowed_methods)) {
+            $admin_log = new AdminLog();
+            $admin_log->ip = $request->ip();
+            $admin_log->action = $request->path();
+            $admin_log->device = $request->userAgent();
+            $admin_log->post = json_encode($request->post());
+            $admin_log->get = json_encode($request->query());
+            $admin_log->session = json_encode(['admin_id' => Session::get('admin_id')]);
             $admin_log->save();
-        }
 
+            $result = $next($request);
+
+            if (gettype($result->original) === 'array') {
+                $admin_log->response = json_encode($result->original);
+                $admin_log->save();
+            }
+        } else {
+            $result = $next($request);
+        }
+        
         return $result;
     }
 }
