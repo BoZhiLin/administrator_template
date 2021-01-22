@@ -5,7 +5,7 @@
         <div class="box1">
           <div>
             <h1>交友首頁</h1>
-            <b-button class="reg-btn" type="submit">
+            <b-button class="reg-btn" @click="$router.push({ path: '/Register' })" type="submit">
               <h3>註冊</h3>
             </b-button>
           </div>
@@ -13,7 +13,7 @@
       </div>
     </section>
     <section>
-      <div class="box2" ref="infoBox" @mousewheel="scrollEvent($event)">
+      <div class="box2" ref="infoBox"  @mousewheel="scrollEvent($event)">
         <b-card header="Default" class="text-center">
           <b-card-text
             >Lorem ipsum dolor sit amet, consectetur adipiscing

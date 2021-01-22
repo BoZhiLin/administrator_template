@@ -18,14 +18,14 @@
                   size="sm"
                   v-model="name"
                   :state="null"
-                  placeholder="Name"
+
                 ></b-form-input>
                 <span
                   class="invalid-feedback1"
 
                   :state="validation"
                 >
-                  {{ inputError.name }}
+                  <!-- {{ inputError.name }} -->
                 </span>
               </b-col>
             </b-row>
@@ -47,7 +47,7 @@
 
                   :state="validation"
                 >
-                  {{ inputError.birthday }}
+                  <!-- {{ inputError.birthday }} -->
                 </span>
               </b-col>
             </b-row>
@@ -69,7 +69,7 @@
 
                   :state="validation"
                 >
-                  {{ inputError.gender }}
+                  <!-- {{ inputError.gender }} -->
                 </span>
               </b-col>
             </b-row>
@@ -91,7 +91,7 @@
 
                   :state="validation"
                 >
-                  {{ inputError.nickname }}
+                  <!-- {{ inputError.nickname }} -->
                 </span>
               </b-col>
             </b-row>
@@ -113,7 +113,7 @@
 
                   :state="validation"
                 >
-                  {{ inputError.email }}
+                  <!-- {{ inputError.email }} -->
                 </span>
               </b-col>
             </b-row>
@@ -136,10 +136,13 @@
 
                   :state="validation"
                 >
-                  {{ inputError.password }}
+                  <!-- {{ inputError.password }} -->
                 </span>
               </b-col>
             </b-row>
+          </b-card-text>
+          <b-card-text class="invalid-feedback1">
+            {{inputError}}
           </b-card-text>
 
           <b-button
@@ -175,49 +178,48 @@ export default {
       password: "",
       options: [
         { value: "MALE", text: "男性" },
-        { value: "FAMALE", text: "女性" },
-        { value: "OTHERS", text: "其他" },
+        { value: "FEMALE", text: "女性" },
+        { value: "OTHER", text: "其他" },
       ],
-      inputError:[],
+      inputError:"",
     //   errorStatus: [false, false, false, false, false, false],
-      text: [],
     };
   },
   watch: {
     birthday(birthday) {
       if (this.birthday !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.birthday = "";
+        this.inputError = "";
       }
     },
     name(name) {
       if (this.name !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.name = "";
+        this.inputError = "";
       }
     },
     gender(gender) {
       if (this.gender !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.gender = "";
+        this.inputError = "";
       }
     },
     nickName(nickName) {
       if (this.nickName !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.nickName = "";
+        this.inputError = "";
       }
     },
     email(email) {
       if (this.email !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.email = "";
+        this.inputError = "";
       }
     },
     password(password) {
       if (this.password !== "") {
         // this.errorStatus[5] = false;
-        this.inputError.password = "";
+        this.inputError = "";
       }
     },
   },
@@ -233,9 +235,12 @@ export default {
           password: this.password,
         })
         .then(({ data }) => {
-            console.log(data.msg.password[0 ]);
-            this.inputError = data.msg;
-          
+              var arr = defined.response
+              for (const prop  in arr) {
+               if (prop == data.status) {
+                 this.inputError = arr[prop]
+               }
+              }
         })
         .catch(({ response }) => {
           //
@@ -259,5 +264,6 @@ export default {
   margin-top: 0.25rem;
   font-size: 80%;
   color: #dc3545 !important;
+  text-align: center  ;
 }
 </style>
