@@ -24,6 +24,26 @@ class DateService extends Service
     }
 
     /**
+     * 取得約會明細
+     * 
+     * @param int $date_id
+     * @return array
+     */
+    public static function getDate(int $date_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $date = DateRepository::find($date_id);
+
+        if (is_null($date)) {
+            $response['status'] = ResponseDefined::DATE_NOT_FOUND;
+        } else {
+            $response['data']['date'] = $date;
+        }
+
+        return $response;
+    }
+
+    /**
      * 發佈約會
      * 
      * @param array $date_info (約會資訊)
@@ -124,6 +144,8 @@ class DateService extends Service
             } finally {
                 Lock::release($lock_key);
             }
+
+            /** TODO: 通知配對人 */
         }
 
         return $response;

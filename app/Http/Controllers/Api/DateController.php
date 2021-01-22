@@ -17,6 +17,12 @@ class DateController extends ApiController
         return response($response);
     }
 
+    public function getDetail(int $id)
+    {
+        $response = DateService::getDate($id);
+        return response($response);
+    }
+
     public function publish(Request $request)
     {
         $result = $this->validateRequest($request->all(), [

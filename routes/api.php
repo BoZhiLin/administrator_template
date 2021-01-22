@@ -91,6 +91,8 @@ Route::group(['middleware' => ['api.auth']], function () {
     Route::group(['prefix' => 'date', 'as' => 'date.'], function () {
         /** 開放中的約會 */
         Route::get('/list', 'DateController@getOpeningList')->name('opening');
+        /** 約會明細 */
+        Route::get('/{date_id}', 'DateController@getDetail')->name('detail');
         /** 發佈 */
         Route::post('/publish', 'DateController@publish')->name('publish')->middleware('api.log');
         /** 報名 */

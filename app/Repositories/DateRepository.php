@@ -11,6 +11,9 @@ class DateRepository extends Repository
         $now = now();
         return static::getModel()::where('opened_at', '<=', $now)
             ->where('closed_at', '>', $now)
+            ->with(['publisher' => function ($query) {
+                $query->select('users.id', 'name', 'nickname', 'avatar');
+            }])
             ->get();
     }
 
@@ -21,6 +24,7 @@ class DateRepository extends Repository
         $date = new $model();
         $date->title = $info['title'];
         $date->description = $info['description'];
+        $date->publisher_id = $info['publisher_id'];
         $date->opened_at = $now;
         $date->closed_at = $now->addDay();
         $date->save();
@@ -35,7 +39,11 @@ class DateRepository extends Repository
 
     public static function find(int $id)
     {
-        return static::getModel()::where('id', $id)->with('dateRecords')->first();
+        return static::getModel()::where('id', $id)
+            ->with(['dateRecords', 'publisher' => function ($query) {
+                $query->select('users.id', 'name', 'nickname', 'avatar');
+            }])
+            ->first();
     }
 
     /**

@@ -22,6 +22,9 @@ class TaskService extends Service
 {
     /**
      * 簽到
+     * 
+     * @param int $user_id
+     * @return array
      */
     public static function signIn(int $user_id)
     {
@@ -49,6 +52,10 @@ class TaskService extends Service
 
     /**
      * 完整個資贈送SUPER LIKE
+     * 
+     * @param int $user_id
+     * @param array $data
+     * @return array
      */
     public static function completeProfile(int $user_id, array $data)
     {

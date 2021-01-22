@@ -21,6 +21,12 @@ use App\Repositories\VipRepository;
 
 class UserService extends Service
 {
+    /**
+     * 註冊
+     * 
+     * @param array $data
+     * @return array
+     */
     public static function register(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -30,6 +36,13 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 驗證使用者信箱
+     * 
+     * @param int $user_id
+     * @param mixed $code
+     * @return array
+     */
     public static function verifyUser(int $user_id, $code = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -52,6 +65,12 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 寄送信箱驗證碼
+     * 
+     * @param int $user_id
+     * @return array
+     */
     public static function sendVerifyCode(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -61,6 +80,12 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 忘記密碼
+     * 
+     * @param string $email
+     * @return array
+     */
     public static function forgetPassword(string $email)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -78,6 +103,13 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 重設密碼
+     * 
+     * @param int $user_id
+     * @param string $password
+     * @return array
+     */
     public static function resetPassword(int $user_id, string $password)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -88,6 +120,12 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 取得使用者資料
+     * 
+     * @param int $user_id
+     * @return array
+     */
     public static function getInfo(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -95,6 +133,13 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 設定使用者資料
+     * 
+     * @param int $user_id
+     * @param array $data
+     * @return array
+     */
     public static function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -111,6 +156,12 @@ class UserService extends Service
         return $response;
     }
 
+    /**
+     * 回傳user陣列 (私有方法)
+     * 
+     * @param int $user_id
+     * @return array
+     */
     private static function getUserInfo(int $user_id)
     {
         $user = UserRepository::find($user_id);
@@ -134,6 +185,12 @@ class UserService extends Service
         ];
     }
 
+    /**
+     * 產生驗證碼並且寄Email (私有方法)
+     * 
+     * @param User $user
+     * @return void
+     */
     private static function generateVerifyCode(User $user)
     {
         $verify_code = random_int(100000, 999999);

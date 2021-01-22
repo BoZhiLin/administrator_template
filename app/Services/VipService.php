@@ -13,6 +13,12 @@ use App\Repositories\OrderRepository;
 
 class VipService extends Service
 {
+    /**
+     * 購買會員
+     * 
+     * @param int $user_id
+     * @return array
+     */
     public static function buy(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];

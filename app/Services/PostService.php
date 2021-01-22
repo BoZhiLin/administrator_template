@@ -14,6 +14,11 @@ use App\Repositories\PostRepository;
 
 class PostService extends Service
 {
+    /**
+     * 文章清單
+     * 
+     * @return array
+     */
     public static function getPosts()
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -23,6 +28,12 @@ class PostService extends Service
         return $response;
     }
 
+    /**
+     * 特定文章
+     * 
+     * @param int $post_id
+     * @return array
+     */
     public static function getPostByID(int $post_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -37,6 +48,12 @@ class PostService extends Service
         return $response;
     }
 
+    /**
+     * PO文
+     * 
+     * @param array $data
+     * @return array
+     */
     public static function create(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
@@ -51,6 +68,10 @@ class PostService extends Service
 
     /**
      * 按讚
+     * 
+     * @param User $user
+     * @param int $post_id
+     * @return array
      */
     public static function likeByUser(User $user, int $post_id)
     {
@@ -79,6 +100,10 @@ class PostService extends Service
 
     /**
      * 取消讚
+     * 
+     * @param User $user
+     * @param int $post_id
+     * @return array
      */
     public static function cancelLikeByUser(User $user, int $post_id)
     {
