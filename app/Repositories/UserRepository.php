@@ -47,18 +47,6 @@ class UserRepository extends Repository
         return $user;
     }
 
-    /**
-     * 通過認證
-     */
-    public static function setVerified(int $id)
-    {
-        $now = now();
-        $user = static::getModel()::find($id);
-        $user->email_verified_at = $now;
-        $user->is_verified = true;
-        $user->save();
-    }
-
     public static function getByEmail(string $email)
     {
         return static::getModel()::where('email', $email)->first();

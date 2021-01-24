@@ -10,15 +10,13 @@ class VerifyController extends ApiController
 {
     public function registration(Request $request)
     {
-        $user_id = auth()->id();
-        $response = UserService::verifyUser($user_id, $request->code);
+        $response = UserService::verifyUser(auth()->user(), $request->code);
         return response($response);
     }
 
     public function sendRegistration()
     {
-        $user_id = auth()->id();
-        $response = UserService::sendVerifyCode($user_id);
+        $response = UserService::sendVerifyCode(auth()->user());
         return response($response);
     }
 }

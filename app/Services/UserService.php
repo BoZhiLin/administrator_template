@@ -16,8 +16,9 @@ use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 
-use App\Repositories\UserRepository;
 use App\Repositories\VipRepository;
+use App\Repositories\UserRepository;
+use App\Repositories\UserMatchRepository;
 
 class UserService extends Service
 {
@@ -31,22 +32,40 @@ class UserService extends Service
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $user = UserRepository::create($data);
-        static::generateVerifyCode($user);
+        $response['data']['user'] = $user;
 
         return $response;
     }
 
     /**
-     * 驗證使用者信箱
+     * 產生驗證碼並且寄Email
      * 
-     * @param int $user_id
+     * @param User $user
+     * @return array
+     */
+    public static function sendVerifyCode(User $user)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $verify_code = random_int(100000, 999999);
+        $key = "verify@user:$user->id";
+        $expire_seconds = SystemDefined::VERIFY_CODE_EXPIRED * 60;
+        Cache::put($key, $verify_code, $expire_seconds);
+        SendVerifyMail::dispatch($user, $verify_code);
+
+        return $response;
+    }
+
+    /**
+     * 驗證使用者信箱，驗證成功則贈送3天黃金會員
+     * 
+     * @param User $user
      * @param mixed $code
      * @return array
      */
-    public static function verifyUser(int $user_id, $code = null)
+    public static function verifyUser(User $user, $code = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $key = "verify@user:$user_id";
+        $key = "verify@user:$user->id";
         $verify_code = Cache::get($key);
 
         if (!$code) {
@@ -56,26 +75,13 @@ class UserService extends Service
         } elseif ($code != $verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
         } else {
-            /** 驗證成功，贈送3天黃金會員 */
-            UserRepository::setVerified($user_id);
-            VipRepository::buyByUser($user_id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
+            $user->email_verified_at = now();
+            $user->is_verified = true;
+            $user->save();
+
+            VipRepository::buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
             Cache::forget($key);
         }
-
-        return $response;
-    }
-
-    /**
-     * 寄送信箱驗證碼
-     * 
-     * @param int $user_id
-     * @return array
-     */
-    public static function sendVerifyCode(int $user_id)
-    {
-        $response = ['status' => ResponseDefined::SUCCESS];
-        $user = UserRepository::find($user_id);
-        static::generateVerifyCode($user);
 
         return $response;
     }
@@ -157,6 +163,73 @@ class UserService extends Service
     }
 
     /**
+     * 發送配對邀請 or 接受配對邀請 (按LIKE，互相按LIKE則自動配對)
+     * 
+     * @param int $from_id
+     * @param int $match_id
+     * @return array
+     */
+    public static function match(int $from_id, int $match_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+
+        if (!UserRepository::find($match_id)) {
+            $response['status'] = ResponseDefined::USER_NOT_FOUND;
+        } elseif ($from_id === $match_id) {
+            $response['status'] = ResponseDefined::NOT_ALLOW_SEND_SELF;
+        } elseif (
+            ($match_info = UserMatchRepository::getByBothUser($from_id, $match_id)) &&
+            $match_info->is_matched
+        ) {
+            $response['status'] = ResponseDefined::USER_HAS_MATCHED;
+        } elseif (
+            ($match_info = UserMatchRepository::getByBothUser($from_id, $match_id)) &&
+            $match_info->from_id === $from_id
+        ) {
+            $response['status'] = ResponseDefined::MATCH_HAS_SEND;
+        } else {
+            $match_info = UserMatchRepository::sendOrMatch([
+                'from_id' => $from_id,
+                'match_id' => $match_id
+            ]);
+
+            if ($match_info->is_matched) {
+                /** TODO: 通知兩人已成功配對 */
+            } else {
+                /** TODO: 通知對方有配對邀請 */
+            }
+        }
+        /** 不可重複配對，亦不可重複發送邀請 */
+         
+
+        return $response;
+    }
+
+    /**
+     * 解除配對 or 對方拒絕配對邀請
+     * 
+     * @param int $from_id
+     * @param int $target_id (配對對象 or 欲拒絕對象)
+     * @return array
+     */
+    public static function removeMatch(int $from_id, int $target_id)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+
+        if (!UserRepository::find($target_id)) {
+            $response['status'] = ResponseDefined::USER_NOT_FOUND;
+        } elseif ($from_id === $target_id) {
+            $response['status'] = ResponseDefined::NOT_ALLOW_REMOVE_SELF;
+        } elseif (! $match_info = UserMatchRepository::getByBothUser($from_id, $target_id)) {
+            $response['status'] = ResponseDefined::MATCH_NOT_FOUND;
+        } else {
+            $match_info->forceDelete();
+        }
+
+        return $response;
+    }
+
+    /**
      * 回傳user陣列 (私有方法)
      * 
      * @param int $user_id
@@ -183,20 +256,5 @@ class UserService extends Service
             'is_verified' => $user->is_verified,
             'like_posts' => $like_posts
         ];
-    }
-
-    /**
-     * 產生驗證碼並且寄Email (私有方法)
-     * 
-     * @param User $user
-     * @return void
-     */
-    private static function generateVerifyCode(User $user)
-    {
-        $verify_code = random_int(100000, 999999);
-        $key = 'verify@user:' . $user->id;
-        $expire_seconds = SystemDefined::VERIFY_CODE_EXPIRED * 60;
-        Cache::put($key, $verify_code, $expire_seconds);
-        SendVerifyMail::dispatch($user, $verify_code);
     }
 }

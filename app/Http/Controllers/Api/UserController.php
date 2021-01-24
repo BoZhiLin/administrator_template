@@ -97,10 +97,43 @@ class UserController extends ApiController
         return response($response);
     }
 
+    public function match(Request $request)
+    {
+        $response = $this->validateRequest($request->all(), [
+            'match_id' => 'required'
+        ], [
+            'match_id' => [
+                'Required' => ResponseDefined::TARGET_IS_REQUIRED
+            ]
+        ]);
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = UserService::match(auth()->id(), $request->match_id);
+        }
+
+        return response($response);
+    }
+
+    public function removeMatch(Request $request)
+    {
+        $response = $this->validateRequest($request->all(), [
+            'target_id' => 'required'
+        ], [
+            'target_id' => [
+                'Required' => ResponseDefined::TARGET_IS_REQUIRED
+            ]
+        ]);
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = UserService::removeMatch(auth()->id(), $request->target_id);
+        }
+
+        return response($response);
+    }
+
     public function buyVIP()
     {
-        $user_id = auth()->id();
-        $result = VipService::buy($user_id);
+        $result = VipService::buy(auth()->id());
 
         /** TODO 串金流時改為回傳支付form */
         return response($result);

@@ -88,4 +88,20 @@ abstract class ResponseDefined
     const DATE_HAS_SIGNUP = 706;
     /** 此配對人無報名該約會 */
     const DATE_MATCH_NOT_EXISTS = 707;
+
+    // ------ LIKE配對相關 ------
+    /** 雙方已配對 */
+    const USER_HAS_MATCHED = 801;
+    /** 邀請已發送 */
+    const MATCH_HAS_SEND = 802;
+    /** 查無配對資料 */
+    const MATCH_NOT_FOUND = 803;
+    /** 與該對象非好友關係 */
+    const USER_NOT_FRIEND = 804;
+    /** 對象必填 */
+    const TARGET_IS_REQUIRED = 805;
+    /** 不可邀請自己 */
+    const NOT_ALLOW_SEND_SELF = 806;
+    /** 不可刪除自己 */
+    const NOT_ALLOW_REMOVE_SELF = 807;
 }
