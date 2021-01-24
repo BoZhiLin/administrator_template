@@ -109,25 +109,24 @@ class DateService extends Service
      * 發佈人進行配對
      * 
      * @param int $date_id (約會ID)
+     * @param int $user_id (當前使用者ID check用)
      * @param int $match_id (配對人ID)
      * @return array
      */
-    public static function match(int $date_id, int $match_id)
+    public static function match(int $date_id, int $user_id, int $match_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $date = DateRepository::find($date_id);
 
         if (is_null($date)) {
             $response['status'] = ResponseDefined::DATE_NOT_FOUND;
+        } elseif ($date->publisher_id !== $user_id) {
+            $response['status'] = ResponseDefined::PERMISSION_DENIED;
         } elseif (!is_null($date->match_id)) {
             $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
-        } elseif (
-            ! $match_user = UserRepository::find($match_id)
-        ) {
+        } elseif (! $match_user = UserRepository::find($match_id)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
-        } elseif (
-            ! $record = $date->dateRecords->firstWhere('user_id', $match_user->id)
-        ) {
+        } elseif (! $record = $date->dateRecords->firstWhere('signup_user_id', $match_user->id)) {
             $response['status'] = ResponseDefined::DATE_MATCH_NOT_EXISTS;
         } else {
             $lock_key = "match@date_id:$date_id";

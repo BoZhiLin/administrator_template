@@ -52,7 +52,7 @@ class DateController extends ApiController
         ]);
 
         if ($result['status'] === ResponseDefined::SUCCESS) {
-            $result = DateService::match($id, $request->match_id);
+            $result = DateService::match($id, auth()->id(), $request->match_id);
         }
 
         return response($result);

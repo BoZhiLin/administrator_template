@@ -88,6 +88,8 @@ abstract class ResponseDefined
     const DATE_HAS_SIGNUP = 706;
     /** 此配對人無報名該約會 */
     const DATE_MATCH_NOT_EXISTS = 707;
+    /** 權限不符 (必須是發佈人才有權限) */
+    const PERMISSION_DENIED = 708;
 
     // ------ LIKE配對相關 ------
     /** 雙方已配對 */
