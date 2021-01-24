@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Defined\ResponseDefined;
 
-use App\Services\VipService;
 use App\Services\UserService;
 use App\Services\TaskService;
 
@@ -133,7 +132,7 @@ class UserController extends ApiController
 
     public function buyVIP()
     {
-        $result = VipService::buy(auth()->id());
+        $result = UserService::buyVIP(auth()->user());
 
         /** TODO 串金流時改為回傳支付form */
         return response($result);
