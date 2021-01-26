@@ -8,17 +8,22 @@ use App\Services\UserService;
 
 class VerifyController extends ApiController
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function registration(Request $request)
     {
-        $user_id = auth()->id();
-        $response = UserService::verifyUser($user_id, $request->code);
+        $response = $this->userService->verifyUser(auth()->user(), $request->code);
         return response($response);
     }
 
     public function sendRegistration()
     {
-        $user_id = auth()->id();
-        $response = UserService::sendVerifyCode($user_id);
+        $response = $this->userService->sendVerifyCode(auth()->user());
         return response($response);
     }
 }

@@ -11,15 +11,23 @@ use App\Repositories\DateRepository;
 
 class DateService extends Service
 {
+    protected $userRepo;
+    protected $dateRepo;
+
+    public function __construct(UserRepository $userRepo, DateRepository $dateRepo)
+    {
+        $this->userRepo = $userRepo;
+        $this->dateRepo = $dateRepo;
+    }
     /**
      * 取得開放報名中的約會
      * 
      * @return array
      */
-    public static function getOpeningList()
+    public function getOpeningList()
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['dates'] = DateRepository::getOpening();
+        $response['data']['dates'] = $this->dateRepo->getOpening();
         return $response;
     }
 
@@ -29,10 +37,10 @@ class DateService extends Service
      * @param int $date_id
      * @return array
      */
-    public static function getDate(int $date_id)
+    public function getDate(int $date_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $date = DateRepository::find($date_id);
+        $date = $this->dateRepo->find($date_id);
 
         if (is_null($date)) {
             $response['status'] = ResponseDefined::DATE_NOT_FOUND;
@@ -49,16 +57,16 @@ class DateService extends Service
      * @param array $date_info (約會資訊)
      * @return array
      */
-    public static function publish(array $date_info)
+    public function publish(array $date_info)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $last_date = DateRepository::getLastByUser($date_info['publisher_id']);
+        $last_date = $this->dateRepo->getLastByUser($date_info['publisher_id']);
 
         /** 一天內無法新增第二筆約會 */
         if (!is_null($last_date)) {
             $response['status'] = ResponseDefined::DATE_PUBLISH_NOT_ALLOW;
         } else {
-            $date = DateRepository::create($date_info);
+            $date = $this->dateRepo->create($date_info);
             $response['data']['date'] = $date;
         }
 
@@ -72,10 +80,10 @@ class DateService extends Service
      * @param int $user_id (報名人ID)
      * @return array
      */
-    public static function signUp(int $date_id, int $user_id)
+    public function signUp(int $date_id, int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $date = DateRepository::find($date_id);
+        $date = $this->dateRepo->find($date_id);
 
         if (is_null($date)) {
             $response['status'] = ResponseDefined::DATE_NOT_FOUND;
@@ -95,7 +103,7 @@ class DateService extends Service
             try {
                 Lock::acquire($lock_key);
 
-                $date_record = DateRepository::signUp($date, $user_id);
+                $date_record = $this->dateRepo->signUp($date, $user_id);
                 $response['data']['record'] = $date_record;
             } finally {
                 Lock::release($lock_key);
@@ -109,25 +117,24 @@ class DateService extends Service
      * 發佈人進行配對
      * 
      * @param int $date_id (約會ID)
+     * @param int $user_id (當前使用者ID check用)
      * @param int $match_id (配對人ID)
      * @return array
      */
-    public static function match(int $date_id, int $match_id)
+    public function match(int $date_id, int $user_id, int $match_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $date = DateRepository::find($date_id);
+        $date = $this->dateRepo->find($date_id);
 
         if (is_null($date)) {
             $response['status'] = ResponseDefined::DATE_NOT_FOUND;
+        } elseif ($date->publisher_id !== $user_id) {
+            $response['status'] = ResponseDefined::PERMISSION_DENIED;
         } elseif (!is_null($date->match_id)) {
             $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
-        } elseif (
-            ! $match_user = UserRepository::find($match_id)
-        ) {
+        } elseif (! $match_user = $this->userRepo->find($match_id)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
-        } elseif (
-            ! $record = $date->dateRecords->firstWhere('user_id', $match_user->id)
-        ) {
+        } elseif (! $record = $date->dateRecords->firstWhere('signup_user_id', $match_user->id)) {
             $response['status'] = ResponseDefined::DATE_MATCH_NOT_EXISTS;
         } else {
             $lock_key = "match@date_id:$date_id";

@@ -15,9 +15,9 @@ class UserRepository extends Repository
     /**
      * 新增/註冊會員
      */
-    public static function create(array $data)
+    public function create(array $data)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $user = new $model();
         $user->gender = $data['gender'];
         $user->name = $data['name'];
@@ -35,9 +35,9 @@ class UserRepository extends Repository
     /**
      * 更新個人資料
      */
-    public static function update(int $id, array $data)
+    public function update(int $id, array $data)
     {
-        $user = static::getModel()::find($id);
+        $user = $this->getModel()::find($id);
         
         foreach ($data as $attribute => $value) {
             $user->$attribute = $value;
@@ -47,21 +47,9 @@ class UserRepository extends Repository
         return $user;
     }
 
-    /**
-     * 通過認證
-     */
-    public static function setVerified(int $id)
+    public function getByEmail(string $email)
     {
-        $now = now();
-        $user = static::getModel()::find($id);
-        $user->email_verified_at = $now;
-        $user->is_verified = true;
-        $user->save();
-    }
-
-    public static function getByEmail(string $email)
-    {
-        return static::getModel()::where('email', $email)->first();
+        return $this->getModel()::where('email', $email)->first();
     }
 
     /**
@@ -70,7 +58,7 @@ class UserRepository extends Repository
      * @param User $user
      * @return string
      */
-    public static function getVipLevel(User $user)
+    public function getVipLevel(User $user)
     {
         $now = now();
         $user->load('vip');
@@ -86,7 +74,7 @@ class UserRepository extends Repository
         return $vip_type;
     }
 
-    // public static function getVipLevel(User $user)
+    // public function getVipLevel(User $user)
     // {
     //     $now = now();
     //     $user->load('vips');
@@ -113,7 +101,7 @@ class UserRepository extends Repository
     //     return $vip_type;
     // }
 
-    public static function getModel()
+    public function getModel()
     {
         return User::class;
     }

@@ -33,20 +33,8 @@ Route::group(['prefix' => 'password', 'as' => 'password.'], function () {
 
 /** 使用者 */
 Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
-    /** 取得登入資訊 */
-    Route::get('/info', 'UserController@getInfo')->name('info')->middleware('api.auth');
-    /** 更新個人資訊 */
-    Route::post('/info', 'UserController@setInfo')->name('info.set')->middleware('api.auth');
     /** 註冊 */
     Route::post('/register', 'UserController@register')->name('register');
-    /** 每日簽到 */
-    Route::post('/sign', 'UserController@signIn')->name('sign');
-
-    /** VIP */
-    Route::group(['prefix' => 'vip', 'as' => 'vip.', 'middleware' => ['api.auth']], function () {
-        /** 購買 */
-        Route::post('/buy', 'UserController@buyVIP')->name('buy');
-    });
 });
 
 /** Banner */
@@ -71,6 +59,25 @@ Route::group(['middleware' => ['api.auth']], function () {
         Route::post('/registration', 'VerifyController@registration')->name('registration');
         /** 寄發驗證碼 */
         Route::post('/registration/send', 'VerifyController@sendRegistration')->name('registration.send');
+    });
+
+    /** 使用者登入後行為 */
+    Route::group(['prefix' => 'user', 'as' => 'user.'], function () {
+        /** 取得登入資訊 */
+        Route::get('/info', 'UserController@getInfo')->name('info');
+        /** 更新個人資訊 */
+        Route::post('/info', 'UserController@setInfo')->name('info.set');
+        /** 配對邀請 (LIKE) */
+        Route::post('/match', 'UserController@match')->name('match');
+        /** 解除配對 */
+        Route::delete('/match', 'UserController@removeMatch')->name('match.remove');
+        /** 每日簽到 */
+        Route::post('/sign', 'UserController@signIn')->name('sign');
+        /** VIP */
+        Route::group(['prefix' => 'vip', 'as' => 'vip.'], function () {
+            /** 購買 */
+            Route::post('/buy', 'UserController@buyVIP')->name('buy');
+        });
     });
     
     /** 文章 */

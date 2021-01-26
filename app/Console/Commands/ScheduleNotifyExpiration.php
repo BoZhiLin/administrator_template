@@ -15,6 +15,13 @@ use App\Jobs\SendExpirationMail;
 class ScheduleNotifyExpiration extends Command
 {
     /**
+     * UserRepository for handling user entity.
+     * 
+     * @var UserRepository
+     */
+    protected $userRepo;
+
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -33,9 +40,10 @@ class ScheduleNotifyExpiration extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepo)
     {
         parent::__construct();
+        $this->userRepo = $userRepo;
     }
 
     /**
@@ -49,7 +57,7 @@ class ScheduleNotifyExpiration extends Command
             ->with(['vips'])
             ->get()
             ->each(function ($user) {
-                $vip_type = UserRepository::getVipLevel($user);
+                $vip_type = $this->userRepo->getVipLevel($user);
                 $current_vip = $user->vips()
                     ->where('type', $vip_type)
                     ->whereDate('expired_at', today()->addDays(SystemDefined::EXPIRATION_NOTIFY_DAYS))
@@ -61,7 +69,5 @@ class ScheduleNotifyExpiration extends Command
                     ]);
                 }
             });
-
-        // TODO: Email通知
     }
 }

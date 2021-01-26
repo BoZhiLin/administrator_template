@@ -4,9 +4,9 @@ namespace App\Repositories;
 
 class PostRepository extends Repository
 {
-    public static function index()
+    public function index()
     {
-        return static::getModel()::with(['user' => function ($query) {
+        return $this->getModel()::with(['user' => function ($query) {
                 $query->select('users.id', 'name', 'nickname', 'avatar');
             }, 'favoriteUsers' => function ($query) {
                 $query->select('users.id', 'name', 'nickname', 'avatar');
@@ -15,18 +15,18 @@ class PostRepository extends Repository
             ->get();
     }
 
-    public static function find(int $id)
+    public function find(int $id)
     {
-        return static::getModel()::where('id', $id)
+        return $this->getModel()::where('id', $id)
             ->with(['favoriteUsers' => function ($query) {
                 $query->select('users.id', 'name', 'nickname', 'avatar');
             }])
             ->first();
     }
 
-    public static function create(array $data)
+    public function create(array $data)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $post = new $model();
         $post->user_id = $data['user_id'];
         $post->content = $data['content'];
@@ -35,7 +35,7 @@ class PostRepository extends Repository
         return $post;
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Post::class;
     }

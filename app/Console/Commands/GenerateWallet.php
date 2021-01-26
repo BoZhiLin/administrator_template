@@ -12,6 +12,11 @@ use App\Repositories\WalletRepository;
 
 class GenerateWallet extends Command
 {
+    /**
+     * WalletRepository for handling wallet entity.
+     * 
+     * @var WalletRepository
+     */
     protected $walletRepo;
 
     /**

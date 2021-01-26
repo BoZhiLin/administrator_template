@@ -6,13 +6,13 @@ use App\Defined\TaskDefined;
 
 class SignInRepository extends Repository
 {
-    public static function setByUser(int $user_id)
+    public function setByUser(int $user_id)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $record = new $model();
         $record->user_id = $user_id;
 
-        if ($yesterday_record = static::findByUser($user_id, today()->subDay()->toDateString())) {
+        if ($yesterday_record = $this->findByUser($user_id, today()->subDay()->toDateString())) {
             if ($yesterday_record->continuous >= TaskDefined::TARGET_CONTINUOUS_DAYS) {
                 $record->continuous = 1;
             } else {
@@ -31,14 +31,14 @@ class SignInRepository extends Repository
     /**
      * 某日是否簽到
      */
-    public static function findByUser(int $user_id, string $date)
+    public function findByUser(int $user_id, string $date)
     {
-        return static::getModel()::where('user_id', $user_id)
+        return $this->getModel()::where('user_id', $user_id)
             ->whereDate('created_at', $date)
             ->first();
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\SignIn::class;
     }

@@ -9,8 +9,6 @@ use App\Models\AdminUser;
 
 class AdminUsersTableSeeder extends Seeder
 {
-    protected $model = AdminUser::class;
-
     /**
      * Run the database seeds.
      *
@@ -18,7 +16,7 @@ class AdminUsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $admin_user = new $this->model();
+        $admin_user = new AdminUser();
         $admin_user->name = 'administrator';
         $admin_user->username = 'admin';
         $admin_user->password = Hash::make('admin123456');

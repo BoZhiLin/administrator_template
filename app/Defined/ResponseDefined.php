@@ -24,6 +24,8 @@ abstract class ResponseDefined
     const VERIFY_CODE_ERROR = 105;
     /** 驗證碼不允許為空 */
     const VERIFY_CODE_REQUIRED = 106;
+    /** 該會員已驗證 */
+    const VERIFY_HAS_PASSED = 107;
 
     // ------ 帳號註冊相關 ------
     /** 查無此帳號 */
@@ -88,4 +90,22 @@ abstract class ResponseDefined
     const DATE_HAS_SIGNUP = 706;
     /** 此配對人無報名該約會 */
     const DATE_MATCH_NOT_EXISTS = 707;
+    /** 權限不符 (必須是發佈人才有權限) */
+    const PERMISSION_DENIED = 708;
+
+    // ------ LIKE配對相關 ------
+    /** 雙方已配對 */
+    const USER_HAS_MATCHED = 801;
+    /** 邀請已發送 */
+    const MATCH_HAS_SEND = 802;
+    /** 查無配對資料 */
+    const MATCH_NOT_FOUND = 803;
+    /** 與該對象非好友關係 */
+    const USER_NOT_FRIEND = 804;
+    /** 對象必填 */
+    const TARGET_IS_REQUIRED = 805;
+    /** 不可邀請自己 */
+    const NOT_ALLOW_SEND_SELF = 806;
+    /** 不可刪除自己 */
+    const NOT_ALLOW_REMOVE_SELF = 807;
 }

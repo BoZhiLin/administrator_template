@@ -4,15 +4,15 @@ namespace App\Repositories;
 
 class VipRepository extends Repository
 {
-    public static function buyByUser(int $user_id, string $type, int $days = 30)
+    public function buyByUser(int $user_id, string $type, int $days = 30)
     {
         $now = now();
-        $vip = static::getModel()::where('user_id', $user_id)
+        $vip = $this->getModel()::where('user_id', $user_id)
             ->where('type', $type)
             ->first();
         
         if (is_null($vip)) {
-            $model = static::getModel();
+            $model = $this->getModel();
             $vip = new $model();
             $vip->user_id = $user_id;
             $vip->type = $type;
@@ -28,7 +28,7 @@ class VipRepository extends Repository
         $vip->save();
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Vip::class;
     }

@@ -8,17 +8,24 @@ use App\Repositories\AnnouncementRepository;
 
 class AnnouncementService extends Service
 {
-    public static function getAnnouncements(bool $with_all = false)
+    protected $announcementRepo;
+
+    public function __construct(AnnouncementRepository $announcementRepo)
+    {
+        $this->announcementRepo = $announcementRepo;
+    }
+
+    public function getAnnouncements(bool $with_all = false)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['announcement'] = AnnouncementRepository::getAll($with_all);
+        $response['data']['announcement'] = $this->announcementRepo->getAll($with_all);
         return $response;
     }
 
-    public static function getAnnouncement(int $id)
+    public function getAnnouncement(int $id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $announcement = AnnouncementRepository::find($id);
+        $announcement = $this->announcementRepo->find($id);
 
         if (is_null($announcement)) {
             $response['status'] = ResponseDefined::ANNOUNCEMENT_NOT_FOUND;
@@ -29,19 +36,19 @@ class AnnouncementService extends Service
         return $response;
     }
 
-    public static function createAccouncement(array $data)
+    public function createAccouncement(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $announcement = AnnouncementRepository::create($data);
+        $announcement = $this->announcementRepo->create($data);
         $response['data']['announcement'] = $announcement;
 
         return $response;
     }
 
-    public static function updateAnnouncement(int $id, array $data)
+    public function updateAnnouncement(int $id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $announcement = AnnouncementRepository::find($id);
+        $announcement = $this->announcementRepo->find($id);
 
         if (is_null($announcement)) {
             $response['status'] = ResponseDefined::ANNOUNCEMENT_NOT_FOUND;
@@ -62,10 +69,10 @@ class AnnouncementService extends Service
         return $response;
     }
 
-    public static function removeAnnouncement(int $id)
+    public function removeAnnouncement(int $id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $announcement = AnnouncementRepository::find($id);
+        $announcement = $this->announcementRepo->find($id);
 
         if (is_null($announcement)) {
             $response['status'] = ResponseDefined::ANNOUNCEMENT_NOT_FOUND;

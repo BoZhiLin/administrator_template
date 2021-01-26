@@ -14,15 +14,21 @@ use App\Repositories\PostRepository;
 
 class PostService extends Service
 {
+    protected $postRepo;
+
+    public function __construct(PostRepository $postRepo)
+    {
+        $this->postRepo = $postRepo;
+    }
     /**
      * 文章清單
      * 
      * @return array
      */
-    public static function getPosts()
+    public function getPosts()
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $posts = PostRepository::index();
+        $posts = $this->postRepo->index();
         $response['data']['posts'] = $posts;
 
         return $response;
@@ -34,10 +40,10 @@ class PostService extends Service
      * @param int $post_id
      * @return array
      */
-    public static function getPostByID(int $post_id)
+    public function getPostByID(int $post_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $post = PostRepository::find($post_id);
+        $post = $this->postRepo->find($post_id);
 
         if (is_null($post)) {
             $response['status'] = ResponseDefined::POST_NOT_FOUND;
@@ -54,7 +60,7 @@ class PostService extends Service
      * @param array $data
      * @return array
      */
-    public static function create(array $data)
+    public function create(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
@@ -62,7 +68,7 @@ class PostService extends Service
             // TODO 上傳圖片待規劃
         }
 
-        $response['data']['post'] = PostRepository::create($data);
+        $response['data']['post'] = $this->postRepo->create($data);
         return $response;
     }
 
@@ -73,10 +79,10 @@ class PostService extends Service
      * @param int $post_id
      * @return array
      */
-    public static function likeByUser(User $user, int $post_id)
+    public function likeByUser(User $user, int $post_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $post = PostRepository::find($post_id);
+        $post = $this->postRepo->find($post_id);
 
         if (is_null($post)) {
             $response['status'] = ResponseDefined::POST_NOT_FOUND;
@@ -105,10 +111,10 @@ class PostService extends Service
      * @param int $post_id
      * @return array
      */
-    public static function cancelLikeByUser(User $user, int $post_id)
+    public function cancelLikeByUser(User $user, int $post_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $post = PostRepository::find($post_id);
+        $post = $this->postRepo->find($post_id);
 
         if (is_null($post)) {
             $response['status'] = ResponseDefined::POST_NOT_FOUND;

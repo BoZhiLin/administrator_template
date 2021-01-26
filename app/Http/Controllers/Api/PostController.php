@@ -10,15 +10,22 @@ use App\Services\PostService;
 
 class PostController extends ApiController
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     public function index()
     {
-        $response = PostService::getPosts();
+        $response = $this->postService->getPosts();
         return response($response);
     }
 
     public function show(int $post_id)
     {
-        $response = PostService::getPostByID($post_id);
+        $response = $this->postService->getPostByID($post_id);
         return response($response);
     }
 
@@ -31,7 +38,7 @@ class PostController extends ApiController
         if ($response['status'] === ResponseDefined::SUCCESS) {
             $request_parameters = $request->only(['content']);
             $request_parameters['user_id'] = auth()->id();
-            $response = PostService::create($request_parameters);
+            $response = $this->postService->create($request_parameters);
         }
 
         return response($response);
@@ -39,15 +46,13 @@ class PostController extends ApiController
 
     public function like(int $post_id)
     {
-        $user = auth()->user();
-        $response = PostService::likeByUser($user, $post_id);
+        $response = $this->postService->likeByUser(auth()->user(), $post_id);
         return response($response);
     }
 
     public function dislike(int $post_id)
     {
-        $user = auth()->user();
-        $response = PostService::cancelLikeByUser($user, $post_id);
+        $response = $this->postService->cancelLikeByUser(auth()->user(), $post_id);
         return response($response);
     }
 }
