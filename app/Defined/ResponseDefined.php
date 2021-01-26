@@ -24,6 +24,8 @@ abstract class ResponseDefined
     const VERIFY_CODE_ERROR = 105;
     /** 驗證碼不允許為空 */
     const VERIFY_CODE_REQUIRED = 106;
+    /** 該會員已驗證 */
+    const VERIFY_HAS_PASSED = 107;
 
     // ------ 帳號註冊相關 ------
     /** 查無此帳號 */

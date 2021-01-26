@@ -65,11 +65,16 @@ class UserService extends Service
     public function sendVerifyCode(User $user)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $verify_code = random_int(100000, 999999);
-        $key = "verify@user:$user->id";
-        $expire_seconds = SystemDefined::VERIFY_CODE_EXPIRED * 60;
-        Cache::put($key, $verify_code, $expire_seconds);
-        SendVerifyMail::dispatch($user, $verify_code);
+
+        if ($user->is_verified) {
+            $response['status'] = ResponseDefined::VERIFY_HAS_PASSED;
+        } else {
+            $verify_code = Str::random(6);
+            $key = "verify@user:$user->id";
+            $expire_seconds = SystemDefined::VERIFY_CODE_EXPIRED * 60;
+            Cache::put($key, $verify_code, $expire_seconds);
+            SendVerifyMail::dispatch($user, $verify_code);
+        }
 
         return $response;
     }
@@ -87,12 +92,16 @@ class UserService extends Service
         $key = "verify@user:$user->id";
         $verify_code = Cache::get($key);
 
-        if (!$code) {
+        if ($user->is_verified) {
+            $response['status'] = ResponseDefined::VERIFY_HAS_PASSED;
+        } elseif (!$code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_REQUIRED;
         } elseif (!$verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_EXPIRED;
         } elseif ($code != $verify_code) {
             $response['status'] = ResponseDefined::VERIFY_CODE_ERROR;
+        } elseif ($user->is_verified) {
+            $response['status'] = ResponseDefined::VERIFY_HAS_PASSED;
         } else {
             $user->email_verified_at = now();
             $user->is_verified = true;

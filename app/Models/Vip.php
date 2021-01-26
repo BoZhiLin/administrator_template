@@ -11,6 +11,7 @@ class Vip extends Model
     use HasFactory, SoftDeletes;
 
     protected $dates = [
+        'expired_at',
         'deleted_at',
     ];
 

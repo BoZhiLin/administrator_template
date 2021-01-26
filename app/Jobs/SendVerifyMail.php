@@ -24,7 +24,7 @@ class SendVerifyMail implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(User $user, int $code)
+    public function __construct(User $user, string $code)
     {
         $this->user = $user;
         $this->code = $code;
