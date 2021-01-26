@@ -42,6 +42,7 @@ class TaskService extends Service
         $this->walletRepo = $walletRepo;
         $this->transactionRepo = $transactionRepo;
     }
+    
     /**
      * 簽到
      * 

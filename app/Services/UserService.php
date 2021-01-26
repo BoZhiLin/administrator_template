@@ -41,6 +41,7 @@ class UserService extends Service
         $this->orderRepo = $orderRepo;
         $this->userMatchRepo = $userMatchRepo;
     }
+    
     /**
      * 註冊
      * 
