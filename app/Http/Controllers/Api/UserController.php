@@ -11,6 +11,15 @@ use App\Services\TaskService;
 
 class UserController extends ApiController
 {
+    protected $userService;
+    protected $taskService;
+
+    public function __construct(UserService $userService, TaskService $taskService)
+    {
+        $this->userService = $userService;
+        $this->taskService = $taskService;
+    }
+
     public function register(Request $request)
     {
         $genders = implode(',', ['MALE', 'FEMALE', 'OTHER']);
@@ -49,7 +58,7 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::register($request->only([
+            $response = $this->userService->register($request->only([
                 'name',
                 'birthday',
                 'gender',
@@ -64,7 +73,7 @@ class UserController extends ApiController
 
     public function getInfo()
     {
-        $user_info = UserService::getInfo(auth()->id());
+        $user_info = $this->userService->getInfo(auth()->id());
         return response($user_info);
     }
 
@@ -89,8 +98,8 @@ class UserController extends ApiController
                 'blood'
             ]);
 
-            $response = UserService::setInfo($user_id, $data);
-            $response = TaskService::completeProfile($user_id, $data);
+            $response = $this->userService->setInfo($user_id, $data);
+            $response = $this->taskService->completeProfile($user_id, $data);
         }
         
         return response($response);
@@ -107,7 +116,7 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::match(auth()->id(), $request->match_id);
+            $response = $this->userService->match(auth()->id(), $request->match_id);
         }
 
         return response($response);
@@ -124,7 +133,7 @@ class UserController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::removeMatch(auth()->id(), $request->target_id);
+            $response = $this->userService->removeMatch(auth()->id(), $request->target_id);
         }
 
         return response($response);
@@ -132,7 +141,7 @@ class UserController extends ApiController
 
     public function buyVIP()
     {
-        $result = UserService::buyVIP(auth()->user());
+        $result = $this->userService->buyVIP(auth()->user());
 
         /** TODO 串金流時改為回傳支付form */
         return response($result);
@@ -140,7 +149,7 @@ class UserController extends ApiController
 
     public function signIn()
     {
-        $response = TaskService::signIn(auth()->id());
+        $response = $this->taskService->signIn(auth()->id());
         return response($response);
     }
 }

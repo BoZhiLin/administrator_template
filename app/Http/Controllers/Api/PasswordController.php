@@ -10,6 +10,13 @@ use App\Services\UserService;
 
 class PasswordController extends ApiController
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function forgot(Request $request)
     {
         $response = $this->validateRequest($request->all(), [
@@ -17,7 +24,7 @@ class PasswordController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::forgetPassword($request->email);
+            $response = $this->userService->forgetPassword($request->email);
         }
 
         return response($response);
@@ -30,7 +37,7 @@ class PasswordController extends ApiController
         ]);
 
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = UserService::resetPassword(auth()->id(), $request->password);
+            $response = $this->userService->resetPassword(auth()->id(), $request->password);
         }
 
         return response($response);

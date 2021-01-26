@@ -14,10 +14,10 @@ class TransactionRepository extends Repository
      * @param Wallet $wallet
      * @param array $fields (value, type, link) link非必填
      */
-    public static function createByWallet(Wallet $wallet, string $type, $value, array $link = null)
+    public function createByWallet(Wallet $wallet, string $type, $value, array $link = null)
     {
         if ($value != 0) {
-            $model = static::getModel();
+            $model = $this->getModel();
             $transaction = new $model();
             $transaction->user_id = $wallet->user_id;
             $transaction->wallet_id = $wallet->id;
@@ -45,7 +45,7 @@ class TransactionRepository extends Repository
         }
     }
     
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Transaction::class;
     }

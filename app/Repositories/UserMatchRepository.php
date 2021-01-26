@@ -4,13 +4,13 @@ namespace App\Repositories;
 
 class UserMatchRepository extends Repository
 {
-    public static function sendOrMatch(array $data)
+    public function sendOrMatch(array $data)
     {
         ['from_id' => $from_id, 'match_id' => $match_id] = $data;
-        $match_info = static::getByBothUser($from_id, $match_id);
+        $match_info = $this->getByBothUser($from_id, $match_id);
 
         if (is_null($match_info)) {
-            $model = static::getModel();
+            $model = $this->getModel();
             $match_info = new $model();
             $match_info->from_id = $from_id;
             $match_info->match_id = $match_id;
@@ -23,9 +23,9 @@ class UserMatchRepository extends Repository
         return $match_info;
     }
 
-    public static function getByBothUser(int $from_id, int $match_id)
+    public function getByBothUser(int $from_id, int $match_id)
     {
-        return static::getModel()::where(function ($query) use ($from_id, $match_id) {
+        return $this->getModel()::where(function ($query) use ($from_id, $match_id) {
                 $query->where('from_id', $from_id)
                     ->where('match_id', $match_id);
             })
@@ -36,7 +36,7 @@ class UserMatchRepository extends Repository
             ->first();
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\UserMatch::class;
     }

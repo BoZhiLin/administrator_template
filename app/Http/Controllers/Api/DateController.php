@@ -10,16 +10,23 @@ use App\Services\DateService;
 
 class DateController extends ApiController
 {
+    protected $dateService;
+
+    public function __construct(DateService $dateService)
+    {
+        $this->dateService = $dateService;
+    }
+
     /** TODO: 配對後是否成為好友? 要能看自己的配對紀錄? 被配對到的人要能查看約會資料 */
     public function getOpeningList()
     {
-        $response = DateService::getOpeningList();
+        $response = $this->dateService->getOpeningList();
         return response($response);
     }
 
     public function getDetail(int $id)
     {
-        $response = DateService::getDate($id);
+        $response = $this->dateService->getDate($id);
         return response($response);
     }
 
@@ -33,7 +40,7 @@ class DateController extends ApiController
         if ($result['status'] === ResponseDefined::SUCCESS) {
             $date_info = $request->only(['title', 'description']);
             $date_info['publisher_id'] = auth()->id();
-            $result = DateService::publish($date_info);
+            $result = $this->dateService->publish($date_info);
         }
 
         return response($result);
@@ -41,7 +48,7 @@ class DateController extends ApiController
 
     public function signUp(int $id)
     {
-        $response = DateService::signUp($id, auth()->id());
+        $response = $this->dateService->signUp($id, auth()->id());
         return response($response);
     }
 
@@ -52,7 +59,7 @@ class DateController extends ApiController
         ]);
 
         if ($result['status'] === ResponseDefined::SUCCESS) {
-            $result = DateService::match($id, auth()->id(), $request->match_id);
+            $result = $this->dateService->match($id, auth()->id(), $request->match_id);
         }
 
         return response($result);

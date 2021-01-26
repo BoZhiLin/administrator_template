@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 class BannerRepository extends Repository
 {
-    public static function getAll(bool $with_all = false)
+    public function getAll(bool $with_all = false)
     {
         $now = now();
-        $eloquent = static::getModel()::orderBy('sort', 'asc');
+        $eloquent = $this->getModel()::orderBy('sort', 'asc');
 
         if ($with_all === false) {
             $eloquent->where(function ($query) use ($now) {
@@ -22,9 +22,9 @@ class BannerRepository extends Repository
         return $eloquent->get();
     }
 
-    public static function create(array $data)
+    public function create(array $data)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $banner = new $model();
         $banner->path = $data['path'];
 
@@ -42,7 +42,7 @@ class BannerRepository extends Repository
         return $banner;
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Banner::class;
     }

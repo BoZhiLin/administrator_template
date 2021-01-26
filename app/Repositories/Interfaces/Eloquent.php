@@ -4,5 +4,5 @@ namespace App\Repositories\Interfaces;
 
 interface Eloquent
 {
-    public static function getModel();
+    public function getModel();
 }

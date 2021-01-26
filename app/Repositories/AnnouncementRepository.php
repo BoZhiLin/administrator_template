@@ -4,10 +4,10 @@ namespace App\Repositories;
 
 class AnnouncementRepository extends Repository
 {
-    public static function getAll(bool $with_all = false)
+    public function getAll(bool $with_all = false)
     {
         $now = now();
-        $eloquent = static::getModel()::orderBy('created_at', 'desc');
+        $eloquent = $this->getModel()::orderBy('created_at', 'desc');
 
         if ($with_all === false) {
             $eloquent->where(function ($query) use ($now) {
@@ -22,9 +22,9 @@ class AnnouncementRepository extends Repository
         return $eloquent->get();
     }
 
-    public static function create(array $data)
+    public function create(array $data)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $announcement = new $model();
         $announcement->title = $data['title'];
         $announcement->content = $data['content'];
@@ -40,7 +40,7 @@ class AnnouncementRepository extends Repository
         return $announcement;
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Announcement::class;
     }

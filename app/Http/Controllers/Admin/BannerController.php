@@ -10,15 +10,22 @@ use App\Services\BannerService;
 
 class BannerController extends AdminController
 {
+    protected $bannerService;
+
+    public function __construct(BannerService $bannerService)
+    {
+        $this->bannerService = $bannerService;
+    }
+
     public function index()
     {
-        $response = BannerService::getBanners(true);
+        $response = $this->bannerService->getBanners(true);
         return response($response);
     }
 
     public function show(int $id)
     {
-        $response = BannerService::getBanner($id);
+        $response = $this->bannerService->getBanner($id);
         return response($response);
     }
 
@@ -33,7 +40,7 @@ class BannerController extends AdminController
         ]);
         
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = BannerService::createBanner($request->only([
+            $response = $this->bannerService->createBanner($request->only([
                 'file',
                 'target_url',
                 'sort',
@@ -56,7 +63,7 @@ class BannerController extends AdminController
         ]);
         
         if ($response['status'] === ResponseDefined::SUCCESS) {
-            $response = BannerService::updateBanner($id, $request->only([
+            $response = $this->bannerService->updateBanner($id, $request->only([
                 'file',
                 'target_url',
                 'sort',
@@ -70,7 +77,7 @@ class BannerController extends AdminController
 
     public function destroy($id)
     {
-        $response = BannerService::removeBanner($id);
+        $response = $this->bannerService->removeBanner($id);
         return response($response);
     }
 }

@@ -7,11 +7,11 @@ class TaskRepository extends Repository
     /**
      * 依據任務代碼，查詢開放中任務
      */
-    public static function findOpeningByCode(string $code)
+    public function findOpeningByCode(string $code)
     {
         $now = now();
 
-        return static::getModel()::ofCode($code)
+        return $this->getModel()::ofCode($code)
             ->where(function ($query) use ($now) {
                 $query->where('started_at', '<=', $now)
                     ->where('ended_at', '>=', $now);
@@ -23,9 +23,9 @@ class TaskRepository extends Repository
             ->first();
     }
 
-    public static function createRecordByUser(int $user_id, array $task_info = [])
+    public function createRecordByUser(int $user_id, array $task_info = [])
     {
-        $task = static::findOpeningByCode($task_info['code']);
+        $task = $this->findOpeningByCode($task_info['code']);
 
         if (!is_null($task)) {
             $field = [
@@ -43,7 +43,7 @@ class TaskRepository extends Repository
         }
     }
     
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Task::class;
     }

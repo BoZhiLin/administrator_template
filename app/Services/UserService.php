@@ -25,16 +25,32 @@ use App\Repositories\UserMatchRepository;
 
 class UserService extends Service
 {
+    protected $vipRepo;
+    protected $userRepo;
+    protected $orderRepo;
+    protected $userMatchRepo;
+
+    public function __construct(
+        VipRepository $vipRepo,
+        UserRepository $userRepo,
+        OrderRepository $orderRepo,
+        UserMatchRepository $userMatchRepo
+    ) {
+        $this->vipRepo = $vipRepo;
+        $this->userRepo = $userRepo;
+        $this->orderRepo = $orderRepo;
+        $this->userMatchRepo = $userMatchRepo;
+    }
     /**
      * 註冊
      * 
      * @param array $data
      * @return array
      */
-    public static function register(array $data)
+    public function register(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = UserRepository::create($data);
+        $user = $this->userRepo->create($data);
         $response['data']['user'] = $user;
 
         return $response;
@@ -46,7 +62,7 @@ class UserService extends Service
      * @param User $user
      * @return array
      */
-    public static function sendVerifyCode(User $user)
+    public function sendVerifyCode(User $user)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $verify_code = random_int(100000, 999999);
@@ -65,7 +81,7 @@ class UserService extends Service
      * @param mixed $code
      * @return array
      */
-    public static function verifyUser(User $user, $code = null)
+    public function verifyUser(User $user, $code = null)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $key = "verify@user:$user->id";
@@ -82,7 +98,7 @@ class UserService extends Service
             $user->is_verified = true;
             $user->save();
 
-            VipRepository::buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
+            $this->vipRepo->buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
             Cache::forget($key);
         }
 
@@ -95,10 +111,10 @@ class UserService extends Service
      * @param string $email
      * @return array
      */
-    public static function forgetPassword(string $email)
+    public function forgetPassword(string $email)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = UserRepository::getByEmail($email);
+        $user = $this->userRepo->getByEmail($email);
 
         if (is_null($user)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
@@ -119,10 +135,10 @@ class UserService extends Service
      * @param string $password
      * @return array
      */
-    public static function resetPassword(int $user_id, string $password)
+    public function resetPassword(int $user_id, string $password)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $user = UserRepository::find($user_id);
+        $user = $this->userRepo->find($user_id);
         $user->password = Hash::make($password);
         $user->save();
 
@@ -135,10 +151,10 @@ class UserService extends Service
      * @param int $user_id
      * @return array
      */
-    public static function getInfo(int $user_id)
+    public function getInfo(int $user_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['user'] = static::getUserInfo($user_id);
+        $response['data']['user'] = $this->getUserInfo($user_id);
         return $response;
     }
 
@@ -149,7 +165,7 @@ class UserService extends Service
      * @param array $data
      * @return array
      */
-    public static function setInfo(int $user_id, array $data)
+    public function setInfo(int $user_id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         
@@ -160,8 +176,8 @@ class UserService extends Service
             $data['avatar'] = $new_avatar_path;
         }
 
-        $user = UserRepository::update($user_id, $data);
-        $response['data']['user'] = static::getUserInfo($user->id);
+        $user = $this->userRepo->update($user_id, $data);
+        $response['data']['user'] = $this->getUserInfo($user->id);
         return $response;
     }
 
@@ -172,26 +188,26 @@ class UserService extends Service
      * @param int $match_id
      * @return array
      */
-    public static function match(int $from_id, int $match_id)
+    public function match(int $from_id, int $match_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
-        if (!UserRepository::find($match_id)) {
+        if (!$this->userRepo->find($match_id)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
         } elseif ($from_id === $match_id) {
             $response['status'] = ResponseDefined::NOT_ALLOW_SEND_SELF;
         } elseif (
-            ($match_info = UserMatchRepository::getByBothUser($from_id, $match_id)) &&
+            ($match_info = $this->userMatchRepo->getByBothUser($from_id, $match_id)) &&
             $match_info->is_matched
         ) {
             $response['status'] = ResponseDefined::USER_HAS_MATCHED;
         } elseif (
-            ($match_info = UserMatchRepository::getByBothUser($from_id, $match_id)) &&
+            ($match_info = $this->userMatchRepo->getByBothUser($from_id, $match_id)) &&
             $match_info->from_id === $from_id
         ) {
             $response['status'] = ResponseDefined::MATCH_HAS_SEND;
         } else {
-            $match_info = UserMatchRepository::sendOrMatch([
+            $match_info = $this->userMatchRepo->sendOrMatch([
                 'from_id' => $from_id,
                 'match_id' => $match_id
             ]);
@@ -215,15 +231,15 @@ class UserService extends Service
      * @param int $target_id (配對對象 or 欲拒絕對象)
      * @return array
      */
-    public static function removeMatch(int $from_id, int $target_id)
+    public function removeMatch(int $from_id, int $target_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
-        if (!UserRepository::find($target_id)) {
+        if (!$this->userRepo->find($target_id)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
         } elseif ($from_id === $target_id) {
             $response['status'] = ResponseDefined::NOT_ALLOW_REMOVE_SELF;
-        } elseif (! $match_info = UserMatchRepository::getByBothUser($from_id, $target_id)) {
+        } elseif (! $match_info = $this->userMatchRepo->getByBothUser($from_id, $target_id)) {
             $response['status'] = ResponseDefined::MATCH_NOT_FOUND;
         } else {
             $match_info->forceDelete();
@@ -238,7 +254,7 @@ class UserService extends Service
      * @param User $user
      * @return array
      */
-    public static function buyVIP(User $user)
+    public function buyVIP(User $user)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $order_info = [
@@ -249,8 +265,8 @@ class UserService extends Service
             'status' => OrderStatusDefined::PAYING
         ];
 
-        $order = OrderRepository::create($order_info);
-        VipRepository::buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::VIP_EXPIRES_DAYS);
+        $order = $this->orderRepo->create($order_info);
+        $this->vipRepo->buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::VIP_EXPIRES_DAYS);
         /** 串金流 TODO */
 
         return $response;
@@ -259,10 +275,10 @@ class UserService extends Service
     /**
      * 完成付款 (留著以後金流webhook用)
      */
-    public static function completed()
+    public function completed()
     {
         // $response = ['status' => ResponseDefined::SUCCESS];
-        // VipRepository::buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
+        // $this->vipRepo->buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
     }
 
     /**
@@ -271,10 +287,10 @@ class UserService extends Service
      * @param int $user_id
      * @return array
      */
-    private static function getUserInfo(int $user_id)
+    private function getUserInfo(int $user_id)
     {
-        $user = UserRepository::find($user_id);
-        $vip_type = UserRepository::getVipLevel($user);
+        $user = $this->userRepo->find($user_id);
+        $vip_type = $this->userRepo->getVipLevel($user);
         $like_posts = $user->favoritePosts->pluck('id');
         
         return [

@@ -4,9 +4,9 @@ namespace App\Repositories;
 
 class OrderRepository extends Repository
 {
-    public static function create(array $data)
+    public function create(array $data)
     {
-        $model = static::getModel();
+        $model = $this->getModel();
         $order = new $model();
         $order->user_id = $data['user_id'];
         $order->type = $data['type'];
@@ -26,7 +26,7 @@ class OrderRepository extends Repository
         return $order;
     }
 
-    public static function getModel()
+    public function getModel()
     {
         return \App\Models\Order::class;
     }

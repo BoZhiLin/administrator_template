@@ -16,6 +16,20 @@ use App\Repositories\WalletRepository;
 class ScheduleSendDailyLike extends Command
 {
     /**
+     * UserRepository for handling user entity.
+     * 
+     * @var UserRepository
+     */
+    protected $userRepo;
+
+    /**
+     * WalletRepository for handling wallet entity.
+     * 
+     * @var WalletRepository
+     */
+    protected $walletRepo;
+    
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -34,9 +48,11 @@ class ScheduleSendDailyLike extends Command
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepo, WalletRepository $walletRepo)
     {
         parent::__construct();
+        $this->userRepo = $userRepo;
+        $this->walletRepo = $walletRepo;
     }
 
     /**
@@ -53,11 +69,11 @@ class ScheduleSendDailyLike extends Command
 
         User::get()
             ->each(function ($user) use ($day_likes) {
-                $vip_type = UserRepository::getVipLevel($user);
+                $vip_type = $this->userRepo->getVipLevel($user);
                 $like_amount = $day_likes[$vip_type];
 
                 /** 每日LIKE數重置 */
-                $wallet = WalletRepository::getByUser($user->id, CoinDefined::DAY_LIKE);
+                $wallet = $this->walletRepo->getByUser($user->id, CoinDefined::DAY_LIKE);
                 $wallet->balance_available = $like_amount;
                 $wallet->save();
             });

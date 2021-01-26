@@ -10,17 +10,24 @@ use App\Repositories\BannerRepository;
 
 class BannerService extends Service
 {
-    public static function getBanners(bool $with_all = false)
+    protected $bannerRepo;
+
+    public function __construct(BannerRepository $bannerRepo)
+    {
+        $this->bannerRepo = $bannerRepo;
+    }
+
+    public function getBanners(bool $with_all = false)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $response['data']['banner'] = BannerRepository::getAll($with_all);
+        $response['data']['banner'] = $this->bannerRepo->getAll($with_all);
         return $response;
     }
 
-    public static function getBanner(int $id)
+    public function getBanner(int $id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $banner = BannerRepository::find($id);
+        $banner = $this->bannerRepo->find($id);
 
         if (is_null($banner)) {
             $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
@@ -31,23 +38,23 @@ class BannerService extends Service
         return $response;
     }
 
-    public static function createBanner(array $data)
+    public function createBanner(array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
 
         $new_banner_path = 'banner/' . $data['file']->getClientOriginalName();
         Storage::disk('public')->put($new_banner_path, file_get_contents($data['file']->getRealPath()));
         $data['path'] = $new_banner_path;
-        $banner = BannerRepository::create($data);
+        $banner = $this->bannerRepo->create($data);
 
         $response['data']['banner'] = $banner;
         return $response;
     }
 
-    public static function updateBanner(int $id, array $data)
+    public function updateBanner(int $id, array $data)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $banner = bannerRepository::find($id);
+        $banner = $this->bannerRepo->find($id);
 
         if (is_null($banner)) {
             $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
@@ -75,10 +82,10 @@ class BannerService extends Service
         return $response;
     }
 
-    public static function removeBanner(int $id)
+    public function removeBanner(int $id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
-        $banner = bannerRepository::find($id);
+        $banner = $this->bannerRepo->find($id);
 
         if (is_null($banner)) {
             $response['status'] = ResponseDefined::BANNER_NOT_FOUND;
