@@ -1,43 +1,39 @@
 <template>
-  <div>
+  <div class="login-container">
     <b-card
       bg-variant="light"
-      header="Login"
+      header="後台登入"
       class="text-center"
       style="max-width: 25rem"
     >
       <b-form @submit.stop.prevent>
-        <b-form-group
-          label="Username:"
-          label-for="username"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
+        <b-input-group class="mb-2">
+          <b-input-group-prepend is-text>
+            <b-icon icon="person-fill"></b-icon>
+          </b-input-group-prepend>
           <b-form-input
             id="username"
             name="username"
-            placeholder="Enter your username"
+            placeholder="請輸入使用者帳號"
             v-model="username"
           ></b-form-input>
-        </b-form-group>
+        </b-input-group>
 
-        <b-form-group
-          label="Password:"
-          label-for="password"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
+        <b-input-group class="mb-2">
+          <b-input-group-prepend is-text>
+            <b-icon icon="envelope-fill"></b-icon>
+          </b-input-group-prepend>
           <b-form-input
             id="password"
             name="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="請輸入使用者密碼"
             v-model="password"
           ></b-form-input>
-        </b-form-group>
-        <b-button type="submit" @click="adminLogin" variant="primary" block
-          >Login</b-button
-        >
+        </b-input-group>
+        <b-button type="submit" @click="adminLogin" variant="primary" block>
+          登入
+        </b-button>
       </b-form>
     </b-card>
   </div>
@@ -69,7 +65,7 @@ export default {
             localStorage.setItem("expired_at", credential.expired_at);
             this.$router.push({ path: "/admin/dashboard" });
           } else if (response.status === defined.response.UNAUTHORIZED) {
-            this.$swal("Error!", "Incorrect account password!", "error");
+            this.$swal("錯誤!", "請從新輸入使用者帳號和密碼!", "error");
           }
         });
     },
@@ -83,11 +79,11 @@ $light_gray: rgb(17, 8, 8);
 .card {
   position: absolute;
   margin: 200px auto;
+  box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.6);
 }
 .card-header {
   font-size: 26px;
   color: $light_gray;
-  text-align: center;
   font-weight: bold;
 }
 .col-form-label {
