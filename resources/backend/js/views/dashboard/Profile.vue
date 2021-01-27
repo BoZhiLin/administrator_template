@@ -1,6 +1,6 @@
 <template>
-  <div class="profiles">
-    Profiles
+  <div class="profile">
+    Profile
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 </script>
 
 <style scoped>
-.profiles {
+.profile {
   display: flex;
   justify-content: center;
   align-items: center;

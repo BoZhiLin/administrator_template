@@ -4,27 +4,27 @@
       後台管理
     </div>
     <div class="menu-items">
-      <router-link to="/admin/dashboard" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.dashboard' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="grid-fill"></b-icon>  
          主頁
       </router-link>
-      <router-link to="/admin/profiles" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.profile' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="file-person"></b-icon>
          個人中心
       </router-link>
-      <router-link to="/admin/administrators" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.administrators' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="tools"></b-icon>
          後台人員
       </router-link>
-      <router-link to="/admin/announcements" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.announcements' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="chat-right-dots-fill"></b-icon>
          公告管理
       </router-link>
-      <router-link to="/admin/banners" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.banners' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="files"></b-icon>
          Banner管理
       </router-link>
-      <router-link to="/admin/users" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.users' }" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="file-person-fill"></b-icon>
          會員管理
       </router-link>

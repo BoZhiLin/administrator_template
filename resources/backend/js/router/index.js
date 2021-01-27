@@ -18,23 +18,28 @@ const router = new VueRouter({
       children: [
         {
           path: '/admin/administrators',
+          name: 'admin.administrators',
           component: require('../views/dashboard/Administrators.vue').default,
         },
         {
           path: '/admin/users',
+          name: 'admin.users',
           component: require('../views/dashboard/Users.vue').default,
         },
         {
           path: '/admin/announcements',
+          name: 'admin.announcements',
           component: require('../views/dashboard/Announcement.vue').default,
         },
         {
           path: '/admin/banners',
+          name: 'admin.banners',
           component: require('../views/dashboard/Banner.vue').default,
         },
         {
-          path: '/admin/profiles',
-          component: require('../views/dashboard/Profiles.vue').default,
+          path: '/admin/profile',
+          name: 'admin.profile',
+          component: require('../views/dashboard/Profile.vue').default,
         },
       ]
     },
