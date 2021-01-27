@@ -8,7 +8,7 @@
         <b-icon icon="grid-fill"></b-icon>  
          主頁
       </router-link>
-      <router-link to="/admin/settings" active-class="active" tag="button" exact class="side-btn">
+      <router-link to="/admin/profiles" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="file-person"></b-icon>
          個人中心
       </router-link>
@@ -24,7 +24,7 @@
         <b-icon icon="files"></b-icon>
          Banner管理
       </router-link>
-      <router-link to="/admin/accounts" active-class="active" tag="button" exact class="side-btn">
+      <router-link to="/admin/users" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="file-person-fill"></b-icon>
          會員管理
       </router-link>
@@ -46,7 +46,6 @@ export default {
         .post("/admin/api/auth/logout", {
         })
         .then(({ data }) => {
-          console.log(data);
           const response = data;
           const credential = response.data;
           if (response.status === defined.response.SUCCESS) {

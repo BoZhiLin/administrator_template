@@ -1,5 +1,5 @@
 <template>
-  <div class="Administrators">
+  <div class="administrators">
     Administrators
   </div>
 </template>
@@ -11,7 +11,7 @@
 </script>
 
 <style scoped>
-.Administrators {
+.administrators {
   display: flex;
   justify-content: center;
   align-items: center;

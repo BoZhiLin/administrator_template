@@ -65,7 +65,7 @@ export default {
             localStorage.setItem("expired_at", credential.expired_at);
             this.$router.push({ path: "/admin/dashboard" });
           } else if (response.status === defined.response.UNAUTHORIZED) {
-            this.$swal("錯誤!", "請從新輸入使用者帳號和密碼!", "error");
+            this.$swal("錯誤!", "請重新輸入使用者帳號和密碼!", "error");
           }
         });
     },

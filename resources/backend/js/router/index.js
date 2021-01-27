@@ -21,8 +21,8 @@ const router = new VueRouter({
           component: require('../views/dashboard/Administrators.vue').default,
         },
         {
-          path: '/admin/accounts',
-          component: require('../views/dashboard/Accounts.vue').default,
+          path: '/admin/users',
+          component: require('../views/dashboard/Users.vue').default,
         },
         {
           path: '/admin/announcements',
@@ -33,8 +33,8 @@ const router = new VueRouter({
           component: require('../views/dashboard/Banner.vue').default,
         },
         {
-          path: '/admin/settings',
-          component: require('../views/dashboard/Settings.vue').default,
+          path: '/admin/profiles',
+          component: require('../views/dashboard/Profiles.vue').default,
         },
       ]
     },

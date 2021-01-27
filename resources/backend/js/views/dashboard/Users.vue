@@ -1,6 +1,6 @@
 <template>
-  <div class="settings">
-    Setting
+  <div class="users">
+    Users
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 </script>
 
 <style scoped>
-.settings {
+.users {
   display: flex;
   justify-content: center;
   align-items: center;
