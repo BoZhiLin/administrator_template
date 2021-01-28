@@ -22,7 +22,7 @@
 </head>
 <body >
     <div id="app">
-        <app />
+        <router-view></router-view>
     </div>
 
     <script src="{{ asset('js/backend/app.js') }}"></script>

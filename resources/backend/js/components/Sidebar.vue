@@ -1,32 +1,66 @@
 <template>
   <div class="sidebar">
-    <div class="title">
-      後台管理
-    </div>
+    <div class="title">後台管理</div>
     <div class="menu-items">
-      <router-link :to="{ name: 'admin.dashboard' }" active-class="active" tag="button" exact class="side-btn">
-        <b-icon icon="grid-fill"></b-icon>  
-         主頁
+      <router-link
+        :to="{ name: 'admin.dashboard' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
+        <b-icon icon="grid-fill"></b-icon>
+        主頁
       </router-link>
-      <router-link :to="{ name: 'admin.profile' }" active-class="active" tag="button" exact class="side-btn">
+      <router-link
+        :to="{ name: 'admin.profile' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
         <b-icon icon="file-person"></b-icon>
-         個人中心
+        個人中心
       </router-link>
-      <router-link :to="{ name: 'admin.administrators' }" active-class="active" tag="button" exact class="side-btn">
+      <router-link
+        :to="{ name: 'admin.administrators' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
         <b-icon icon="tools"></b-icon>
-         後台人員
+        後台人員
       </router-link>
-      <router-link :to="{ name: 'admin.announcements' }" active-class="active" tag="button" exact class="side-btn">
+      <router-link
+        :to="{ name: 'admin.announcements' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
         <b-icon icon="chat-right-dots-fill"></b-icon>
-         公告管理
+        公告管理
       </router-link>
-      <router-link :to="{ name: 'admin.banners' }" active-class="active" tag="button" exact class="side-btn">
+      <router-link
+        :to="{ name: 'admin.banners' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
         <b-icon icon="files"></b-icon>
-         Banner管理
+        Banner管理
       </router-link>
-      <router-link :to="{ name: 'admin.users' }" active-class="active" tag="button" exact class="side-btn">
+      <router-link
+        :to="{ name: 'admin.users' }"
+        active-class="active"
+        tag="button"
+        exact
+        class="side-btn"
+      >
         <b-icon icon="file-person-fill"></b-icon>
-         會員管理
+        會員管理
       </router-link>
       <b-button type="submit" @click="adminLogout" variant="primary" block>
         登出
@@ -42,24 +76,24 @@ import defined from "../tools/defined.js";
 export default {
   methods: {
     adminLogout() {
-      axios
-        .post("/admin/api/auth/logout", {
+      axios.post("/admin/api/auth/logout", {}, {
+          headers: {
+            "Authorization": `Bearer ${localStorage["access_token"]}`
+          }
         })
         .then(({ data }) => {
-          const response = data;
-          const credential = response.data;
-          if (response.status === defined.response.SUCCESS) {
-            localStorage.remove("access_token");
-            localStorage.remove("expired_at");
-            this.$router.push({ path: "/admin/login" });
+          if (data.status === defined.response.SUCCESS) {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("expired_at");
+            this.$router.push({ name: "admin.login" });
           }
         });
     },
   },
-}
+};
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .title {
   color: white;
   font-size: 24px;
