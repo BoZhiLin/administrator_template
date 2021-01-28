@@ -20,6 +20,7 @@ class PostService extends Service
     {
         $this->postRepo = $postRepo;
     }
+    
     /**
      * 文章清單
      * 

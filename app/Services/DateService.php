@@ -19,6 +19,7 @@ class DateService extends Service
         $this->userRepo = $userRepo;
         $this->dateRepo = $dateRepo;
     }
+    
     /**
      * 取得開放報名中的約會
      * 

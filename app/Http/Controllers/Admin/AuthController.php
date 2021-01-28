@@ -17,7 +17,7 @@ class AuthController extends AdminController
             $response['status'] = ResponseDefined::UNAUTHORIZED;
         } else {
             $token_info = $this->respondWithToken($token);
-            $response['data']['credential'] = $token_info;
+            $response['data'] = $token_info;
         }
 
         return response($response);
@@ -35,7 +35,7 @@ class AuthController extends AdminController
     {
         $response = ['status' => ResponseDefined::SUCCESS];
         $token_info = $this->respondWithToken(auth('admin')->refresh());
-        $response['data']['credential'] = $token_info;
+        $response['data'] = $token_info;
 
         return response($response);
     }
