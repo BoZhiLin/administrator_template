@@ -61,7 +61,7 @@ export default {
         })
         .then(({ data }) => {
           const response = data;
-
+          
           if (response.status === defined.response.SUCCESS) {
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("expired_at", response.data.expired_at);

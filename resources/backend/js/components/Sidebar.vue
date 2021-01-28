@@ -62,9 +62,10 @@
         <b-icon icon="file-person-fill"></b-icon>
         會員管理
       </router-link>
-      <b-button type="submit" @click="adminLogout" variant="primary" block>
-        登出
-      </b-button>
+      <router-link :to="{ name: 'admin.login' }" @click.native="adminLogout" active-class="active" tag="button" exact class="side-btn">
+        <b-icon icon="bell-fill"></b-icon>
+         登出
+      </router-link>
     </div>
   </div>
 </template>
@@ -74,6 +75,11 @@ import axios from "axios";
 import defined from "../tools/defined.js";
 
 export default {
+  data() {
+    return {
+      // 
+    };
+  },
   methods: {
     adminLogout() {
       axios.post("/admin/api/auth/logout", {}, {
@@ -85,7 +91,6 @@ export default {
           if (data.status === defined.response.SUCCESS) {
             localStorage.removeItem("access_token");
             localStorage.removeItem("expired_at");
-            this.$router.push({ name: "admin.login" });
           }
         });
     },
@@ -106,7 +111,7 @@ export default {
 .side-btn {
   text-align: left;
   border: none;
-  padding: 16px 0px 16px 25px;
+  padding: 8px 0px 8px 25px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
