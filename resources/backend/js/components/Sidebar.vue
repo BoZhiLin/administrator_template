@@ -28,9 +28,10 @@
         <b-icon icon="file-person-fill"></b-icon>
          會員管理
       </router-link>
-      <b-button type="submit" @click="adminLogout" variant="primary" block>
-        登出
-      </b-button>
+      <router-link :to="{ name: 'admin.login' }" @click.native="adminLogout" active-class="active" tag="button" exact class="side-btn">
+        <b-icon icon="bell-fill"></b-icon>
+         登出
+      </router-link>
     </div>
   </div>
 </template>
@@ -40,18 +41,28 @@ import axios from "axios";
 import defined from "../tools/defined.js";
 
 export default {
+  data() {
+    return {
+      access_token: localStorage.getItem('access_token'),
+    };
+  },
   methods: {
     adminLogout() {
       axios
-        .post("/admin/api/auth/logout", {
+        .post("/admin/api/auth/logout",
+        {
+          body: ''
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${this.access_token}`
+          }
         })
         .then(({ data }) => {
           const response = data;
-          const credential = response.data;
           if (response.status === defined.response.SUCCESS) {
-            localStorage.remove("access_token");
-            localStorage.remove("expired_at");
-            this.$router.push({ path: "/admin/login" });
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("expired_at");
           }
         });
     },
@@ -72,7 +83,7 @@ export default {
 .side-btn {
   text-align: left;
   border: none;
-  padding: 16px 0px 16px 25px;
+  padding: 8px 0px 8px 25px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;

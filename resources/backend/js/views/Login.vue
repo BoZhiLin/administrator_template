@@ -59,7 +59,7 @@ export default {
         })
         .then(({ data }) => {
           const response = data;
-          const credential = response.data;
+          const credential = response.data.credential;
           if (response.status === defined.response.SUCCESS) {
             localStorage.setItem("access_token", credential.access_token);
             localStorage.setItem("expired_at", credential.expired_at);
