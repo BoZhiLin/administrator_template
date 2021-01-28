@@ -1,45 +1,43 @@
 <template>
-  <div>
-    <b-card
-      bg-variant="light"
-      header="Login"
-      class="text-center"
-      style="max-width: 25rem"
-    >
-      <b-form @submit.stop.prevent>
-        <b-form-group
-          label="Username:"
-          label-for="username"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
-          <b-form-input
-            id="username"
-            name="username"
-            placeholder="Enter your username"
-            v-model="username"
-          ></b-form-input>
-        </b-form-group>
+  <div class="login-container">
+    <div class="row d-flex justify-content-center">
+      <b-card
+        bg-variant="light"
+        header="後台登入"
+        class="text-center"
+        style="max-width: 25rem"
+      >
+        <b-form @submit.stop.prevent>
+          <b-input-group class="mb-2">
+            <b-input-group-prepend is-text>
+              <b-icon icon="person-fill"></b-icon>
+            </b-input-group-prepend>
+            <b-form-input
+              id="username"
+              name="username"
+              placeholder="請輸入使用者帳號"
+              v-model="username"
+            ></b-form-input>
+          </b-input-group>
 
-        <b-form-group
-          label="Password:"
-          label-for="password"
-          label-cols-sm="3"
-          label-align-sm="right"
-        >
-          <b-form-input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Enter your password"
-            v-model="password"
-          ></b-form-input>
-        </b-form-group>
-        <b-button type="submit" @click="adminLogin" variant="primary" block
-          >Login</b-button
-        >
-      </b-form>
-    </b-card>
+          <b-input-group class="mb-2">
+            <b-input-group-prepend is-text>
+              <b-icon icon="lock-fill"></b-icon>
+            </b-input-group-prepend>
+            <b-form-input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="請輸入使用者密碼"
+              v-model="password"
+            ></b-form-input>
+          </b-input-group>
+          <b-button type="submit" @click="adminLogin" variant="primary" block>
+            登入
+          </b-button>
+        </b-form>
+      </b-card>
+    </div>
   </div>
 </template>
 
@@ -63,13 +61,13 @@ export default {
         })
         .then(({ data }) => {
           const response = data;
-          const credential = response.data;
+          
           if (response.status === defined.response.SUCCESS) {
-            localStorage.setItem("access_token", credential.access_token);
-            localStorage.setItem("expired_at", credential.expired_at);
-            this.$router.push({ path: "/admin/dashboard" });
-          } else if (response.status === defined.response.UNAUTHORIZED) {
-            this.$swal("Error!", "Incorrect account password!", "error");
+            localStorage.setItem("access_token", response.data.access_token);
+            localStorage.setItem("expired_at", response.data.expired_at);
+            this.$router.push({ name: "admin.dashboard" });
+          } else {
+            this.$swal("錯誤", "帳號或密碼錯誤", "error");
           }
         });
     },
@@ -77,19 +75,34 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 $light_gray: rgb(17, 8, 8);
+.login-container {
+  font-family: "Roboto", sans-serif;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(#283443, #6078ea);
+  height: 100vh;
+  margin: 0;
+  padding: 0px;
+  background-attachment: fixed;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
 .card {
   position: absolute;
   margin: 200px auto;
+  box-shadow: 5px 5px 6px rgba(0, 0, 0, 0.6);
 }
+
 .card-header {
   font-size: 26px;
   color: $light_gray;
-  text-align: center;
   font-weight: bold;
 }
+
 .col-form-label {
   font-weight: bold;
 }

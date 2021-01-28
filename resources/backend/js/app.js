@@ -12,7 +12,7 @@ Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueSwal);
 
-Vue.component('app', require('./components/App.vue').default);
+// Vue.component('app', require('./components/App.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
