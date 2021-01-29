@@ -32,7 +32,7 @@
               v-model="password"
             ></b-form-input>
           </b-input-group>
-          <b-button type="submit" @click="adminLogin" variant="primary" block>
+          <b-button type="submit" @click="Login" variant="primary" block>
             登入
           </b-button>
         </b-form>
@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import defined from "../tools/defined.js";
+import api from "../tools/api.js";
 
 export default {
   data() {
@@ -53,9 +53,9 @@ export default {
     };
   },
   methods: {
-    adminLogin() {
-      axios
-        .post("/admin/api/auth/login", {
+    Login() {
+      api
+        .adminLogin({
           username: this.username,
           password: this.password,
         })
