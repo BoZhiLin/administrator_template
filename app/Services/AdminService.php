@@ -106,7 +106,10 @@ class AdminService extends Service
             }
         }
 
-        $admin_user->save();
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $admin_user->save();
+        }
+
         return $response;
     }
 }
