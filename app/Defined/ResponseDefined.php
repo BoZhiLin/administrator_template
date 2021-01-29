@@ -108,4 +108,16 @@ abstract class ResponseDefined
     const NOT_ALLOW_SEND_SELF = 806;
     /** 不可刪除自己 */
     const NOT_ALLOW_REMOVE_SELF = 807;
+
+    // ------ Admin相關 ------
+    /** 查無後台人員 */
+    const ADMIN_NOT_FOUND = 901;
+    /** 當舊密碼不為空，則新密碼必填 */
+    const NEW_PASSWORD_REQUIRED = 902;
+    /** 新密碼不吻合 */
+    const NEW_PASSWORD_NOT_MATCH = 903;
+    /** 當新密碼不為空，則舊密碼必填 */
+    const OLD_PASSWORD_REQUIRED = 904;
+    /** 舊密碼不符合 */
+    const OLD_PASSWORD_VERIFY_FAIL = 905;
 }

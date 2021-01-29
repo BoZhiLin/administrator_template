@@ -28,6 +28,14 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
 /** Authenticated Allow */
 Route::group(['middleware' => ['admin.auth']], function () {
+    /** 後台人員 */
+    Route::group(['prefix' => 'administrator', 'as' => 'administrator.'], function () {
+        /** 取得個人資訊 */
+        Route::get('/info', 'AdminUserController@getInfo')->name('info');
+        /** 修改個人資料 */
+        Route::post('/info', 'AdminUserController@setInfo')->name('info.set');
+    });
+
     /** 公告管理 */
     Route::group(['prefix' => 'announcement', 'as' => 'announcement.'], function () {
         /** 公告列表 */
