@@ -30,6 +30,10 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 Route::group(['middleware' => ['admin.auth']], function () {
     /** 後台人員 */
     Route::group(['prefix' => 'administrator', 'as' => 'administrator.'], function () {
+        /** 列表 */
+        Route::get('/', 'AdminUserController@index')->name('index');
+        /** 創建 */
+        Route::post('/', 'AdminUserController@store')->name('store');
         /** 取得個人資訊 */
         Route::get('/info', 'AdminUserController@getInfo')->name('info');
         /** 修改個人資料 */

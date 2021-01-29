@@ -17,6 +17,49 @@ class AdminUserController extends AdminController
         $this->adminService = $adminService;
     }
 
+    public function index()
+    {
+        $response = $this->adminService->getAdministrators(auth('admin')->id());
+        return response($response);
+    }
+
+    public function store(Request $request)
+    {
+        $response = $this->validateRequest($request->all(), [
+            'name' => 'required',
+            'email' => 'nullable|email',
+            'username' => 'required|unique:admin_users',
+            'password' => 'required|min:8|confirmed'
+        ], [
+            'name' => [
+                'Required' => ResponseDefined::NAME_REQUIRED
+            ],
+            'email' => [
+                'Email' => ResponseDefined::EMAIL_INVALID
+            ],
+            'username' => [
+                'Required' => ResponseDefined::USERNAME_REQUIRED,
+                'Unique' => ResponseDefined::USERNAME_HAS_EXISTS
+            ],
+            'password' => [
+                'Required' => ResponseDefined::PASSWORD_REQUIRED,
+                'Min' => ResponseDefined::PASSWORD_MIN,
+                'Confirmed' => ResponseDefined::PASSWORD_NOT_MATCH
+            ]
+        ]);
+
+        if ($response['status'] === ResponseDefined::SUCCESS) {
+            $response = $this->adminService->createAdministrator($request->only([
+                'name',
+                'email',
+                'username',
+                'password'
+            ]));
+        }
+
+        return response($response);
+    }
+
     public function getInfo()
     {
         $response = $this->adminService->getInfo(auth('admin')->id());

@@ -18,6 +18,47 @@ class AdminService extends Service
     }
 
     /**
+     * 後台人員列表 (撇除自己本身)
+     * 
+     * @param int $self_id (自己的id)
+     * @return array
+     */
+    public function getAdministrators(int $self_id = null)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $administrators = $this->adminUser->all()
+            ->where('id', '<>', $self_id)
+            ->map(function ($admin) {
+                return [
+                    'id' => $admin->id,
+                    'name' => $admin->name,
+                    'email' => $admin->email,
+                    'username' => $admin->username,
+                    'last_ip' => $admin->last_ip,
+                    'created_at' => strtotime($admin->created_at),
+                    'updated_at' => strtotime($admin->updated_at)
+                ];
+            });
+        $response['data']['administrators'] = $administrators;
+
+        return $response;
+    }
+
+    /**
+     * 創建後台人員
+     * 
+     * @param array $data
+     * @return array
+     */
+    public function createAdministrator(array $data)
+    {
+        $response = ['status' => ResponseDefined::SUCCESS];
+        $response['data']['administrator'] = $this->adminUser->create($data);
+        
+        return $response;
+    }
+
+    /**
      * 取得後台當前人員資訊
      * 
      * @param int $admin_id

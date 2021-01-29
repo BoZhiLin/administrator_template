@@ -120,4 +120,10 @@ abstract class ResponseDefined
     const OLD_PASSWORD_REQUIRED = 904;
     /** 舊密碼不符合 */
     const OLD_PASSWORD_VERIFY_FAIL = 905;
+    /** 帳號必填 */
+    const USERNAME_REQUIRED = 906;
+    /** 帳號已存在 */
+    const USERNAME_HAS_EXISTS = 907;
+    /** 密碼不吻合 */
+    const PASSWORD_NOT_MATCH = 908;
 }
