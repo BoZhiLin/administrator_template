@@ -103,6 +103,7 @@ export default {
   color: white;
   font-size: 24px;
   margin-top: 10px;
+  padding-left:25px;
 }
 .menu-items {
   display: flex;
