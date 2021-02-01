@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
+use App\Events\UserVerified;
+use App\Events\UserMatched;
+
 use App\Jobs\SendVerifyMail;
 use App\Jobs\SendForgotMail;
 
@@ -110,6 +113,9 @@ class UserService extends Service
 
             $this->vipRepo->buyByUser($user->id, VipTypeDefined::GOLD, SystemDefined::USER_DEFAULT_DAYS);
             Cache::forget($key);
+
+            /** 通知中心 新增VIP試用通知 */
+            event(new UserVerified($user));
         }
 
         return $response;
@@ -224,6 +230,7 @@ class UserService extends Service
 
             if ($match_info->is_matched) {
                 /** TODO: 通知兩人已成功配對 */
+                event(new UserMatched($from_id, $match_id));
             } else {
                 /** TODO: 通知對方有配對邀請 */
             }
