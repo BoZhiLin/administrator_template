@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserMatched' => [
             'App\Listeners\UserMatchNotification',
         ],
+        'App\Events\UserMatchInvite' => [
+            'App\Listeners\UserInviteNotification',
+        ],
     ];
 
     /**

@@ -73,6 +73,15 @@ Route::group(['middleware' => ['api.auth']], function () {
         Route::delete('/match', 'UserController@removeMatch')->name('match.remove');
         /** 每日簽到 */
         Route::post('/sign', 'UserController@signIn')->name('sign');
+
+        /** 通知中心 */
+        Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+            /** 取得列表 */
+            Route::get('/', 'UserController@getNotifications')->name('notifications');
+            /** 已讀 */
+            Route::patch('/{id}/read', 'UserController@markNotificationRead')->name('notification.read');
+        });
+
         /** VIP */
         Route::group(['prefix' => 'vip', 'as' => 'vip.'], function () {
             /** 購買 */

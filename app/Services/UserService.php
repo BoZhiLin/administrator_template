@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Events\UserVerified;
 use App\Events\UserMatched;
+use App\Events\UserMatchInvite;
 
 use App\Jobs\SendVerifyMail;
 use App\Jobs\SendForgotMail;
@@ -198,7 +199,7 @@ class UserService extends Service
     }
 
     /**
-     * 發送配對邀請 or 接受配對邀請 (按LIKE，互相按LIKE則自動配對)
+     * 發送配對LIKE or 接受LIKE邀請 (按LIKE，互相按LIKE則自動配對)
      * 
      * @param int $from_id
      * @param int $match_id
@@ -229,10 +230,9 @@ class UserService extends Service
             ]);
 
             if ($match_info->is_matched) {
-                /** TODO: 通知兩人已成功配對 */
                 event(new UserMatched($from_id, $match_id));
             } else {
-                /** TODO: 通知對方有配對邀請 */
+                event(new UserMatchInvite($from_id, $match_id));
             }
         }
         /** 不可重複配對，亦不可重複發送邀請 */
@@ -287,15 +287,6 @@ class UserService extends Service
         /** 串金流 TODO */
 
         return $response;
-    }
-
-    /**
-     * 完成付款 (留著以後金流webhook用)
-     */
-    public function completed()
-    {
-        // $response = ['status' => ResponseDefined::SUCCESS];
-        // $this->vipRepo->buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
     }
 
     /**

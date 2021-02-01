@@ -9,25 +9,23 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 
-class UserVerified
+class UserMatchInvite
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var User
-     */
-    public $user;
+    public $fromUser;
+    public $targetUser;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($fromUser, $targetUser)
     {
-        $this->user = $user;
+        $this->fromUser = $fromUser;
+        $this->targetUser = $targetUser;
     }
 
     /**

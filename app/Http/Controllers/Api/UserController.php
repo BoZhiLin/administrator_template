@@ -8,16 +8,22 @@ use App\Defined\ResponseDefined;
 
 use App\Services\UserService;
 use App\Services\TaskService;
+use App\Services\NotificationService;
 
 class UserController extends ApiController
 {
     protected $userService;
     protected $taskService;
+    protected $notificationService;
 
-    public function __construct(UserService $userService, TaskService $taskService)
-    {
+    public function __construct(
+        UserService $userService,
+        TaskService $taskService,
+        NotificationService $notificationService
+    ) {
         $this->userService = $userService;
         $this->taskService = $taskService;
+        $this->notificationService = $notificationService;
     }
 
     public function register(Request $request)
@@ -136,6 +142,18 @@ class UserController extends ApiController
             $response = $this->userService->removeMatch(auth()->id(), $request->target_id);
         }
 
+        return response($response);
+    }
+
+    public function getNotifications()
+    {
+        $response = $this->notificationService->getByUser(auth()->user());
+        return response($response);
+    }
+
+    public function markNotificationRead(int $notification_id)
+    {
+        $response = $this->notificationService->markAsRead(auth()->user(), $notification_id);
         return response($response);
     }
 
