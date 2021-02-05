@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use Latrell\Lock\Facades\Lock;
-
 use Illuminate\Support\Facades\Storage;
 
 use App\Defined\ResponseDefined;
@@ -90,16 +88,9 @@ class PostService extends Service
         } elseif (!is_null($post->favoriteUsers->firstWhere('id', $user->id))) {
             $response['status'] = ResponseDefined::POST_HAS_LIKE;
         } else {
-            $lock_key = "like@post_$post_id";
-
-            try {
-                Lock::acquire($lock_key);
-                $user->favoritePosts()->attach($post_id);
-                $post->increment('like_amount');
-                $response['data']['post'] = $post;
-            } finally {
-                Lock::release($lock_key);
-            }
+            $user->favoritePosts()->attach($post_id);
+            $post->increment('like_amount');
+            $response['data']['post'] = $post;
         }
 
         return $response;
@@ -122,16 +113,9 @@ class PostService extends Service
         } elseif (is_null($post->favoriteUsers->firstWhere('id', $user->id))) {
             $response['status'] = ResponseDefined::POST_NOT_LIKE;
         } else {
-            $lock_key = "cancel@post_$post_id";
-
-            try {
-                Lock::acquire($lock_key);
-                $user->favoritePosts()->detach($post_id);
-                $post->decrement('like_amount');
-                $response['data']['post'] = $post;
-            } finally {
-                Lock::release($lock_key);
-            }
+            $user->favoritePosts()->detach($post_id);
+            $post->decrement('like_amount');
+            $response['data']['post'] = $post;
         }
 
         return $response;
