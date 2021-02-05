@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Defined\CoinDefined;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
@@ -17,12 +16,14 @@ use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
+use App\Defined\CoinDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 use App\Defined\OrderTypeDefined;
 use App\Defined\OrderStatusDefined;
 use App\Defined\TransactionDefined;
+
 use App\Repositories\VipRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\OrderRepository;
