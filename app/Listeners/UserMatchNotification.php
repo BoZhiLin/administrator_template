@@ -31,27 +31,26 @@ class UserMatchNotification
      */
     public function handle(UserMatched $event)
     {
-        $details = [
+        $from_user = User::find($event->fromUser);
+        $target_user = User::find($event->targetUser);
+        $notifications = [
             [
                 'user_id' => $event->fromUser,
-                'content' => ''
+                'title' => __('notification.like.title'),
+                'content' => __('notification.like.content', ['user' => $target_user->nickname])
             ],
             [
                 'user_id' => $event->targetUser,
-                'content' => ''
+                'title' => __('notification.like.title'),
+                'content' => __('notification.like.content', ['user' => $from_user->nickname])
             ]
         ];
-        $user_ids = [
-            $event->fromUser,
-            $event->targetUser
-        ];
-        $users = User::find($user_ids); // collection
 
-        foreach ($users as $user) {
+        foreach ($notifications as $notification) {
             $this->repo->create([
-                'user_id' => $user->id,
-                'title' => '',
-                'content' => ''
+                'user_id' => $notification['user_id'],
+                'title' => $notification['title'],
+                'content' => $notification['content']
             ]);
         }
     }

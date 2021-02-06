@@ -62,6 +62,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Post::class);
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function favoritePosts()
     {
         return $this->belongsToMany(Post::class, 'user_favorite_posts')->withTimestamps();

@@ -83,35 +83,36 @@ class DateService extends Service
      */
     public function signUp(int $date_id, int $user_id)
     {
-        $response = ['status' => ResponseDefined::SUCCESS];
-        $date = $this->dateRepo->find($date_id);
+        $lock_key = "sign@date_id:$date_id";
 
-        if (is_null($date)) {
-            $response['status'] = ResponseDefined::DATE_NOT_FOUND;
-        } elseif ($date->publisher_id === $user_id) {
-            $response['status'] = ResponseDefined::DATE_NOT_ALLOW_SELF;
-        } elseif (!is_null($date->match_id)) {
-            $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
-        } elseif (now() >= $date->closed_at) {
-            $response['status'] = ResponseDefined::DATE_HAS_CLOSED;
-        } elseif (
-            $date->dateRecords->where('signup_user_id', $user_id)->count() > 0
-        ) {
-            $response['status'] = ResponseDefined::DATE_HAS_SIGNUP;
-        } else {
-            $lock_key = "sign@date_id:$date_id";
+        try {
+            Lock::acquire($lock_key);
 
-            try {
-                Lock::acquire($lock_key);
+            $response = ['status' => ResponseDefined::SUCCESS];
+            $date = $this->dateRepo->find($date_id);
 
+            if (is_null($date)) {
+                $response['status'] = ResponseDefined::DATE_NOT_FOUND;
+            } elseif ($date->publisher_id === $user_id) {
+                $response['status'] = ResponseDefined::DATE_NOT_ALLOW_SELF;
+            } elseif (!is_null($date->match_id)) {
+                $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
+            } elseif (now() >= $date->closed_at) {
+                $response['status'] = ResponseDefined::DATE_HAS_CLOSED;
+            } elseif (
+                $date->dateRecords->where('signup_user_id', $user_id)->count() > 0
+            ) {
+                $response['status'] = ResponseDefined::DATE_HAS_SIGNUP;
+            } else {
+                /** TODO:錢包交易 扣除報名點數 */
                 $date_record = $this->dateRepo->signUp($date, $user_id);
                 $response['data']['record'] = $date_record;
-            } finally {
-                Lock::release($lock_key);
             }
-        }
 
-        return $response;
+            return $response;
+        } finally {
+            Lock::release($lock_key);
+        }
     }
 
     /**
@@ -124,38 +125,37 @@ class DateService extends Service
      */
     public function match(int $date_id, int $user_id, int $match_id)
     {
-        $response = ['status' => ResponseDefined::SUCCESS];
-        $date = $this->dateRepo->find($date_id);
+        $lock_key = "match@date_id:$date_id";
 
-        if (is_null($date)) {
-            $response['status'] = ResponseDefined::DATE_NOT_FOUND;
-        } elseif ($date->publisher_id !== $user_id) {
-            $response['status'] = ResponseDefined::PERMISSION_DENIED;
-        } elseif (!is_null($date->match_id)) {
-            $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
-        } elseif (! $match_user = $this->userRepo->find($match_id)) {
-            $response['status'] = ResponseDefined::USER_NOT_FOUND;
-        } elseif (! $record = $date->dateRecords->firstWhere('signup_user_id', $match_user->id)) {
-            $response['status'] = ResponseDefined::DATE_MATCH_NOT_EXISTS;
-        } else {
-            $lock_key = "match@date_id:$date_id";
+        try {
+            Lock::acquire($lock_key);
 
-            try {
-                Lock::acquire($lock_key);
+            $response = ['status' => ResponseDefined::SUCCESS];
+            $date = $this->dateRepo->find($date_id);
 
+            if (is_null($date)) {
+                $response['status'] = ResponseDefined::DATE_NOT_FOUND;
+            } elseif ($date->publisher_id !== $user_id) {
+                $response['status'] = ResponseDefined::PERMISSION_DENIED;
+            } elseif (!is_null($date->match_id)) {
+                $response['status'] = ResponseDefined::DATE_HAS_MATCHED;
+            } elseif (! $match_user = $this->userRepo->find($match_id)) {
+                $response['status'] = ResponseDefined::USER_NOT_FOUND;
+            } elseif (! $record = $date->dateRecords->firstWhere('signup_user_id', $match_user->id)) {
+                $response['status'] = ResponseDefined::DATE_MATCH_NOT_EXISTS;
+            } else {
                 $record->is_matched = true;
                 $record->save();
 
                 $date = $record->date;
                 $date->match_id = $match_id;
                 $date->save();
-            } finally {
-                Lock::release($lock_key);
+                /** TODO: 通知配對人 */
             }
 
-            /** TODO: 通知配對人 */
+            return $response;
+        } finally {
+            Lock::release($lock_key);
         }
-
-        return $response;
     }
 }

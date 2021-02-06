@@ -9,22 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Events\UserVerified;
 use App\Events\UserMatched;
+use App\Events\UserMatchInvite;
 
 use App\Jobs\SendVerifyMail;
 use App\Jobs\SendForgotMail;
 
 use App\Models\User;
 
+use App\Defined\CoinDefined;
 use App\Defined\SystemDefined;
 use App\Defined\VipTypeDefined;
 use App\Defined\ResponseDefined;
 use App\Defined\OrderTypeDefined;
 use App\Defined\OrderStatusDefined;
+use App\Defined\TransactionDefined;
 
 use App\Repositories\VipRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\UserMatchRepository;
+use App\Repositories\WalletRepository;
+use App\Repositories\TransactionRepository;
 
 class UserService extends Service
 {
@@ -32,17 +37,23 @@ class UserService extends Service
     protected $userRepo;
     protected $orderRepo;
     protected $userMatchRepo;
+    protected $walletRepo;
+    protected $transactionRepo;
 
     public function __construct(
         VipRepository $vipRepo,
         UserRepository $userRepo,
         OrderRepository $orderRepo,
-        UserMatchRepository $userMatchRepo
+        UserMatchRepository $userMatchRepo,
+        WalletRepository $walletRepo,
+        TransactionRepository $transactionRepo
     ) {
         $this->vipRepo = $vipRepo;
         $this->userRepo = $userRepo;
         $this->orderRepo = $orderRepo;
         $this->userMatchRepo = $userMatchRepo;
+        $this->walletRepo = $walletRepo;
+        $this->transactionRepo = $transactionRepo;
     }
     
     /**
@@ -198,7 +209,7 @@ class UserService extends Service
     }
 
     /**
-     * 發送配對邀請 or 接受配對邀請 (按LIKE，互相按LIKE則自動配對)
+     * 發送配對LIKE or 接受LIKE邀請 (按LIKE，互相按LIKE則自動配對)
      * 
      * @param int $from_id
      * @param int $match_id
@@ -207,6 +218,7 @@ class UserService extends Service
     public function match(int $from_id, int $match_id)
     {
         $response = ['status' => ResponseDefined::SUCCESS];
+        $wallet = $this->walletRepo->getByUser($from_id, CoinDefined::DAY_LIKE);
 
         if (!$this->userRepo->find($match_id)) {
             $response['status'] = ResponseDefined::USER_NOT_FOUND;
@@ -222,27 +234,28 @@ class UserService extends Service
             $match_info->from_id === $from_id
         ) {
             $response['status'] = ResponseDefined::MATCH_HAS_SEND;
+        } elseif ($wallet->balance_available < 1) {
+            $response['status'] = ResponseDefined::BALANCE_NOT_ENOUGH;
         } else {
+            $this->transactionRepo->createByWallet($wallet, TransactionDefined::SEND_LIKE, -1);
+            
             $match_info = $this->userMatchRepo->sendOrMatch([
                 'from_id' => $from_id,
                 'match_id' => $match_id
             ]);
 
             if ($match_info->is_matched) {
-                /** TODO: 通知兩人已成功配對 */
                 event(new UserMatched($from_id, $match_id));
             } else {
-                /** TODO: 通知對方有配對邀請 */
+                event(new UserMatchInvite($from_id, $match_id));
             }
         }
-        /** 不可重複配對，亦不可重複發送邀請 */
-         
 
         return $response;
     }
 
     /**
-     * 解除配對 or 對方拒絕配對邀請
+     * 解除配對 or 拒絕配對邀請
      * 
      * @param int $from_id
      * @param int $target_id (配對對象 or 欲拒絕對象)
@@ -287,15 +300,6 @@ class UserService extends Service
         /** 串金流 TODO */
 
         return $response;
-    }
-
-    /**
-     * 完成付款 (留著以後金流webhook用)
-     */
-    public function completed()
-    {
-        // $response = ['status' => ResponseDefined::SUCCESS];
-        // $this->vipRepo->buyByUser($user_id, $type, SystemDefined::VIP_EXPIRES_DAYS);
     }
 
     /**
