@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-navbar type="dark" variant="dark" class="tet">
+  <div >
+    <b-navbar v-show="$store.state.logined" type="dark" variant="dark" class="tet">
       <b-navbar-nav>
         <b-nav-item href="#">Home</b-nav-item>
 
@@ -33,7 +33,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      // logined:this.$store.stats.logined,
+    };
   },
   methods: {},
 };

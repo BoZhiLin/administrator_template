@@ -185,6 +185,9 @@ export default {
     //   errorStatus: [false, false, false, false, false, false],
     };
   },
+  mounted(){
+     this.$store.commit("status")
+  },
   watch: {
     birthday(birthday) {
       if (this.birthday !== "") {
@@ -244,7 +247,14 @@ export default {
         })
         .catch(({ response }) => {
           //
-        });
+        })
+        .finally(
+        () => (
+          this.$store.commit("status"),
+          console.log(this.$store.state.isLoading)
+        )
+      );
+        
     },
   },
 };

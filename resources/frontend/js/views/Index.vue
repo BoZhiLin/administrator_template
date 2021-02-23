@@ -119,6 +119,7 @@ export default {
   mounted() {
     this.timer();
     console.log(this.$route.path);
+    this.$store.commit("statusOf")
   },
   methods: {
     scrollEvent: function (event) {

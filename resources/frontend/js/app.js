@@ -3,7 +3,7 @@ import router from './router/index.js';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-
+import store from './store/store.js';
 
 
 require('./bootstrap');
@@ -23,5 +23,6 @@ Vue.component('app', require('./components/App.vue').default);
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store
 });

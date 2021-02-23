@@ -58,6 +58,9 @@ export default {
       password: "",
     };
   },
+  mounted(){
+    this.$store.commit("status")
+  },
   methods: {
     login() {
       api
