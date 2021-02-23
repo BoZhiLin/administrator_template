@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import defined from "../tools/defined.js";
-import api from "../tools/api.js";
+import defined from "@/tools/defined.js";
+import api from "@/tools/api.js";
 
 export default {
   data() {
@@ -76,12 +76,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$light_gray: rgb(17, 8, 8);
+$bg:#283443;
+$light_gray:#110809;
+
 .login-container {
   font-family: "Roboto", sans-serif;
   text-align: center;
   color: #fff;
-  background: linear-gradient(#283443, #6078ea);
+  background: $bg;
   height: 100vh;
   margin: 0;
   padding: 0px;

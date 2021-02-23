@@ -19,3 +19,11 @@ mix.js('resources/frontend/js/app.js', 'public/js/frontend/')
     .sass('resources/backend/sass/app.scss', 'public/css/backend/')
     .copy('resources/backend/images/', 'public/images/backend/')
     .version();
+
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'resources/backend/js/')
+        }
+    }
+});
