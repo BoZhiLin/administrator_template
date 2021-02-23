@@ -132,4 +132,8 @@ abstract class ResponseDefined
     const NOTIFICATION_NOT_FOUND = 1001;
     /** 本則通知已閱讀 */
     const NOTIFICATION_HAS_READ = 1002;
+
+    // ------ 錢包交易相關 ------
+    /** 餘額不足 */
+    const BALANCE_NOT_ENOUGH = 1101;
 }

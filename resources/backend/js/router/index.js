@@ -42,7 +42,7 @@ const router = new VueRouter({
       component: require("../views/Profile.vue").default,
     },
     { 
-      path: '/admin/*',
+      path: '/admin',
       meta: { requiresAuth: true },
     }
   ]
