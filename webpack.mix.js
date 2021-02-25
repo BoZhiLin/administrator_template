@@ -23,7 +23,8 @@ mix.js('resources/frontend/js/app.js', 'public/js/frontend/')
 mix.webpackConfig({
     resolve: {
         alias: {
-            '@': path.resolve(__dirname, 'resources/backend/js/')
+            '@': path.resolve(__dirname, 'resources/backend/js/'),
+            '~': path.resolve(__dirname, 'resources/frontend/js/')
         }
     }
 });
