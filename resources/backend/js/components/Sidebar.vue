@@ -62,7 +62,7 @@
         <b-icon icon="file-person-fill"></b-icon>
         會員管理
       </router-link>
-      <router-link :to="{ name: 'admin.login' }" @click.native="adminLogout" active-class="active" tag="button" exact class="side-btn">
+      <router-link :to="{ name: 'admin.login' }" @click.native="Logout" active-class="active" tag="button" exact class="side-btn">
         <b-icon icon="bell-fill"></b-icon>
          登出
       </router-link>
@@ -71,8 +71,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import defined from "../tools/defined.js";
+import api from "../tools/api.js";
 
 export default {
   data() {
@@ -81,12 +81,9 @@ export default {
     };
   },
   methods: {
-    adminLogout() {
-      axios.post("/admin/api/auth/logout", {}, {
-          headers: {
-            "Authorization": `Bearer ${localStorage["access_token"]}`
-          }
-        })
+    Logout() {
+      api
+        .adminLogout()
         .then(({ data }) => {
           if (data.status === defined.response.SUCCESS) {
             localStorage.removeItem("access_token");
