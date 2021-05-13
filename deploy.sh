@@ -1,20 +1,21 @@
-#!/bin/bash
-#time=$(date +'%Y%m%d%H%M')
-#sed -i "s/LOAD_DATE=.*/LOAD_DATE=${time}/g" .env
-# git pull
-composer install
-composer dump-autoload
-npm install
+#!/bin/sh
+COMMANDS="
+    cd /var/www/ifriend-platform;
 
-php artisan cache:clear
-php artisan route:clear
-php artisan config:clear
-php artisan view:clear
+    git pull;
+    composer install;
+    composer dump-autoload;
 
-php artisan migrate && php artisan db:seed
+    php artisan cache:clear;
+    php artisan route:clear;
+    php artisan config:clear;
+    php artisan view:clear;
 
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+    php artisan migrate;
 
-echo "Deploy successfully!";
+    php artisan config:cache;
+    php artisan route:cache;
+    php artisan view:cache;
+"
+
+ssh deployer@192.168.1.16 -i ~/.ssh/deployerkey $COMMANDS
